@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="team_member_cat"
+              appendTo="@(body)"
+              widgetVar="team_member_cat"
+              showHeader="false"
+              modal="true">
+        <o:form useRequestURI="true" id="team_member_cat_form">
+            <div class="timeexp-popup-ctn" id="seltemcat" >
+                <h1> #{projectTeamMemberTranslationService.selectTeamMemberCategory}
+
+                    <a href="#">
+                        <img src="/resources/images/fancy-close-btn.png" 
+                             onclick="PF('team_member_cat').hide();"
+                             class ="close-icon-popup close-header" />
+                    </a>
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <div class="lable-field-area-fn">
+                        <label>#{projectTeamMemberTranslationService.category}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         required="true"
+                                         requiredMessage="#{projectTeamMemberTranslationService.selectTeamMemberCategoryRquiredMessage}"
+                                         value="#{projectTeamMemberController.projectTeamMemberModel.teamMemberCategory}">
+                            <f:selectItems value="#{projectTeamMemberController.teamMemberCategories}" />
+                        </h:selectOneMenu>
+
+                    </div>
+
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right"> 
+                            <a class="cancel-new-btn" 
+                               onclick="PF('team_member_cat').hide();"
+                               href="#">#{projectTeamMemberTranslationService.cancel}
+                            </a> 
+
+                            <p:commandLink styleClass="next-new-btn-01 fancybox"
+                                           value="#{projectTeamMemberTranslationService.next}"
+                                           actionListener="#{projectTeamMemberController.updateMemberId()}"
+                                           update="add_project_member_form"
+                                           onsuccess="PF('team_member_cat').hide();PF('add_project_member').show();">
+                            </p:commandLink>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+</ui:composition>

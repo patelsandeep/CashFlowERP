@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="new_subcontractor"
+              widgetVar="new_subcontractor"
+              styleClass="phase-dialog"
+              showHeader="false"
+              resizable="false"
+              modal="true">
+        <o:form useRequestURI="true" 
+                enctype="multipart/form-data" 
+                id="new_subcontractor_form">
+            <div class="add-new-warehouse-popup-ctn" id="newsubcont" >
+                <h1>#{subContractorTranslationService.addNewSubContractor}
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('new_subcontractor').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-warehouse-popup-field-ctnr clearfix">
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.subContractorID}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.supplierModel.id}" />
+                    </div>
+
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.subContractorName}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.supplierModel.name}" />
+                    </div>
+
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.country}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         value="#{subContractorExpenseController.supplierModel.countryModel}">
+                            <f:selectItems value="#{countrySelectionController.countries}"/>
+                            <p:ajax event="change"
+                                    update="phone mobile"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.stateOrProvince}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.supplierModel.address.stateOrProvince}" />
+                    </div>
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.zipOrPostalCode}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.supplierModel.address.zipOrPostCode}" />   		
+                    </div>
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.city}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.supplierModel.address.city}" />
+                    </div>
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.address}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.supplierModel.address.street}" />
+                    </div>
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.address}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.supplierModel.address.buildingNumberOrName}" />
+                    </div>
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.contactName}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.supplierModel.contactName}" />
+                    </div>
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.email}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.supplierModel.contactAddress.emailAddress}" />
+                    </div>
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.phone}:</label>
+                        <h:inputText styleClass="inventory-input-field-01 wd55"
+                                     id="phone"
+                                     readonly="true"
+                                     value="+#{subContractorExpenseController.supplierModel.countryModel.country.dialingCode}"/>
+                        <h:inputText styleClass="inventory-input-field-01 wd261"
+                                     value="#{subContractorExpenseController.supplierModel.phoneNumber}" />
+                    </div>
+                    <div class="lable-field-area-fn">
+                        <label>#{subContractorTranslationService.mobile}:</label>
+                        <h:inputText styleClass="inventory-input-field-01 wd55"
+                                     readonly="true"
+                                     id="mobile"
+                                     value="+#{subContractorExpenseController.supplierModel.countryModel.country.dialingCode}"/>
+                        <h:inputText styleClass="inventory-input-field-01 wd261"
+                                     value="#{subContractorExpenseController.supplierModel.mobileNumber}" />
+                    </div>
+
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a class="cancel-new-btn"
+                               onclick="PF('new_subcontractor').hide();"
+                               href="#">#{subContractorTranslationService.cancel}</a>
+                            <p:commandLink actionListener="#{subContractorExpenseController.saveSubcontractor()}"
+                                           styleClass="save-new-btn-01 mrg-rgt"
+                                           onsuccess="PF('new_subcontractor').hide();PF('subcontractor_success_message').show();"
+                                           update="@form add_subcontractor_expense_form subcontractoSuccessForm"
+                                           value="#{subContractorTranslationService.save}" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </o:form>
+    </p:dialog>
+</ui:composition>

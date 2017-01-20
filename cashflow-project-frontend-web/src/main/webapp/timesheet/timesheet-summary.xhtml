@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/main-template.xhtml"> 
+        <ui:define name="content"> 
+            <o:form id="timeSheetSummaryForm" useRequestURI="true">
+                <div class="condent-right">
+                    <div class="content-right-ctn">
+                        <div class="title-01 clearfix">
+                            <h1>#{timeSheetSummaryTranslationService.headerLabel}</h1>
+                            <a class="trgth-btns" href="#">#{timeSheetSummaryTranslationService.createTimeSheetLabel}</a>
+                        </div>
+                        <div class="content-ctnr clearfix">
+
+                            <div class="invoice-table-ctn-01" style="overflow-x: scroll;width: 100%">
+                                <table cellpadding="0" cellspacing="0" border="0" width="180%">
+                                    <tr>
+                                        <th class="border-left">#{timeSheetSummaryTranslationService.dateLabel}</th>
+                                        <th>#{timeSheetSummaryTranslationService.customerNameLabel}</th>              
+                                        <th>#{timeSheetSummaryTranslationService.projectIdLabel}</th>         
+                                        <th>#{timeSheetSummaryTranslationService.projectNameLabel}</th>          
+                                        <th>#{timeSheetSummaryTranslationService.phaseIdLabel}</th>          
+                                        <th>#{timeSheetSummaryTranslationService.milestoneIdLabel}</th>         
+                                        <th>#{timeSheetSummaryTranslationService.taskIdLabel}</th>
+                                        <th>#{timeSheetSummaryTranslationService.timeSheetIdLabel}</th>
+                                        <th>#{timeSheetSummaryTranslationService.teamMemberLabel}</th>
+                                        <th>#{timeSheetSummaryTranslationService.nonBillableHoursLabel}</th>
+                                        <th>#{timeSheetSummaryTranslationService.billableHoursLabel}</th>
+                                        <th>#{timeSheetSummaryTranslationService.totalHoursLabel}</th>
+                                        <th>#{timeSheetSummaryTranslationService.statusLabel}</th>
+                                        <th class="border-right">#{timeSheetSummaryTranslationService.actionLabel}</th>
+
+                                    </tr>
+                                    <ui:repeat value="#{timeSheetSummaryController.pendingTimeSheetInfoModel.entrySet().toArray()}"
+                                               var="timesheetInfo">
+                                        <c:set value="#{timesheetInfo.value}" var="timesheets" />
+                                        <ui:repeat value="#{timesheets}" var="info">
+                                            <tr class="alt">
+                                                <td>
+                                                    <h:outputText styleClass="details-txt wd110" value="#{info.timeSheetInfoDate.time}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                    </h:outputText>
+                                                </td>
+                                                <td>
+                                                    <h:outputText value="#{info.customerName}"/>
+                                                </td>
+                                                <td>
+                                                    <h:outputText value="#{info.projectId}"/>
+                                                </td>
+                                                <td>
+                                                    <h:outputText value="#{info.projectName}"/>
+                                                </td>
+                                                <td>
+                                                    <h:outputText value="#{info.phaseId}"/>
+                                                </td>
+                                                <td>
+                                                    <h:outputText value="#{info.milestoneId}"/>
+                                                </td>
+                                                <td>
+                                                    <h:outputText value="#{info.taskId}"/>
+                                                </td>
+                                                <td>
+                                                    <h:outputText styleClass="details-txt" value="#{info.timesheetId}"/>
+                                                </td>
+                                                <td>
+                                                    <h:outputText styleClass="details-txt" value="#{info.memberName}"/>
+                                                </td>
+                                                <td>
+                                                    <h:outputText value="#{timeSheetSummaryController.calculateNonBillableHours(timesheetInfo.key)}"/>
+                                                </td>
+                                                <td>
+                                                    <h:outputText value="#{timeSheetSummaryController.calculateBillableHours(timesheetInfo.key)}"/>
+                                                </td>
+                                                <td>
+                                                    <h:outputText value="#{timeSheetSummaryController.calculateTotalHours(timesheetInfo.key)}"/>
+                                                </td>
+                                               
+                                                <ui:fragment rendered="#{info.timesheetStatus eq 'SUBMITTED'}">
+                                                    <td>
+                                                        <h:outputText styleClass="submit-btn-03"
+                                                                      value="#{info.timesheetStatus}"/>
+                                                    </td>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{info.timesheetStatus eq 'SAVED'}">
+                                                    <td>
+                                                        <h:outputText styleClass="pending-btn-02"
+                                                                      value="#{info.timesheetStatus}"/>
+                                                    </td>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{info.timesheetStatus eq 'APPROVED'}">
+                                                    <td>
+                                                        <h:outputText styleClass="safe-btn"
+                                                                      value="#{info.timesheetStatus}"/>
+                                                    </td>
+                                                </ui:fragment>
+                                                <td>
+                                                    <p:commandLink disabled="#{info.timesheetStatus ne 'SUBMITTED'}"
+                                                                   title="#{timeSheetSummaryTranslationService.editThisTimesheet}">
+                                                        <img src="/resources/images/ac-edit-icon.png" alt="" />
+                                                    </p:commandLink>
+
+                                                    <p:commandLink title="#{timeSheetSummaryTranslationService.viewThisTimesheet}">
+                                                        <img src="/resources/images/view-icon.png" alt="" />
+                                                    </p:commandLink>
+                                                </td>
+
+                                            </tr>
+                                        </ui:repeat>
+                                    </ui:repeat>
+                                </table>
+                            </div>
+                            <div class="paging-ctnr clearfix">
+                                <h:selectOneMenu value="#{timeSheetSummaryController.limit}" styleClass="col-sel-field">
+                                    <f:selectItems value="#{timeSheetSummaryController.limits}"/>
+                                    <p:ajax listener="#{timeSheetSummaryController.loadTimesheets()}"
+                                            update="@form" />
+                                </h:selectOneMenu>
+                                <div class="next-prev-ctn clearfix">
+                                    <p:commandLink styleClass="prev-btn"
+                                                   value="Previous"
+                                                   actionListener="#{timeSheetSummaryController.previousPage()}"
+                                                   disabled="#{timeSheetSummaryController.page lt 1}"
+                                                   update="@form"/>
+                                    <span class="pages-info">#{timeSheetSummaryController.page + 1} of #{timeSheetSummaryController.pageCount}</span>
+                                    <p:commandLink styleClass="next-btn" 
+                                                   value="Next" 
+                                                   actionListener="#{timeSheetSummaryController.nextPage()}"
+                                                   disabled="#{timeSheetSummaryController.page ge timeSheetSummaryController.maxPage}"
+                                                   update="@form"/>
+                                </div>
+                                <h:selectOneMenu value="#{timeSheetSummaryController.page}" styleClass="page-sel-field">
+                                    <f:selectItems value="#{timeSheetSummaryController.pages}"/>
+                                    <p:ajax listener="#{timeSheetSummaryController.loadTimesheets()}"
+                                            update="@form" />
+                                </h:selectOneMenu>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </o:form>
+           
+            
+        </ui:define>
+    </ui:composition>
+</html>

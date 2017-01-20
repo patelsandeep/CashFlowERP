@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/main-template.xhtml"> 
+
+        <ui:define name="content">
+            <o:form id="pendingTimeSheetForm" useRequestURI="true">
+                <div class="condent-right">
+                    <div class="content-right-ctn">
+                        <div class="title-01 clearfix">
+                            <h1>#{pendingTimeSheetTranslationService.timeSheetPendingApprovalLabel} </h1>
+                        </div>
+                        <div class="content-ctnr-01 clearfix">
+                            <div class="invoice-detail-ctn">
+                                <div class="time-sortby-link clearfix">
+                                    <p>#{pendingTimeSheetTranslationService.sortByLabel}:</p>
+                                    <p:commandLink styleClass="#{pendingTimeSheetController.sortBy eq 'People' ? '' : 'selected'}"
+                                                   value="#{pendingTimeSheetTranslationService.peopleLabel}"
+                                                   update="@form"
+                                                   actionListener="#{pendingTimeSheetController.setPeopleSorting()}"/>
+                                    <span>|</span>
+                                    <p:commandLink styleClass="#{pendingTimeSheetController.sortBy eq 'Project' ? '' : 'selected'}"
+                                                   value="#{pendingTimeSheetTranslationService.projectsLabel}"
+                                                   update="@form"
+                                                   actionListener="#{pendingTimeSheetController.setProjectSorting()}"/>
+
+                                </div>
+
+
+                                <div class="time-sortby-table-ctn">
+
+                                    <p:messages autoUpdate="true" redisplay="false"/>
+                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                        <tr class="head">
+                                            <td width="20%"></td>
+                                            <td align="right" width="10%">#{pendingTimeSheetTranslationService.nonBillableHoursLabel}</td>                        
+                                            <td align="right" width="10%">#{pendingTimeSheetTranslationService.billableHoursLabel}</td>                        
+                                            <td align="right" width="10%">#{pendingTimeSheetTranslationService.totalHoursLabel}</td>                            
+                                            <td align="center" width="10%">#{pendingTimeSheetTranslationService.selectLabel}</td>	
+                                        </tr>
+                                        <ui:repeat value="#{pendingTimeSheetController.pendingTimeSheet.entrySet().toArray()}" var="timeSheet">
+                                            <c:set value="#{timeSheet.value}" var="timesheetInfo" />
+                                            <tr class="cname">
+                                                <ui:fragment rendered="#{pendingTimeSheetController.sortBy eq 'People'}">
+                                                    <td colspan="5">
+
+                                                        <p:link href="#{pendingTimeSheetController.buildTimesheetDetailUrl(timesheetInfo.uuid)}"
+                                                                styleClass="details-txt"
+                                                                value="#{timesheetInfo.member}"/>
+
+
+                                                    </td>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{pendingTimeSheetController.sortBy eq 'Project'}">
+                                                    <td colspan="5">
+                                                        <p:link href="#{pendingTimeSheetController.buildTimesheetDetailUrl(timesheetInfo.uuid)}"
+                                                                styleClass="details-txt"
+                                                                value="#{timesheetInfo.project}"/>
+
+                                                    </td>
+                                                </ui:fragment>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+
+                                                    <h:outputText value="#{timesheetInfo.timesheetDate.time}">
+                                                        <f:convertDateTime type="date" pattern="dd MMM YYYY"/>
+                                                    </h:outputText>
+                                                    -
+                                                    <h:outputText value="#{timesheetInfo.toTimesheetDate.time}">
+                                                        <f:convertDateTime type="date" pattern="dd MMM YYYY"/>
+                                                    </h:outputText>
+
+
+                                                </td>
+
+
+                                                <td align="right">
+                                                    <h:outputText value="#{timesheetInfo.nonBillableHours}" />
+                                                </td>
+                                                <td align="right">
+                                                    <h:outputText value="#{timesheetInfo.billableHours}" />
+                                                </td>
+                                                <td align="right">
+                                                    <h:outputText value="#{timesheetInfo.totalHours}" />
+                                                </td>
+                                                <td align="center">
+                                                    <h:selectBooleanCheckbox value="#{pendingTimeSheetController.checked[timesheetInfo.uuid]}"  />
+                                                </td>
+                                            </tr>
+
+                                        </ui:repeat>
+                                    </table>
+
+                                </div>
+                                <div class="btns-ctnr clearfix">
+                                    <div class="right">
+
+
+
+                                        <p:commandLink styleClass="reject-btn-01 mrg-rgt"
+                                                       update="@form pendingTimeSheetSuccessForm"
+                                                       value="#{pendingTimeSheetTranslationService.rejectTimeSheetReportLabel}"
+                                                       actionListener="#{pendingTimeSheetController.approvePendingTimeSheet()}"
+                                                       onsuccess="PF('pending_timesheet_success_message').show()">
+                                            <f:param name="action" value="reject"/>
+                                        </p:commandLink>
+                                        <p:commandLink styleClass="save-new-btn-01 mrg-rgt"
+                                                       update="@form pendingTimeSheetSuccessForm"
+                                                       value="#{pendingTimeSheetTranslationService.approveTimeSheetReport}"
+                                                       actionListener="#{pendingTimeSheetController.approvePendingTimeSheet()}"
+                                                       onsuccess="PF('pending_timesheet_success_message').show()"> 
+                                            <f:param name="action" value="approve"/>
+                                        </p:commandLink>
+
+
+
+                                        <p:link class="cancel-new-btn"
+                                                href="#{pendingTimeSheetController.redirectTimeSheet()}"
+                                                style="margin-left: 10px">#{pendingTimeSheetTranslationService.cancel}
+                                        </p:link>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </o:form>
+            <ui:include src="/timesheet/pending-timesheet-success.xhtml"/>
+        </ui:define>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,311 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="create_task_finance"
+              widgetVar="create_task_finance"
+              closeOnEscape="true"
+              resizable="false"
+              showHeader="false"
+              styleClass="phase-dialog"
+              modal="true">
+        <o:form useRequestURI="true" id="taskFinanceForm">
+            <div class="phase-finance-popup-ctn" id="task-financial-detail" >
+                <h1>Task Financial Detail 
+                <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('create_task_finance').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="phase-finance-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>Customer:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="Toronto Real Estate Development Co." />
+                    </div>
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>Customer ID: </label>
+                        <input class="inventory-input-field-01" name="" type="text" value="C00001" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>Phase: </label>
+                        <input class="inventory-input-field-01" name="" type="text" value="Phase 1 Planning, Design and Legal Approval" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>Milestone:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="Milestone 1 Planning, Design and Legal Approval" />
+                    </div>
+
+                    <div class="lable-field-area">
+                        <label>Task:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="Task 1 Research and Planning" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>Task ID:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="T00001" />
+                    </div>
+                    <br clear="all" />
+                    <div class="pro-table-ctrn">
+                        <table cellpadding="0" cellspacing="0" border="0" width="1800px">
+                            <tbody>
+                                <tr class="border-head-01">
+                                    <td class="twd240" valign="top"></td>
+                                    <td class="twd90" valign="top">Original Cost Budget</td>
+                                    <td class="twd90" valign="top">Current Cost Budget</td>
+                                    <td class="twd90" valign="top">Original Revenue Budget</td>
+                                    <td class="twd90" valign="top">Current Revenue Budget</td>
+                                    <td class="twd60" valign="top">Original GP Budget</td>
+                                    <td class="twd60" valign="top">Current GP Budget</td>
+                                    <td class="twd90" valign="top">Actual Cost Amount</td>
+                                    <td class="twd90" valign="top">Actual Revenue Amount</td>
+                                    <td class="twd90" valign="top">Actual GP Amount</td>
+                                    <td class="twd40" valign="top">Actual GP %</td>
+                                    <td class="twd40" valign="top">Variance GP %</td>
+                                    <td class="twd40" valign="top">POC %</td>
+                                    <td class="twd40" valign="top">PPC %</td>
+                                    <td class="twd60" valign="top">End Date</td>
+                                </tr>
+                                <tr class="border-td title-td">
+                                    <td colspan="15">Task 1 Research and Planning</td>
+                                </tr>
+                                <tr class="border-td-01">
+                                    <td><a href="#">Labor</a></td>
+                                    <td><a href="#">CAD 4,000</a></td>
+                                    <td><a href="#">CAD 4,500</a></td>
+                                    <td><a href="#">CAD 6,000</a></td>
+                                    <td><a href="#">CAD 6,000</a></td>
+                                    <td><a href="#">50%</a></td>
+                                    <td><a href="#">33%</a></td>
+                                    <td><a href="#">CAD 2,250</a></td>
+                                    <td><a href="#">CAD 3,000</a></td>
+                                    <td><a href="#">CAD 750</a></td>
+                                    <td><a href="#">33%</a></td>
+                                    <td><a href="#">(17%)</a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><a href="#">2016-11-30</a></td>
+                                </tr>
+                                <tr class="border-td-01">
+                                    <td><a href="#"> Equipment </a></td>
+                                    <td><a href="#"> CAD 1,250 </a></td>
+                                    <td><a href="#"> CAD 1,250 </a></td>
+                                    <td><a href="#"> CAD 1,500 </a></td>
+                                    <td><a href="#">CAD 1,500 </a></td>
+                                    <td><a href="#">20% </a></td>
+                                    <td><a href="#">20%</a></td>
+                                    <td><a href="#">CAD 625 </a></td>
+                                    <td><a href="#">CAD 750 </a></td>
+                                    <td><a href="#">CAD  125 </a></td>
+                                    <td><a href="#">20%</a></td>
+                                    <td><a href="#">0%</a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><a href="#"> 2016-11-30 </a></td>
+                                </tr>
+                                <tr class="border-td-01">
+                                    <td><a href="#"> Materials </a></td>
+                                    <td><a href="#"> CAD 6.000 </a></td>
+                                    <td><a href="#"> CAD 6,000 </a></td>
+                                    <td><a href="#"> CAD 6,550 </a></td>
+                                    <td><a href="#"> CAD 6,550 </a></td>
+                                    <td><a href="#"> 9% </a></td>
+                                    <td><a href="#"> 9% </a></td>
+                                    <td><a href="#"> CAD 3,000 </a></td>
+                                    <td><a href="#"> CAD 3,275 </a></td>
+                                    <td><a href="#"> CAD 275 </a></td>
+                                    <td><a href="#"> 9% </a></td>
+                                    <td><a href="#"> 0% </a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><a href="#"> 2016-11-30 </a></td>
+                                </tr>
+                                <tr class="border-td-01">
+                                    <td><a href="#">Sub-Contractors </a></td>
+                                    <td><a href="#"> CAD 2,500 </a></td>
+                                    <td><a href="#">CAD 2,750 </a></td>
+                                    <td><a href="#">CAD 3,000 </a></td>
+                                    <td><a href="#">CAD 3,000 </a></td>
+                                    <td><a href="#">20% </a></td>
+                                    <td><a href="#">9% </a></td>
+                                    <td><a href="#"> CAD 1,375 </a></td>
+                                    <td><a href="#"> CAD 1,500 </a></td>
+                                    <td><a href="#"> CAD 125 </a></td>
+                                    <td><a href="#"> 9% </a></td>
+                                    <td><a href="#"> (11%) </a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><a href="#"> 2016-11-30 </a></td>
+                                </tr>
+                                <tr class="border-td-01">
+                                    <td><a href="#">Overhead Allocation </a></td>
+                                    <td><a href="#">CAD 750 </a></td>
+                                    <td><a href="#"> CAD 750 </a></td>
+                                    <td><a href="#"> CAD 800 </a></td>
+                                    <td><a href="#"> CAD 800 </a></td>
+                                    <td><a href="#"> 7% </a></td>
+                                    <td><a href="#"> 7% </a></td>
+                                    <td><a href="#"> CAD 375 </a></td>
+                                    <td><a href="#"> CAD 400 </a></td>
+                                    <td><a href="#"> CAD 25 </a></td>
+                                    <td><a href="#"> 7% </a></td>
+                                    <td><a href="#"> 0% </a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><a href="#"> 2016-11-30 </a></td>
+                                </tr>
+                                <tr class="border-td-01">
+                                    <td><a href="#">Other Indirect</a></td>
+                                    <td><a href="#"> CAD 250 </a></td>
+                                    <td><a href="#"> CAD 250 </a></td>
+                                    <td><a href="#"> CAD 275 </a></td>
+                                    <td><a href="#"> CAD 275 </a></td>
+                                    <td><a href="#"> 10% </a></td>
+                                    <td><a href="#"> 10% </a></td>
+                                    <td><a href="#"> CAD 125 </a></td>
+                                    <td><a href="#"> CAD 138 </a></td>
+                                    <td><a href="#"> CAD 13 </a></td>
+                                    <td><a href="#"> 0% </a></td>
+                                    <td><a href="#"> 0% </a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><a href="#"> 2016-11-30 </a></td>
+                                </tr>
+                                <tr class="border-td title-td">
+                                    <td>Task Total</td>
+                                    <td>CAD 14,750 </td>
+                                    <td> CAD 15,500 </td>
+                                    <td> CAD 18,125 </td>
+                                    <td> CAD 18,125 </td>
+                                    <td> 23% </td>
+                                    <td>17% </td>
+                                    <td> CAD 7,750 </td>
+                                    <td> CAD 9,063 </td>
+                                    <td> CAD 1,313 </td>
+                                    <td> 17% </td>
+                                    <td> (17%) </td>
+                                    <td> 50% </td>
+                                    <td> 45% </td>
+                                    <td> 2016-11-30</td>
+                                </tr>
+                                <tr class="border-td title-td">
+                                    <td colspan="15">Task LEMS</td>
+                                </tr>
+                                <tr class="border-td-01">
+                                    <td>Labor</td>
+                                    <td>CAD 1,000,000</td>
+                                    <td>CAD 1,100,000</td>
+                                    <td>CAD 1,350,000</td>
+                                    <td>CAD 1,350,000</td>
+                                    <td>35%</td>
+                                    <td>22%</td>
+                                    <td>CAD 600,000</td>
+                                    <td>CAD 720,000</td>
+                                    <td>CAD 120,000</td>
+                                    <td>20%</td>
+                                    <td>(2%)</td>
+                                    <td>55%</td>
+                                    <td>45%</td>
+                                    <td>2016-11-30</td>
+                                </tr>
+                                <tr class="border-td-01">
+                                    <td>Equipment</td>
+                                    <td>CAD 1,000,000</td>
+                                    <td>CAD 1,100,000</td>
+                                    <td>CAD 1,350,000</td>
+                                    <td>CAD 1,350,000</td>
+                                    <td>35%</td>
+                                    <td>22%</td>
+                                    <td>CAD 600,000</td>
+                                    <td>CAD 720,000</td>
+                                    <td>CAD 120,000</td>
+                                    <td>20%</td>
+                                    <td>(2%)</td>
+                                    <td>55%</td>
+                                    <td>45%</td>
+                                    <td>2017-05-30</td>
+                                </tr>
+                                <tr class="border-td-01">
+                                    <td>Materials</td>
+                                    <td>CAD 1,000,000</td>
+                                    <td>CAD 1,100,000</td>
+                                    <td>CAD 1,350,000</td>
+                                    <td>CAD 1,350,000</td>
+                                    <td>35%</td>
+                                    <td>22%</td>
+                                    <td>CAD 600,000</td>
+                                    <td>CAD 720,000</td>
+                                    <td>CAD 120,000</td>
+                                    <td>20%</td>
+                                    <td>(2%)</td>
+                                    <td>55%</td>
+                                    <td>45%</td>
+                                    <td>2016-11-30</td>
+                                </tr>
+                                <tr class="border-td-01">
+                                    <td>Other</td>
+                                    <td>CAD 1,000,000</td>
+                                    <td>CAD 1,100,000</td>
+                                    <td>CAD 1,350,000</td>
+                                    <td>CAD 1,350,000</td>
+                                    <td>35%</td>
+                                    <td>22%</td>
+                                    <td>CAD 600,000</td>
+                                    <td>CAD 720,000</td>
+                                    <td>CAD 120,000</td>
+                                    <td>20%</td>
+                                    <td>(2%)</td>
+                                    <td>55%</td>
+                                    <td>45%</td>
+                                    <td>2017-05-30</td>
+                                </tr>
+                                <tr class="border-td title-td">
+                                    <td>Task Total</td>
+                                    <td>CAD 2,000,000</td>
+                                    <td>CAD 2,200,000</td>
+                                    <td>CAD 2,700,000</td>
+                                    <td>CAD 2,700,000</td>
+                                    <td>35%</td>
+                                    <td>22%</td>
+                                    <td>CAD 1,200,000</td>
+                                    <td>CAD 1,440,000</td>
+                                    <td>CAD 240,000</td>
+                                    <td>20%</td>
+                                    <td>(2%)</td>
+                                    <td>55%</td>
+                                    <td>45%</td>
+                                    <td>2016-11-30</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br clear="all" />
+                    <div class="lable-field-area">
+                        <label>Invoiced LTD: </label>
+                        <input class="inventory-input-field-01" name="" type="text" value="CAD 150,500.00" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>Payments Received:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="CAD 80,000.00" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>Committed Costs:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="CAD 10,000.00" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>Disputed Billings:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="CAD 5,000.00" />
+                    </div>
+                    <br clear="all" />
+                    <hr /> 
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right"> <a class="cancel-new-btn"  onclick="PF('create_task_finance').hide();" href="#">Cancel</a> </div>
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+</ui:composition>

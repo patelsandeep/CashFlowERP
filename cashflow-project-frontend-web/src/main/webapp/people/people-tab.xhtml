@@ -1,0 +1,220 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <o:form useRequestURI="true" id="peopleForm">
+        <div id="tab5" class="tab_content clearfix">
+            <div class="protab-para-ctn">
+                <h1>#{projectTeamMemberListTranslationService.peopleHeader}</h1>
+                <p>#{projectTeamMemberListTranslationService.peopleDetail1}</p>
+                <p>#{projectTeamMemberListTranslationService.peopleDetail2}
+                    <a href="#">#{projectTeamMemberListTranslationService.knowledgeBase}</a>
+                    #{projectTeamMemberListTranslationService.peopleDetail3} 
+                    <a href="#">#{projectTeamMemberListTranslationService.peopleDetail4}</a></p>
+            </div>
+            <div class="tabtitle clearfix">
+                <h1>#{projectTeamMemberListTranslationService.peopleHeader}</h1>
+                <a class="addtm-btn fancybox"
+                   onclick="PF('team_member_cat').show();">
+                    + #{projectTeamMemberListTranslationService.addNewTeamMember}
+                </a>
+                <div class="all-customer-field-ctn-01">
+                    <h:inputText class="search-field"
+                                 value="#{projectTeamMemberListController.searchValue}">
+                    </h:inputText>
+                    <h:selectOneMenu styleClass="all-sel-field-02"
+                                     value="#{projectTeamMemberListController.filterValue}">
+
+                        <f:selectItem itemLabel="Filter by" itemValue="#{null}"/>
+                        <f:selectItem itemLabel="Phase" itemValue="phase"/>
+                        <f:selectItem itemLabel="Milestone" itemValue="milestone"/>
+                        <f:selectItem itemLabel="Task" itemValue="task"/>
+                        <f:selectItem itemLabel="Function Roles" itemValue="functionRoles"/>
+                        <f:selectItem itemLabel="Department" itemValue="department"/>
+                        <p:ajax update="searchbox" listener="#{projectTeamMemberListController.loadDefaultValues}"/>
+                    </h:selectOneMenu>
+                    <h:panelGroup id="searchbox">
+                        <ui:fragment rendered="#{projectTeamMemberListController.filterValue eq 'phase'}">
+                            <h:selectOneMenu styleClass="all-sel-field-02"
+                                             value="#{projectTeamMemberListController.projectLevelUUID}">
+                                <f:selectItem itemLabel="#{projectTeamMemberTranslationService.selectPhaseLabel}" />
+                                <f:selectItems value="#{projectTeamMemberListController.loadProjectPhases}"
+                                               var="phase"
+                                               itemLabel="#{phase.name}"
+                                               itemValue="#{phase.uuid}"/>
+
+                            </h:selectOneMenu>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{projectTeamMemberListController.filterValue eq 'milestone'}">
+                            <h:selectOneMenu styleClass="all-sel-field-02"
+                                             value="#{projectTeamMemberListController.projectLevelUUID}">
+                                <f:selectItem itemLabel="#{projectTeamMemberTranslationService.selectMilestoneLabel}" />
+                                <f:selectItems value="#{projectTeamMemberListController.loadProjectMilestones}"
+                                               var="milestone"
+                                               itemLabel="#{milestone.name}"
+                                               itemValue="#{milestone.uuid}"/>
+
+                            </h:selectOneMenu>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{projectTeamMemberListController.filterValue eq 'task'}">
+                            <h:selectOneMenu styleClass="all-sel-field-02"
+                                             value="#{projectTeamMemberListController.projectLevelUUID}">
+                                <f:selectItem itemLabel="#{projectTeamMemberTranslationService.selectTaskLabel}" />
+                                <f:selectItems value="#{projectTeamMemberListController.loadProjectTasks}"
+                                               var="task"
+                                               itemLabel="#{task.name}"
+                                               itemValue="#{task.uuid}"/>
+
+                            </h:selectOneMenu>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{projectTeamMemberListController.filterValue eq 'functionRoles'}">
+                            <h:selectOneMenu styleClass="all-sel-field-02"
+                                             value="#{projectTeamMemberListController.projectRole}">
+                                <f:selectItem itemLabel="#{projectTeamMemberTranslationService.selectProjectRole}" />
+                                <f:selectItems value="#{projectTeamMemberListController.accessRoles}"
+                                               var="role"
+                                               itemLabel="#{role.roleName}"
+                                               itemValue="#{role.uuid}"/>
+
+                            </h:selectOneMenu>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{projectTeamMemberListController.filterValue eq 'department'}">
+                            <h:selectOneMenu styleClass="all-sel-field-02"
+                                             value="#{projectTeamMemberListController.department}">
+                                <f:selectItem itemLabel="#{projectTeamMemberTranslationService.selectDepartment}" />
+                                <f:selectItems value="#{projectTeamMemberListController.departments}"
+                                               var="dept"
+                                               itemLabel="#{dept.name}"
+                                               itemValue="#{dept.uuid}"/>
+
+                            </h:selectOneMenu>
+                        </ui:fragment>
+                    </h:panelGroup>
+                    <p:commandLink class="trgth-btns" 
+                                   value="Search" 
+                                   update="@form"
+                                   action="#{projectTeamMemberListController.loadPeoples()}" />
+                </div>
+            </div>
+            <div class="pro-table-ctrn">
+                <table cellpadding="0" cellspacing="0" border="0" width="1500px">
+                    <tr class="border-head">
+                        <td>#{projectTeamMemberListTranslationService.projectId}</td>
+                        <td>#{projectTeamMemberListTranslationService.phaseId}</td>
+                        <td>#{projectTeamMemberListTranslationService.milestoneId}</td>
+                        <td>#{projectTeamMemberListTranslationService.taskId}</td>
+                        <td>#{projectTeamMemberListTranslationService.teamMember}</td>
+                        <td>#{projectTeamMemberListTranslationService.memberId}</td>
+                        <td>#{projectTeamMemberListTranslationService.platformRole}</td>
+                        <td>#{projectTeamMemberListTranslationService.department}</td>
+                        <td>#{projectTeamMemberListTranslationService.projectRole}</td>
+                        <td>#{projectTeamMemberListTranslationService.costSource}</td>
+                        <td>#{projectTeamMemberListTranslationService.costRate}</td>
+                        <td>#{projectTeamMemberListTranslationService.markUp}</td>
+                        <td>#{projectTeamMemberListTranslationService.billingRate}</td>
+                        <td>#{projectTeamMemberListTranslationService.action} </td>
+                    </tr>
+                    <ui:repeat value="#{projectTeamMemberListController.peopleEntityModels}" var="member">
+                        <tr class="border-td show-m1">
+                            <td>#{member.projectId}</td>
+                            <td>#{member.phaseId}</td>
+                            <td>#{member.milestoneId}</td>
+                            <td>#{member.taskId}</td>
+                            <td>
+                                <p:commandLink value="#{member.teamMember}"
+                                               actionListener="#{projectTeamMemberViewController.viewProjectTeamMember(member)}"
+                                               update="view_project_member_form"
+                                               oncomplete="PF('view_project_member').show();"
+                                               />
+                            </td>
+                            <td>
+                                <p:commandLink value="#{member.memberId}"
+                                               actionListener="#{projectTeamMemberViewController.viewProjectTeamMember(member)}"
+                                               update="view_project_member_form"
+                                               oncomplete="PF('view_project_member').show();"
+                                               />
+
+                            </td>
+                            <td>#{member.platformRole}</td>
+                            <td>#{member.department.name}</td>
+                            <td>#{member.projectRole}</td>
+                            <td>#{member.costRateSource.toString()}</td>
+                            <td>#{member.costRate}</td>
+                            <ui:fragment rendered="#{member.markupMethod eq 'PERCENTAGE'}">
+                                <td>#{member.markup}%</td>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{member.markupMethod eq 'ABSOLUTE'}">
+                                <td>#{member.costRate.currency}
+                                    <h:outputText value="#{member.markup}">
+                                        <f:convertNumber pattern="#,##0.00" 
+                                                         maxFractionDigits="2" />  
+                                    </h:outputText>
+                                </td>
+                            </ui:fragment>
+                            <td>
+                                <h:outputText value="#{member.billingRate}">
+
+                                </h:outputText>
+                            </td>
+                            <td class="acction-ctn">
+                                <p:commandLink actionListener="#{projectTeamMemberController.editProjectTeamMember(member)}"
+                                               update="add_project_member_form"
+                                               oncomplete="PF('add_project_member').show();">
+                                    <img src="/resources/images/ac-edit-icon.png" alt="" />
+                                </p:commandLink>
+                                <p:commandLink actionListener="#{projectTeamMemberViewController.viewProjectTeamMember(member)}"
+                                               update="view_project_member_form"
+                                               oncomplete="PF('view_project_member').show();">
+                                    <img src="/resources/images/view-icon.png" alt="" />
+                                </p:commandLink>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                </table>
+            </div>
+            <div class="paging-ctnr clearfix">
+                <h:selectOneMenu value="#{projectTeamMemberListController.limit}" 
+                                 styleClass="col-sel-field">
+                    <f:selectItems value="#{projectTeamMemberListController.limits}"/>
+                    <p:ajax listener="#{projectTeamMemberListController.initPeoples()}"
+                            update="@form" />
+                </h:selectOneMenu>
+                <div class="next-prev-ctn clearfix">
+                    <p:commandLink styleClass="prev-btn"
+                                   value="Previous"
+                                   actionListener="#{projectTeamMemberListController.previousPage()}"
+                                   disabled="#{projectTeamMemberListController.page lt 1}"
+                                   update="@form"/>
+                    <span class="pages-info">#{projectTeamMemberListController.page + 1} of #{projectTeamMemberListController.pageCount}</span>
+                    <p:commandLink styleClass="next-btn" 
+                                   value="Next" 
+                                   actionListener="#{projectTeamMemberListController.nextPage()}"
+                                   disabled="#{projectTeamMemberListController.page ge projectTeamMemberListController.maxPage}"
+                                   update="@form"/>
+                </div>
+                <h:selectOneMenu value="#{projectTeamMemberListController.page}" styleClass="page-sel-field">
+                    <f:selectItems value="#{projectTeamMemberListController.pages}"/>
+                    <p:ajax listener="#{projectTeamMemberListController.initPeoples()}"
+                            update="@form" />
+                </h:selectOneMenu>
+            </div>
+            <hr class="hrline-02" />
+            <div class="btns-ctnr-04 clearfix">
+                <div class="right"> 
+                    <p:link href="#{projectTeamMemberListController.redirectProjectSummary()}"
+                            value="#{projectTeamMemberListTranslationService.cancel}"
+                            styleClass="cancel-new-btn">
+                    </p:link>
+                </div>
+            </div>
+        </div>
+    </o:form>
+    <ui:include src="/people/team-member-cat.xhtml"/>
+    <ui:include src="/people/add-team-member.xhtml"/>
+    <ui:include src="/people/view-team-member.xhtml"/>
+</ui:composition>

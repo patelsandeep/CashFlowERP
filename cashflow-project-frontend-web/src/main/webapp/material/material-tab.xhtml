@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <div class="protab-para-ctn">
+        <h1>#{materialExpenseTranslationService.materialTabHeader}</h1>
+        <p>#{materialExpenseTranslationService.materialExpensesInfo} <a href="#">#{materialExpenseTranslationService.knowledgeBaseLinkText}</a> #{materialExpenseTranslationService.andViewTranslation} <a href="#">#{materialExpenseTranslationService.materialExpenseKnowledgeBaseSection}</a></p>
+    </div>
+    <o:form useRequestURI="true" id="materialExpensesForm">
+        <div class="tabtitle clearfix">
+            <h1>#{materialExpenseTranslationService.materialTabHeader}</h1>
+        </div>
+        <div class="tabtitle clearfix">
+            <p:commandLink class="trgth-btns fancybox" 
+                               value="+ #{materialExpenseTranslationService.newMaterialExpensesButtonLabel}" 
+                               actionListener="#{materialExpenseListController.addNewMaterialExpense()}" />
+            <div class="all-customer-field-ctn-01">
+                <h:inputText class="search-field"
+                             value="#{materialExpenseListController.searchValue}">
+                </h:inputText>
+                <h:selectOneMenu styleClass="all-sel-field-02"
+                                 value="#{materialExpenseListController.filterValue}">
+
+                    <f:selectItem itemLabel="Filter by" itemValue="#{null}"/>
+                    <f:selectItem itemLabel="#{materialExpenseTranslationService.phaseIdLabel}" itemValue="phaseId"/>
+                    <f:selectItem itemLabel="#{materialExpenseTranslationService.milestoneIdLabel}" itemValue="milestoneId"/>
+                    <f:selectItem itemLabel="#{materialExpenseTranslationService.taskIdLabel}" itemValue="taskId"/>
+                    <p:ajax update="searchbox" listener="#{materialExpenseListController.loadDefaultValues()}"/>
+                </h:selectOneMenu>
+                <h:panelGroup id="searchbox">
+                    <ui:fragment rendered="#{materialExpenseListController.filterValue eq 'phase'}">
+                        <h:selectOneMenu styleClass="all-sel-field-02"
+                                         value="#{materialExpenseListController.projectLevelUUID}">
+                            <f:selectItem itemLabel="#{materialExpenseTranslationService.phaseIdLabel}" />
+                            <f:selectItems value="#{materialExpenseListController.loadProjectPhases}"
+                                           var="phase"
+                                           itemLabel="#{phase.name}"
+                                           itemValue="#{phase.uuid}"/>
+
+                        </h:selectOneMenu>
+                    </ui:fragment>
+                </h:panelGroup>
+                <p:commandLink class="trgth-btns" 
+                               value="Search" 
+                               update="@form"
+                               action="#{materialExpenseListController.loadMaterialExpenses()}" />
+            </div>
+        </div>
+        <ui:include src="/material/material-list.xhtml" />
+    </o:form>
+    <hr class="hrline-02" />
+    <div class="btns-ctnr-04 clearfix">
+        <div class="right"> 
+            <a class="cancel-new-btn" href="#">
+                #{materialExpenseTranslationService.cancelButtonLabel}
+            </a>
+        </div>
+    </div>
+</ui:composition>

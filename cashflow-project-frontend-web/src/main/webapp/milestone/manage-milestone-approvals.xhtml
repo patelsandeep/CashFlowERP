@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="create_milestone_approval"
+              widgetVar="create_milestone_approval"
+              closeOnEscape="true"
+              showHeader="false"
+              styleClass="phase-dialog"
+              modal="true">
+        <o:form useRequestURI="true" id="milestoneApprovalForm">
+            <div class="phase-finance-popup-ctn" id="manageapprovals-mile" >
+                <h1>Manage Approvals 
+                <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('create_milestone_approval').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="phase-finance-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>Customer:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="Toronto Real Estate Development Co." />
+                    </div>
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>Project: </label>
+                        <input class="inventory-input-field-01" name="" type="text" value="New Toronto Star Trek Mall" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>Phase: </label>
+                        <input class="inventory-input-field-01" name="" type="text" value="Phase 1 Planning, Design and Legal Approval" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>Milestone: </label>
+                        <input class="inventory-input-field-01" name="" type="text" value="Milestone 1 Planning, Design and Legal Approval  " />
+                    </div>
+
+                    <div class="lable-field-area">
+                        <label>Task:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="Task 1 Research and Planning" />
+                    </div>
+
+                    <div class="lable-field-area">
+                        <label>Task ID:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="T00001" />
+                    </div>
+                    <div class="prosum-field-area">
+                        <label>LEMS Approvals:</label>
+                        <textarea class="prosum-textarea-field-01" name="" cols="" rows="">Projects Managers and Supervisors are automatically assigned the role of approving all Project, Phase, Milestone and Task Level expenses. You can make changes and specify other Team Members who can approve expenses.</textarea>
+                    </div>
+                    <br clear="all" />
+                    <div class="lable-field-area-02"> <a class="attach-file-btn-01" href="#">Update PPC</a> </div>
+                    <br clear="all" />
+                    <div class="pro-table-ctrn">
+                        <table cellpadding="0" cellspacing="0" border="0" width="1800px">
+                            <tr class="border-head-01">
+                                <td>Approver</td>
+                                <td>Project Role</td>
+                                <td>Approval Level</td>
+                                <td class="twd100">Time and Expenses</td>
+                                <td class="twd60">Equipment</td>
+                                <td class="twd60">Materials</td>
+                                <td class="twd90">Sub-Contractors</td>
+                                <td class="twd60">Overheads</td>
+                                <td class="twd90">Change Orders</td>
+                                <td class="twd60">PPC</td>
+                                <td class="twd60">Invoices</td>
+                                <td class="twd60">Phases</td>
+                                <td class="twd60">Milestones</td>
+                                <td class="twd60">Tasks</td>
+                                <td class="twd60">All</td>
+                                <td class="twd30"></td>
+                            </tr>
+                            <tr class="border-td-01">
+                                <td>
+                                    <a class="approver-list-01a" href="#">Select</a>
+                                    <ul id="approver-list-ctn-01a"><li><a href="#">John Johnson</a></li></ul>
+                                </td>
+                                <td>
+                                    <a class="project-list-01a" href="#">Select</a>
+                                    <ul id="project-list-ctn-01a"><li><a href="#">Project Manager</a></li></ul>
+                                </td>
+                                <td>
+                                    <a class="plevel-list-01a" href="#">Select</a>
+                                    <ul id="plevel-list-ctn-01a"><li><a href="#">Project Level</a></li></ul>
+                                </td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td class="acction-ctn"><a href="#"><img src="images/del-icon.png" alt="" /></a></td>
+                            </tr>
+                            <tr class="border-td-01">
+                                <td>
+                                    <a class="approver-list-02a" href="#">Select</a>
+                                    <ul id="approver-list-ctn-02a"><li><a href="#">Willam Williams</a></li></ul>
+                                </td>
+                                <td>
+                                    <a class="project-list-02a" href="#">Select</a>
+                                    <ul id="project-list-ctn-02a"><li><a href="#">Phase Supervisor</a></li></ul>
+                                </td>
+                                <td>
+                                    <a class="plevel-list-02a" href="#">Select</a>
+                                    <ul id="plevel-list-ctn-02a"><li><a href="#">Phase Level</a></li></ul>
+                                </td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td class="acction-ctn"><a href="#"><img src="images/del-icon.png" alt="" /></a></td>
+                            </tr>
+                            <tr class="border-td-01">
+                                <td>
+                                    <a class="approver-list-03a" href="#">Select</a>
+                                    <ul id="approver-list-ctn-03a"><li><a href="#">James Jameson</a></li></ul>
+                                </td>
+                                <td>
+                                    <a class="project-list-03a" href="#">Select</a>
+                                    <ul id="project-list-ctn-03a"><li><a href="#">Task Supervisor</a></li></ul>
+                                </td>
+                                <td>
+                                    <a class="plevel-list-03a" href="#">Select</a>
+                                    <ul id="plevel-list-ctn-03a"><li><a href="#">Task Level</a></li></ul>
+                                </td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td class="acction-ctn"><a href="#"><img src="images/del-icon.png" alt="" /></a></td>
+                            </tr>
+                            <tr class="border-td-01">
+                                <td>
+                                    <a class="approver-list-04a" href="#">Select</a>
+                                    <ul id="approver-list-ctn-04a"><li><a href="#">John Johnson</a></li></ul>
+                                </td>
+                                <td>
+                                    <a class="project-list-04a" href="#">Select</a>
+                                    <ul id="project-list-ctn-04a"><li><a href="#">Project Manager</a></li></ul>
+                                </td>
+                                <td>
+                                    <a class="plevel-list-04a" href="#">Select</a>
+                                    <ul id="plevel-list-ctn-04a"><li><a href="#">Project level</a></li></ul>
+                                </td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td class="acction-ctn"><a href="#"><img src="images/del-icon.png" alt="" /></a></td>
+                            </tr>
+                            <tr class="border-td-01">
+                                <td colspan="16"><a class="add-reminder-link" href="#">Add a line</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <a class="auditnotes-link" onClick="showhide8()">Audit Trail and Notes:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote8">
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                    </div>
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right"> <a class="cancel-new-btn" onclick="PF('create_milestone_approval').hide();" href="#">Cancel</a> <a class="save-new-btn-01 mrg-rgt" href="#">Save</a> </div>
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+</ui:composition>

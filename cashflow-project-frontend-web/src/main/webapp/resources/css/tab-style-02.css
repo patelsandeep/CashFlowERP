@@ -1,0 +1,54 @@
+@charset "utf-8";
+/* CSS Document */
+
+.container {width:100%; margin-top:20px;}
+ul.tabs {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	height: 41px;
+	width: 100%;
+}
+ul.tabs li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 40px;
+	line-height: 40px;
+	border: 1px solid #d1d1d1;
+	margin-bottom: -1px;
+	margin-right:-1px;
+	overflow: hidden;
+	position: relative;
+	background-color:#dadada;
+}
+ul.tabs li a {
+	text-decoration: none;
+	color: #3b3c3b;
+	display: block;
+	font-size:12px;
+	font-weight:500;
+	padding: 0 11px;
+	outline: none;
+}
+ul.tabs li a:hover {
+	background: #f1f1f1;
+	color:#faad41;	
+}
+html ul.tabs li.active, html ul.tabs li.active a:hover  {
+	background: #f1f1f1;
+	color:#faad41;
+	border-bottom: 2px solid #f1f1f1;
+}
+html ul.tabs li.active a{color:#faad41;}
+
+.tab_container {
+	width: 100%;
+}
+.tab_content {
+	padding:15px;
+	border:solid 1px #d1d1d1;
+	clear:both;
+	background-color:#f1f1f1;
+}
+.pro-tab-ctnr {margin-top:20px;}

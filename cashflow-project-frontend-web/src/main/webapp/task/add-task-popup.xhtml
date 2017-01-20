@@ -1,0 +1,413 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <p:dialog id="create_project_task"
+              widgetVar="create_project_task"
+              closeOnEscape="true"
+              resizable="false"
+              showHeader="false"
+              styleClass="phase-dialog"
+              modal="true">
+
+        <o:form useRequestURI="true" id="addTaskForm" >
+
+            <div class="add-new-phase-popup-ctn" id="addNewTask" >
+                <h1>#{projectTaskTranslationService.taskHeader} 
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('create_project_task').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{projectTaskTranslationService.customerLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectTaskController.projectTaskModel.customerName}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{projectTaskTranslationService.customerIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectTaskController.projectTaskModel.customerId}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.projectNameLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectTaskController.projectTaskModel.projectName}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.projectIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectTaskController.projectTaskModel.projectId}"
+                                     readonly="true"/>
+                    </div>
+                    <ui:fragment rendered="#{projectTaskController.project.projectLevelCategory eq 'PHASE'}">
+
+                        <div class="lable-field-area">
+                            <label>#{projectTaskTranslationService.phaseLabel}: </label>
+                            <h:selectOneMenu value="#{projectTaskController.projectTaskModel.projectPhase}"
+                                             styleClass="inventory-sel-field-01">
+                                <f:selectItem itemLabel="#{projectTaskTranslationService.selectPhaseLabel}"
+                                              itemValue="#{null}"/>
+                                <f:selectItems value="#{projectTaskController.loadPhases()}"
+                                               var="phase"
+                                               itemValue="#{phase.uuid}"
+                                               itemLabel="#{phase.name}"/>
+                                <p:ajax update="phaseId milestone" listener="#{projectTaskController.updatePhaseId()}"/>
+
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{projectTaskTranslationService.phaseIdLabel}: </label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         id="phaseId"
+                                         readonly="true"
+                                         value="#{projectTaskController.projectTaskModel.phaseId}"/>
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{projectTaskTranslationService.milestoneLabel}: </label>
+                            <h:selectOneMenu value="#{projectTaskController.projectTaskModel.projectMilestone}"
+                                             id="milestone"
+                                             styleClass="inventory-sel-field-01">
+                                <f:selectItem itemLabel="#{projectTaskTranslationService.selectMilestoneLabel}"
+                                              itemValue="#{null}"/>
+                                <f:selectItems value="#{projectTaskController.projectTaskModel.projectMilestones}"
+                                               var="milestone"
+                                               itemValue="#{milestone.uuid}"
+                                               itemLabel="#{milestone.name}"/>
+                                <p:ajax update="milestoneId taskNumber" listener="#{projectTaskController.updateMilestoneId()}"/>
+
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{projectTaskTranslationService.milestoneIdLabel}: </label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         id="milestoneId"
+                                         readonly="true"
+                                         value="#{projectTaskController.projectTaskModel.milestoneId}"/>
+                        </div>
+                    </ui:fragment>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskNumberLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="taskNumber"
+                                     value="#{projectTaskController.projectTaskModel.taskNumber}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectTaskController.projectTaskModel.taskId}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskNameLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectTaskController.projectTaskModel.taskName}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskSupervisorLabel}:</label>
+
+
+                        <p:autoComplete cache="true"
+                                        inputStyleClass="inventory-input-field-01"
+                                        inputStyle="padding-right: 0px; padding-left: 0px; box-shadow: none;"
+                                        completeMethod="#{projectTaskController.loadSupervisors}"
+                                        emptyMessage="#{projectTaskTranslationService.noTaskSupervisorFoundMessage}"
+                                        forceSelection="true"
+                                        queryDelay="400"
+                                        minQueryLength="3"
+                                        placeholder="#{projectTaskTranslationService.messageForTaskSupervisorSearch}"
+                                        value="#{projectTaskController.projectTaskModel.taskSupervisor}"
+                                        title="#{projectTaskTranslationService.messageForTaskSupervisorSearch}"
+                                        var="sup"
+                                        itemValue="#{sup}"
+                                        itemLabel="#{sup.supervisorName}"
+                                        style="width: 320px">
+
+                        </p:autoComplete>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.startDateLabel}:</label>
+                        <p:calendar id="startDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{projectTaskController.projectTaskModel.startDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="startDate"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.endDateLabel}:</label>
+                        <p:calendar id="enddate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{projectTaskController.projectTaskModel.endDate}"
+                                    pattern="yyyy-MM-dd"
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="enddate"/>
+                    </div>
+                    <div class="prosum-field-area">
+                        <label>#{projectTaskTranslationService.taskSummaryLabel}:</label>
+                        <h:inputTextarea styleClass="prosum-textarea-field-01"
+                                         value="#{projectTaskController.projectTaskModel.taskSummary}"/>
+                    </div>
+                    <div class="prosum-field-area">
+                        <label>#{projectTaskTranslationService.taskDeliverableLabel}:</label>
+                        <h:inputTextarea styleClass="prosum-textarea-field-01"
+                                         value="#{projectTaskController.projectTaskModel.taskDeliverable}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskBudgetCostLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="costCurrency"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     id="cost"
+                                     readonly="#{projectTaskController.projectTaskModel.taskBudgetInformation.taskBudgetCost.intValue() ne 0}"
+                                     value="#{projectTaskController.projectTaskModel.taskBudgetInformation.taskBudgetCost}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax update="@this profit" listener="#{projectTaskController.calculateTaskGrossProfit()}"/>
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskBudgetRevenueLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="revenueCurrency"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     id="revenue"
+                                     readonly="#{projectTaskController.projectTaskModel.taskRevenueInformation.taskBudgetRevenue.intValue() ne 0}"
+                                     value="#{projectTaskController.projectTaskModel.taskRevenueInformation.taskBudgetRevenue}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax update="@this profit" listener="#{projectTaskController.calculateTaskGrossProfit()}"/>
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskBudgetProfitLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="profitCurrency"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     id="profit"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.taskBudgetInformation.taskBudgetGrossProfit}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{projectTaskTranslationService.depositOrRetainersLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-09"
+                                     id="depositCurrency"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-10" 
+                                     value="#{projectTaskController.projectTaskModel.taskDepositModel.depositOrRetainers}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax update="@this" listener="#{projectTaskController.checkDepositValue()}" />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area-02"> 
+                        <a class="attach-file-btn-01 mrgt" href="#">#{projectTaskTranslationService.invoiceIssueLabel}</a> 
+                    </div>
+                    <div class="lable-field-area-02"> 
+                        <a class="attach-file-btn-01 fancybox"  onclick="PF('create_task_alert').show();" href="#">
+                            #{projectTaskTranslationService.manageAlertsLabel}
+                        </a>
+                    </div>
+                    <div class="lable-field-area-02"> 
+                        <a class="attach-file-btn-01 fancybox" onclick="PF('create_task_approval').show();"  href="#">
+                            #{projectTaskTranslationService.manageApprovalsLabel}
+                        </a> 
+                    </div>
+                    <div class="lable-field-area-02"> 
+                        <p:commandLink styleClass="attach-file-btn-01g fancybox" 
+                                       update="taskBudgetForm"
+                                       onclick="PF('task_budget_details').show();"
+                                       value="+ #{projectTaskTranslationService.addOrEditTaskBudgetLabel}"/>
+
+                    </div>
+                    <div class="lable-field-area-02"> 
+                        <a class="attach-file-btn-01 fancybox" onclick="PF('create_task_finance').show();"  href="#">
+                            #{projectTaskTranslationService.viewTaskFinancialsLabel}
+                        </a> 
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.teamMemberLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.teamMemberCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.subContractorLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.subContractorCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskPOCLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.poc}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskPPCLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.ppc}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.changeOrderCountLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.changeOrderCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.changeOrderAmountLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="changeOrderCurrency"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.changeOrderAmount}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.penaltyCountLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.taskPenaltyInformation.penaltyCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.penaltyAmountLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="penaltyCurrency"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.taskPenaltyInformation.penaltiesAmount}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.projectManagerLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectTaskController.projectTaskModel.projectManager}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.safetyRatingLabel}: </label>
+
+                        <h:selectOneMenu id="safetyrating" 
+                                         disabled="true"
+                                         value="#{projectTaskController.projectTaskModel.safetyRating}"
+                                         styleClass="inventory-sel-field-01">
+
+                            <f:selectItems value="#{projectTaskController.safetyRatings}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.performanceStatusLabel}:</label>
+                        <h:selectOneMenu id="performanceStatus" 
+                                         value="#{projectTaskController.projectTaskModel.performanceStatus}"
+                                         styleClass="inventory-sel-field-01">
+
+                            <f:selectItems value="#{projectTaskController.performanceStatuses}"/>
+
+                        </h:selectOneMenu>
+
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskStatusLabel}:</label>
+                        <h:selectOneMenu id="TaskStatus" 
+                                         value="#{projectTaskController.projectTaskModel.taskStatus}"
+                                         styleClass="inventory-sel-field-01">
+
+                            <f:selectItems value="#{projectTaskController.taskStatuses}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+
+                        <h:outputLabel for="phase_details_file_input" 
+                                       styleClass="attach-file-btn-01"
+                                       value="#{projectTaskTranslationService.taskAttachmentsLabel}">
+                        </h:outputLabel>
+                        <p:fileUpload mode="advanced"
+                                      widgetVar="phase_details_file"
+                                      id="phase_details_file"
+                                      auto="true"
+                                      fileLimit="5"
+                                      styleClass="ui-helper-hidden"
+                                      multiple="true"
+                                      skinSimple="true"
+                                      dragDropSupport="true"
+                                      allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xlsx|csv|xls)$/"
+                                      fileUploadListener="#{projectTaskController.fileUpload}"
+                                      />
+                    </div>
+                    <br clear="all" />
+                    <a class="auditnotes-link">#{projectTaskTranslationService.auditTrailandNotesLabel}:</a><br />
+
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a class="cancel-new-btn"
+                               onclick="PF('create_project_task').hide();">#{projectTaskTranslationService.cancelLabel}</a>
+                            <ui:fragment rendered="#{not empty projectTaskController.projectTaskModel.taskUUID}">
+                                <p:commandLink value="#{projectTaskTranslationService.updateLabel}"
+                                               update="@form"
+                                               actionListener="#{projectTaskController.saveProjectTask()}"
+                                               onsuccess="PF('create_project_task').hide();PF('update_task_success_message').show();"
+                                               styleClass="save-new-btn-01 mrg-rgt"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty projectTaskController.projectTaskModel.taskUUID}">
+                                <p:commandLink value="#{projectTaskTranslationService.saveLabel}"
+                                               update="@form taskSuccessForm"
+                                               actionListener="#{projectTaskController.saveProjectTask()}"
+                                               onsuccess="PF('create_project_task').hide();PF('task_success_message').show();"
+                                               styleClass="save-new-btn-01 mrg-rgt"/>
+                            </ui:fragment>
+
+                            <a class="save-new-btn-01 mrg-rgt" href="#">#{projectTaskTranslationService.approveLabel}</a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </o:form>
+
+    </p:dialog>
+    <ui:include src="/task/task-success-popup.xhtml"/>
+    <ui:include src="/task/manage-task-approvals.xhtml"/>
+    <ui:include src="/task/manage-task-alerts.xhtml"/>
+    <ui:include src="/task/view-task-finance-details.xhtml"/>
+    <ui:include src="/task/add-task-budget-details.xhtml"/>
+    <ui:include src="/task/view-task-budget-details.xhtml"/>
+
+</ui:composition>

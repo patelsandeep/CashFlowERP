@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="owned_expense_file"
+              appendTo="@(body)"
+              styleClass="message_dialog"
+              widgetVar="owned_expense_file"
+              resizable="false"
+              showHeader="false"
+              modal="true">
+
+        <div class="add-new-phase-popup-ctn" id="addnewphase" >
+            <h1> #{ownedEquipmentExpenseTranslationService.download}
+
+                <a href="#">
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('owned_expense_file').hide();"
+                         class ="close-icon-popup close-header" />
+                </a>
+            </h1>
+
+            <div class="add-new-phase-popup-field-ctnr clearfix">
+                <ui:repeat value="#{equipment.equipmentDocs}"
+                           var="fileUrl" >
+                    <p:commandLink ajax="false"
+                                   value="#{fileUrl.name}">
+                        <p:fileDownload value="#{staticContentController.content}" 
+                                        class="item-photo" />
+                        <f:param name="fileUUID" value="#{fileUrl.uuid}" />
+                    </p:commandLink>
+                    <br />
+                </ui:repeat>
+
+            </div>
+        </div>
+    </p:dialog>
+</ui:composition>

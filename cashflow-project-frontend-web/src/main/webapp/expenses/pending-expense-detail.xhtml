@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/main-template.xhtml"> 
+        <ui:define name="content">
+            <o:form id="pendingExpDetailForm" useRequestURI="true">
+                <div class="condent-right">
+                    <div class="content-right-ctn">
+                        <div class="title-01 clearfix">
+                            <h1>#{pendingExpenseTranslationService.expensePendingApprovalDetailLabel} </h1>
+                        </div>
+                        <div class="content-ctnr-01 clearfix">
+                            <div style="width: 375px;margin-left: 33px;">
+                                <p:messages autoUpdate="true" redisplay="false"/>
+                            </div>
+
+                            <div class="invoice-detail-ctn">
+                                <div class="timesheet-pending-table-ctn">
+                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                        <tr class="head">
+                                            <td colspan="11">#{pendingExpenseDetailController.pendingExpenseModel.name}: Submitted hours from 
+                                                <p:outputLabel value="#{pendingExpenseDetailController.pendingExpenseModel.expenseDate.time}">
+                                                    <f:convertDateTime pattern="d, MMM YYYY"/></p:outputLabel> to 
+                                                <p:outputLabel value="#{pendingExpenseDetailController.pendingExpenseModel.toExpenseDate.time}">
+                                                    <f:convertDateTime pattern="d, MMM YYYY"/></p:outputLabel></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <ui:repeat value="#{pendingExpenseDetailController.pendingExpenseInfoModel.entrySet().toArray()}"
+                                                       var="expense">
+                                                <td align="right" class="mondate">
+                                                    <h:outputText value="#{expense.key.time}">
+                                                        <f:convertDateTime type="date" pattern="EEE"/>
+                                                    </h:outputText>
+                                                    <span> 
+                                                        <h:outputText value="#{expense.key.time}">
+                                                            <f:convertDateTime type="date" pattern="MMM d"/>
+                                                        </h:outputText>
+                                                    </span>
+                                                </td>
+                                            </ui:repeat>
+                                            <td align="right">#{pendingExpenseTranslationService.totalLabel}</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3" colspan="2">
+                                                <ui:fragment rendered="#{pendingExpenseDetailController.sortBy eq 'people'}">
+                                                    <p>#{pendingExpenseDetailController.pendingExpenseModel.name}</p>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{pendingExpenseDetailController.sortBy eq 'project'}">
+                                                    <p>#{pendingExpenseDetailController.pendingExpenseModel.project}</p>
+                                                </ui:fragment>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#{pendingExpenseTranslationService.billableLabel}</td>
+                                            <ui:repeat value="#{pendingExpenseDetailController.pendingExpenseInfoModel.entrySet().toArray()}" var="expense">
+                                                <td align="right">#{pendingExpenseDetailController.calculateBillableAmount(expense.key)}</td>
+                                            </ui:repeat>
+                                            <td align="right"> #{pendingExpenseDetailController.pendingExpenseModel.billableExpense}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#{pendingExpenseTranslationService.nonBillableLabel}</td>
+                                            <ui:repeat value="#{pendingExpenseDetailController.pendingExpenseInfoModel.entrySet().toArray()}" var="expense">
+                                                <td align="right">#{pendingExpenseDetailController.calculateNonBillableAmount(expense.key)}</td>
+                                            </ui:repeat>
+                                            <td align="right"> #{pendingExpenseDetailController.pendingExpenseModel.nonBillableExpense}</td>
+                                        </tr>
+                                        <tr class="totalbg">
+                                            <td colspan="2"></td>
+                                            <td class="totaln">#{pendingExpenseTranslationService.totalLabel}</td>
+                                            <ui:repeat value="#{pendingExpenseDetailController.pendingExpenseInfoModel.entrySet().toArray()}"
+                                                       var="expense">
+                                                <td align="right">#{pendingExpenseDetailController.calculateTotalAmount(expense.key)}</td>
+                                            </ui:repeat>
+                                            <td class="totaln" align="right"> #{pendingExpenseDetailController.pendingExpenseModel.totalExpense}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="timesheet-detial-table-ctn">
+                                    <p class="details-txt">#{pendingExpenseTranslationService.expenseDetailsLabel}</p>
+                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                        <ui:repeat value="#{pendingExpenseDetailController.pendingExpenseInfoModel.entrySet().toArray()}"
+                                                   var="expenseDetail">
+                                            <c:set value="#{expenseDetail.value}" var="info" />
+
+                                            <ui:fragment rendered="#{pendingExpenseDetailController.sortBy eq 'people'}">
+                                                <tr class="alt">
+                                                    <td><p:outputLabel value="#{expenseDetail.key.time}">
+                                                            <f:convertDateTime pattern="dd MMM YYYY-EEE"/>
+                                                        </p:outputLabel></td>
+                                                    <td align="right">#{pendingExpenseTranslationService.nonBillableLabel}</td>
+                                                    <td align="right">#{pendingExpenseTranslationService.billableLabel}</td>
+                                                    <td align="right">#{pendingExpenseTranslationService.totalLabel}</td>
+                                                    <td align="right">#{pendingExpenseTranslationService.selectLabel}</td>
+                                                </tr>
+                                                <ui:repeat value="#{pendingExpenseDetailController.getExpenseInformation(expenseDetail.key)}"
+                                                           var="expenseInfo">
+
+                                                    <tr>
+                                                        <td>
+                                                            <p>
+                                                                <span>#{pendingExpenseTranslationService.projectLabel}:</span>
+                                                                #{expenseInfo.projectName}
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingExpenseTranslationService.phaseLabel}:</span>
+                                                                #{expenseInfo.phaseName} 
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingExpenseTranslationService.milestoneLabel}:</span>
+                                                                #{expenseInfo.milestoneName}
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingExpenseTranslationService.taskLabel}:</span> 
+                                                                #{expenseInfo.taskName}
+                                                            </p>
+                                                        </td>
+                                                        <td align="right">#{pendingExpenseDetailController.calculateProjectInfoNonBillableAmount(expenseInfo)}</td> 
+                                                        <td align="right">#{pendingExpenseDetailController.calculateProjectInfoBillableAmount(expenseInfo)}</td>
+                                                        <td align="right">#{pendingExpenseDetailController.calculateProjectInfoTotalAmount(expenseInfo)}</td>
+                                                        <td align="center">
+                                                            <h:selectBooleanCheckbox value="#{pendingExpenseDetailController.checked[expenseInfo.pendingUUID]}"  />
+                                                        </td>
+                                                    </tr>
+                                                </ui:repeat>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{pendingExpenseDetailController.sortBy eq 'project'}">
+                                                <tr class="alt">
+                                                    <td><p:outputLabel value="#{expenseDetail.key.time}">
+                                                            <f:convertDateTime pattern="dd MMM YYYY-EEE"/>
+                                                        </p:outputLabel></td>
+                                                    <td align="right">#{pendingExpenseTranslationService.nonBillableLabel}</td>
+                                                    <td align="right">#{pendingExpenseTranslationService.billableLabel}</td>
+                                                    <td align="right">#{pendingExpenseTranslationService.totalLabel}</td>
+                                                    <td align="right">#{pendingExpenseTranslationService.selectLabel}</td>
+                                                </tr>
+                                                <ui:repeat value="#{pendingExpenseDetailController.getExpenseInformationProject(expenseDetail.key)}" var="expenseInfo">
+
+                                                    <tr>
+                                                        <td>
+                                                            <p>
+                                                                <span>#{pendingExpenseTranslationService.teamMemberLabel}:</span>
+                                                                #{expenseInfo.memberName} 
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingExpenseTranslationService.phaseLabel}:</span>
+                                                                #{expenseInfo.phaseName} 
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingExpenseTranslationService.milestoneLabel}:</span>
+                                                                #{expenseInfo.milestoneName}
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingExpenseTranslationService.taskLabel}:</span> 
+                                                                #{expenseInfo.taskName}
+                                                            </p>
+                                                        </td>
+                                                        <td align="right">#{pendingExpenseDetailController.calculateMemberInfoNonBillableAmount(expenseInfo)}</td> 
+                                                        <td align="right">#{pendingExpenseDetailController.calculateMemberInfoBillableAmount(expenseInfo)}</td>
+                                                        <td align="right">#{pendingExpenseDetailController.calculateMemberInfoTotalAmount(expenseInfo)}</td>
+                                                        <td align="center">
+                                                            <h:selectBooleanCheckbox value="#{pendingExpenseDetailController.checked[expenseInfo.pendingUUID]}"  />
+                                                        </td>
+                                                    </tr>
+                                                </ui:repeat>
+                                            </ui:fragment>
+                                        </ui:repeat>
+                                    </table>
+                                </div>
+                                <a class="email-team-btn" href="#">
+                                    #{pendingExpenseTranslationService.emailTeamMemberLabel}
+                                </a>
+
+                                <div class="send-email-ctn clearfix">
+                                    <div class="send-email">
+                                        <ui:fragment rendered="#{pendingExpenseDetailController.sortBy eq 'people'}">
+                                            <p>
+                                                #{pendingExpenseTranslationService.sentEmailToLabel}
+                                                #{pendingExpenseDetailController.pendingExpenseModel.name}:
+                                            </p>
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{pendingExpenseDetailController.sortBy eq 'project'}">
+                                            <p>
+                                                #{pendingExpenseTranslationService.sentEmailToLabel} 
+                                                #{pendingExpenseDetailController.pendingExpenseModel.project}
+                                                #{pendingExpenseTranslationService.teamMembersLabel}:
+                                            </p>
+                                        </ui:fragment>
+                                        <h:inputText styleClass="sendemail-input-field" 
+                                                     value="#{pendingExpenseDetailController.pendingExpenseModel.message}"/>
+
+                                        <div class="clearfix">
+                                            <p:commandLink styleClass="save-new-btn mar-lft" 
+                                                           update="pendingExpenseMailSuccessForm"
+                                                           actionListener="#{pendingExpenseDetailController.sendEmail()}"
+                                                           onsuccess="PF('pending_expense_mail_success_message').show()"
+                                                           value="Send">
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btns-ctnr clearfix">
+                                    <div class="right">
+
+                                        <h:commandLink styleClass="reject-btn-01 mrg-rgt"
+                                                       value="#{pendingExpenseTranslationService.rejectExpenseReportLabel}"
+                                                       actionListener="#{pendingExpenseDetailController.approveSelectedPendingExpense()}">
+                                            <f:param name="action" value="reject"/>
+                                        </h:commandLink>
+                                        <h:commandLink styleClass="save-new-btn-01 mrg-rgt"
+                                                       value="#{pendingExpenseTranslationService.approveExpenseReport}"
+                                                       actionListener="#{pendingExpenseDetailController.approveSelectedPendingExpense()}" > 
+                                            <f:param name="action" value="approve"/>
+                                        </h:commandLink>
+
+
+                                        <p:link class="cancel-new-btn"
+                                                href="#{pendingExpenseDetailController.redirectApproveExpenseList()}" 
+                                                style="margin-left: 10px">#{pendingExpenseTranslationService.cancel}</p:link>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </o:form>
+            <ui:include src="/expenses/expense-email-success.xhtml"/>
+        </ui:define>
+
+    </ui:composition>
+</html>

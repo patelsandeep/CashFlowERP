@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/main-template.xhtml"> 
+        <ui:define name="content">
+            <o:form id="pendingDetailForm" useRequestURI="true">
+                <div class="condent-right">
+                    <div class="content-right-ctn">
+                        <div class="title-01 clearfix">
+                            <h1>#{pendingTimeSheetTranslationService.timesheetPendingApprovalDetailLabel} </h1>
+                        </div>
+                        <div class="content-ctnr-01 clearfix">
+                            <div style="width: 375px;margin-left: 33px;">
+                                <p:messages autoUpdate="true" redisplay="false"/>
+                            </div>
+
+                            <div class="invoice-detail-ctn">
+                                <div class="timesheet-pending-table-ctn">
+                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                        <tr class="head">
+                                            <td colspan="11">#{pendingTimeSheetDetailController.pendingTimeSheetModel.name}: Submitted hours from 
+                                                <p:outputLabel value="#{pendingTimeSheetDetailController.pendingTimeSheetModel.timesheetDate.time}">
+                                                    <f:convertDateTime pattern="d, MMM YYYY"/></p:outputLabel> to 
+                                                <p:outputLabel value="#{pendingTimeSheetDetailController.pendingTimeSheetModel.toTimesheetDate.time}">
+                                                    <f:convertDateTime pattern="d, MMM YYYY"/></p:outputLabel></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <ui:repeat value="#{pendingTimeSheetDetailController.pendingTimeSheetInfoModel.entrySet().toArray()}"
+                                                       var="timeSheet">
+                                                <td align="right" class="mondate">
+                                                    <h:outputText value="#{timeSheet.key.time}">
+                                                        <f:convertDateTime type="date" pattern="EEE"/>
+                                                    </h:outputText>
+                                                    <span> 
+                                                        <h:outputText value="#{timeSheet.key.time}">
+                                                            <f:convertDateTime type="date" pattern="MMM d"/>
+                                                        </h:outputText>
+                                                    </span>
+                                                </td>
+                                            </ui:repeat>
+                                            <td align="right">#{pendingTimeSheetTranslationService.totalLabel}</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3" colspan="2">
+                                                <ui:fragment rendered="#{pendingTimeSheetDetailController.sortBy eq 'people'}">
+                                                    <p>#{pendingTimeSheetDetailController.pendingTimeSheetModel.name}</p>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{pendingTimeSheetDetailController.sortBy eq 'project'}">
+                                                    <p>#{pendingTimeSheetDetailController.pendingTimeSheetModel.project}</p>
+                                                </ui:fragment>
+
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#{pendingTimeSheetTranslationService.billableLabel}</td>
+                                            <ui:repeat value="#{pendingTimeSheetDetailController.pendingTimeSheetInfoModel.entrySet().toArray()}" var="timeSheet">
+                                                <td align="right">#{pendingTimeSheetDetailController.calculateBillableHours(timeSheet.key)}</td>
+                                            </ui:repeat>
+                                            <td align="right"> #{pendingTimeSheetDetailController.pendingTimeSheetModel.billableHours}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#{pendingTimeSheetTranslationService.nonBillableLabel}</td>
+                                            <ui:repeat value="#{pendingTimeSheetDetailController.pendingTimeSheetInfoModel.entrySet().toArray()}" var="timeSheet">
+                                                <td align="right">#{pendingTimeSheetDetailController.calculateNonBillableHours(timeSheet.key)}</td>
+                                            </ui:repeat>
+                                            <td align="right"> #{pendingTimeSheetDetailController.pendingTimeSheetModel.nonBillableHours}</td>
+                                        </tr>
+                                        <tr class="totalbg">
+                                            <td colspan="2"></td>
+                                            <td class="totaln">#{pendingTimeSheetTranslationService.totalLabel}</td>
+                                            <ui:repeat value="#{pendingTimeSheetDetailController.pendingTimeSheetInfoModel.entrySet().toArray()}"
+                                                       var="timeSheet">
+                                                <td align="right">#{pendingTimeSheetDetailController.calculateTotalHours(timeSheet.key)}</td>
+                                            </ui:repeat>
+                                            <td class="totaln" align="right"> #{pendingTimeSheetDetailController.pendingTimeSheetModel.totalHours}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="timesheet-detial-table-ctn">
+                                    <p class="details-txt">#{pendingTimeSheetTranslationService.timeSheetDetailsLabel}</p>
+                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                        <ui:repeat value="#{pendingTimeSheetDetailController.pendingTimeSheetInfoModel.entrySet().toArray()}"
+                                                   var="timeSheetDetail">
+                                            <c:set value="#{timeSheetDetail.value}" var="info" />
+
+
+
+                                            <ui:fragment rendered="#{pendingTimeSheetDetailController.sortBy eq 'people'}">
+                                                <tr class="alt">
+                                                    <td><p:outputLabel value="#{timeSheetDetail.key.time}">
+                                                            <f:convertDateTime pattern="dd MMM YYYY-EEE"/>
+                                                        </p:outputLabel></td>
+                                                    <td align="right">#{pendingTimeSheetTranslationService.nonBillableHoursLabel}</td>
+                                                    <td align="right">#{pendingTimeSheetTranslationService.billableHoursLabel}</td>
+                                                    <td align="right">#{pendingTimeSheetTranslationService.totalHoursLabel}</td>
+                                                    <td align="right">#{pendingTimeSheetTranslationService.selectLabel}</td>
+                                                </tr>
+                                                <ui:repeat value="#{pendingTimeSheetDetailController.getTimeSheetInformation(timeSheetDetail.key)}"
+                                                           var="sheetInfo">
+
+                                                    <tr>
+                                                        <td>
+                                                            <p>
+                                                                <span>#{pendingTimeSheetTranslationService.projectLabel}:</span>
+                                                                #{sheetInfo.projectName}
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingTimeSheetTranslationService.phaseLabel}:</span>
+                                                                #{sheetInfo.phaseName} 
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingTimeSheetTranslationService.milestoneLabel}:</span>
+                                                                #{sheetInfo.milestoneName}
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingTimeSheetTranslationService.taskLabel}:</span> 
+                                                                #{sheetInfo.taskName}
+                                                            </p>
+                                                        </td>
+                                                        <td align="right">#{pendingTimeSheetDetailController.calculateProjectInfoNonBillableHours(sheetInfo)}</td> 
+                                                        <td align="right">#{pendingTimeSheetDetailController.calculateProjectInfoBillableHours(sheetInfo)}</td>
+                                                        <td align="right">#{pendingTimeSheetDetailController.calculateProjectInfoTotalHours(sheetInfo)}</td>
+                                                        <td align="center">
+                                                            <h:selectBooleanCheckbox value="#{pendingTimeSheetDetailController.checked[sheetInfo.pendingUUID]}"  />
+                                                        </td>
+                                                    </tr>
+                                                </ui:repeat>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{pendingTimeSheetDetailController.sortBy eq 'project'}">
+                                                <tr class="alt">
+                                                    <td><p:outputLabel value="#{timeSheetDetail.key.time}">
+                                                            <f:convertDateTime pattern="dd MMM YYYY-EEE"/>
+                                                        </p:outputLabel></td>
+                                                    <td align="right">#{pendingTimeSheetTranslationService.nonBillableHoursLabel}</td>
+                                                    <td align="right">#{pendingTimeSheetTranslationService.billableHoursLabel}</td>
+                                                    <td align="right">#{pendingTimeSheetTranslationService.totalHoursLabel}</td>
+                                                    <td align="right">#{pendingTimeSheetTranslationService.selectLabel}</td>
+                                                </tr>
+                                                <ui:repeat value="#{pendingTimeSheetDetailController.getTimeSheetInformationProject(timeSheetDetail.key)}" var="sheetInfo">
+
+                                                    <tr>
+                                                        <td>
+                                                            <p>
+                                                                <span>#{pendingTimeSheetTranslationService.teamMemberLabel}:</span>
+                                                                #{sheetInfo.memberName}
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingTimeSheetTranslationService.phaseLabel}:</span>
+                                                                #{sheetInfo.phaseName} 
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingTimeSheetTranslationService.milestoneLabel}:</span>
+                                                                #{sheetInfo.milestoneName}
+                                                            </p>
+                                                            <p>
+                                                                <span>#{pendingTimeSheetTranslationService.taskLabel}:</span> 
+                                                                #{sheetInfo.taskName}
+                                                            </p>
+
+                                                        </td>
+                                                        <td align="right">#{pendingTimeSheetDetailController.calculateMemberInfoNonBillableHours(sheetInfo)}</td> 
+                                                        <td align="right">#{pendingTimeSheetDetailController.calculateMemberInfoBillableHours(sheetInfo)}</td>
+                                                        <td align="right">#{pendingTimeSheetDetailController.calculateMemberInfoTotalHours(sheetInfo)}</td>
+                                                        <td align="center">
+                                                            <h:selectBooleanCheckbox value="#{pendingTimeSheetDetailController.checked[sheetInfo.pendingUUID]}"  />
+                                                        </td>
+                                                    </tr>
+                                                </ui:repeat>
+                                            </ui:fragment>
+                                        </ui:repeat>
+                                    </table>
+                                </div>
+                                <a class="email-team-btn" href="#">
+                                    #{pendingTimeSheetTranslationService.emailTeamMemberLabel}
+                                </a>
+                                <div class="send-email-ctn clearfix">
+                                    <div class="send-email">
+                                        <ui:fragment rendered="#{pendingTimeSheetDetailController.sortBy eq 'people'}">
+                                            <p>
+                                                #{pendingTimeSheetTranslationService.sentEmailToLabel}
+                                                #{pendingTimeSheetDetailController.pendingTimeSheetModel.name}:
+                                            </p>
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{pendingTimeSheetDetailController.sortBy eq 'project'}">
+                                            <p>
+                                                #{pendingTimeSheetTranslationService.sentEmailToLabel} 
+                                                #{pendingTimeSheetDetailController.pendingTimeSheetModel.project}
+                                                #{pendingTimeSheetTranslationService.teamMembersLabel}:
+                                            </p>
+                                        </ui:fragment>
+                                        <h:inputText styleClass="sendemail-input-field" 
+                                                     value="#{pendingTimeSheetDetailController.pendingTimeSheetModel.message}"/>
+
+                                        <div class="clearfix">
+                                            <p:commandLink styleClass="save-new-btn mar-lft" 
+                                                           update="pendingTimeSheetMailSuccessForm"
+                                                           action="#{pendingTimeSheetDetailController.sendEmail()}" 
+                                                           onsuccess="PF('pending_timesheet_mail_success_message').show()"
+                                                           value="Send">
+                                            </p:commandLink>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btns-ctnr clearfix">
+                                    <div class="right">
+
+                                        <h:commandLink styleClass="reject-btn-01 mrg-rgt"
+                                                       value="#{pendingTimeSheetTranslationService.rejectTimeSheetReportLabel}"
+                                                       actionListener="#{pendingTimeSheetDetailController.approveSelectedPendingTimeSheet()}" >
+                                            <f:param name="action" value="reject"/>
+                                        </h:commandLink>
+                                        <h:commandLink styleClass="save-new-btn-01 mrg-rgt"
+                                                       value="#{pendingTimeSheetTranslationService.approveTimeSheetReport}"
+                                                       actionListener="#{pendingTimeSheetDetailController.approveSelectedPendingTimeSheet()}" > 
+                                            <f:param name="action" value="approve"/>
+                                        </h:commandLink>
+
+                                        <p:link class="cancel-new-btn"
+                                                href="#{pendingTimeSheetDetailController.redirectApproveTimeSheetList()}" 
+                                                style="margin-left: 10px">#{pendingTimeSheetTranslationService.cancel}</p:link>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </o:form>
+            <ui:include src="/timesheet/email-success.xhtml"/>
+        </ui:define>
+
+    </ui:composition>
+</html>

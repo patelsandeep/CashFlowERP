@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="view_owned_equipment_expense"
+              widgetVar="view_owned_equipment_expense"
+              styleClass="phase-dialog"
+              showHeader="false"
+              resizable="false"
+              modal="true">
+        <o:form useRequestURI="true" 
+                enctype="multipart/form-data"
+                id="view_owned_equipment_expense_form">
+
+            <div class="phase-finance-popup-ctn" id="own-eqnt-sch" >
+                <h1>#{ownedEquipmentExpenseTranslationService.ownedEquipmentDetailHeader}
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('view_owned_equipment_expense').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <ui:fragment rendered="#{equipmentExpenseViewController.status ne 'APPROVED'}">
+                    <p:commandLink styleClass="trgth-btns"
+                                   actionListener="#{ownedEquipmentExpenseController.editExpense(equipmentExpenseViewController.ownedEquipmentExpenseModel.ownedEquipmentUUID)}"
+                                   onsuccess="PF('view_owned_equipment_expense').hide();PF('add_owned_equipment').show();"
+                                   update="add_owned_equipment_form"
+                                   value="#{ownedEquipmentExpenseTranslationService.edit}"/>
+                    </ui:fragment>
+
+                    <br clear="all" />
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{ownedEquipmentExpenseTranslationService.equipmentChargeScheduleId}:</label>
+                        <h:outputText styleClass="inventory-input-field-01"
+                                      value="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.ownedEquipmentId}"/>
+
+                    </div>
+                    <br clear="all" />
+
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.customerLabel}</label>
+                        <h:outputText styleClass="inventory-input-field-01"
+                                      value="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.customer}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.projectLabel}:</label>
+                        <h:outputText styleClass="inventory-input-field-01"
+                                      value="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.project}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.phaseLabel}</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.phaseName}"/>
+
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.milestoneLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.milestoneName}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.taskLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.taskName}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.taskIdLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.taskId}"/>
+                    </div>
+                    <br clear="all" />
+                    <div class="lable-field-area-02">
+                        <label>#{ownedEquipmentExpenseTranslationService.weekStartLabel}:</label>
+                        <p:calendar id="startDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.weekStartDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="startDate"/>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{ownedEquipmentExpenseTranslationService.weekEndingLabel}:</label>
+                        <p:calendar id="endDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.weekEndingDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="endDate"/>
+                    </div>
+
+                    <br clear="all" />
+                    <h:panelGroup id="equipTable">
+                        <div class="pro-table-ctrn">
+                            <table cellpadding="0" cellspacing="0" border="0" width="180%">
+                                <tr class="border-head-01">
+                                    <td>#{ownedEquipmentExpenseTranslationService.dateLabel}</td>	
+                                    <td>#{ownedEquipmentExpenseTranslationService.categoryLabel} </td>         
+                                    <td>#{ownedEquipmentExpenseTranslationService.subCategoryLabel} </td>	       	 
+                                    <td>#{ownedEquipmentExpenseTranslationService.equipmentNameLabel}</td> 	
+                                    <td>#{ownedEquipmentExpenseTranslationService.equipmentIdLabel} </td>	
+                                    <td>#{ownedEquipmentExpenseTranslationService.costRateLabel}</td>	
+                                    <td class="twd150">#{ownedEquipmentExpenseTranslationService.billRateLabel}</td>          
+                                    <td>#{ownedEquipmentExpenseTranslationService.unitsLabel}</td>     
+                                    <td>#{ownedEquipmentExpenseTranslationService.amountLabel}</td>        
+                                    <td>#{ownedEquipmentExpenseTranslationService.billableLabel}</td>   
+                                    <td>#{ownedEquipmentExpenseTranslationService.attachFileLabel}</td>
+                                </tr>
+                                <ui:repeat value="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.equipmentDetailModels}"
+                                           var="equipment" varStatus="equ">
+                                    <tr class="border-td">
+                                        <td>
+                                            <p:calendar id="equipmentDate" 
+                                                        converter="generalCalendarConverter"
+                                                        class="p-calander" 
+                                                        value="#{equipment.equipmentDate}"
+                                                        mindate="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.weekStartDate.time}"
+                                                        maxdate="#{equipmentExpenseViewController.ownedEquipmentExpenseModel.weekEndingDate.time}"
+                                                        pattern="yyyy-MM-dd"    
+                                                        pp:pattern="yyyy-MM-dd">
+
+                                            </p:calendar>
+                                            <p:watermark value="YYYY-MM-DD" for="equipmentDate"/>
+                                        </td>	
+                                        <td>
+                                            <h:selectOneMenu styleClass="inventory-sel-field-01 twd100"
+                                                             disabled="true"
+                                                             value="#{equipment.equipmentCategory}">
+                                                <f:selectItem/>
+                                                <f:selectItems value="#{equipmentExpenseViewController.allFaParentCategories}"
+                                                               var="cat"
+                                                               itemLabel="#{cat.displayCatName}"
+                                                               itemValue="#{cat.value}"/>
+                                            </h:selectOneMenu>
+                                        </td>
+                                        <td>
+                                            <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                                             disabled="true"
+                                                             value="#{equipment.equipmentSubCategory}">
+                                                <f:selectItem/>
+                                                <f:selectItems value="#{equipment.subCatList}"
+                                                               var="subCat"
+                                                               itemLabel="#{subCat.subCatName}"
+                                                               itemValue="#{subCat.value}"/>
+                                            </h:selectOneMenu>
+                                        </td>
+                                        <td>
+                                            <h:inputText styleClass="inventory-input-field-01 twd150"
+                                                         readonly="true"
+                                                         value="#{equipment.ownedEquipment.assetName}">
+                                            </h:inputText>
+
+
+                                        </td>
+                                        <td class="twd150">
+                                            <h:inputText styleClass="inventory-input-field-01 twd100"
+                                                         readonly="true"
+                                                         value="#{equipment.ownedEquipment.assetItemID}">
+                                            </h:inputText>
+                                        </td>
+                                        <td> 
+                                            <h:inputText styleClass="inventory-input-field-01 twd100"
+                                                         readonly="true"
+                                                         value="#{equipment.costRate}">
+
+                                            </h:inputText>
+                                        </td> 
+                                        <td> #{equipmentExpenseViewController.ownedEquipmentExpenseModel.currency}
+                                            <h:inputText styleClass="inventory-input-field-01 twd100"
+                                                         readonly="true"
+                                                         value="#{equipment.billRate}">
+                                                <f:convertNumber pattern="#,##0.00"
+                                                                 maxFractionDigits="2" />
+                                            </h:inputText>
+                                        </td> 
+                                        <td> 
+                                            <h:inputText styleClass="inventory-input-field-01 twd100"
+                                                         readonly="true"
+                                                         value="#{equipment.unit}">
+
+                                            </h:inputText>
+                                        </td> 
+
+                                        <td> <h:inputText styleClass="inventory-input-field-01"
+                                                          readonly="true"
+                                                          value="#{equipment.equipmentAmount}">
+                                            </h:inputText>
+                                        </td>
+                                        <td>
+                                            <h:inputText styleClass="inventory-input-field-01"
+                                                         readonly="true"
+                                                         value="#{equipment.billable}">
+                                            </h:inputText>
+                                        </td>
+
+                                        <td class="acction-ctn">
+                                            <a styleClass="cur">
+                                                <img src="/resources/images/dwnld-icon.png"
+                                                     onclick="PF('owned_expense_file').show();"
+                                                     alt="" />
+                                            </a>
+                                        </td>
+                                        <ui:include src="/equipment/owned-expense-files-popup.xhtml" />
+                                    </tr>
+                                </ui:repeat>
+                            </table>
+                        </div>
+                    </h:panelGroup>
+                    <a class="auditnotes-link" onclick="showhide27()">Audit Trail and Notes:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote27">
+
+                    </div>
+                    <hr />
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a class="cancel-new-btn" 
+                               onclick="PF('view_owned_equipment_expense').hide();">#{ownedEquipmentExpenseTranslationService.cancelLabel}</a> 
+                            <ui:fragment rendered="#{equipmentExpenseViewController.status ne 'APPROVED'}">
+                                <p:commandLink value="#{ownedEquipmentExpenseTranslationService.approveLabel}"
+                                               styleClass="save-new-btn-01 mrg-rgt"
+                                               actionListener="#{equipmentExpenseViewController.approveEquipment()}"
+                                               update="@form ownedEquipApproveSuccessForm"
+                                               onsuccess="PF('view_owned_equipment_expense').hide();PF('owned_equip_approve_success_message').show()">
+
+                                </p:commandLink>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                    <hr />
+                    <a class="advanced-settings-btn" onclick="showhide26()">Advanced Settings</a>
+
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+</ui:composition>

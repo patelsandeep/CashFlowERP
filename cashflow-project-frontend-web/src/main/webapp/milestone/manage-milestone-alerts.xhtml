@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="create_milestone_alert"
+              widgetVar="create_milestone_alert"
+              closeOnEscape="true"
+              showHeader="false"
+              resizable="false"
+              styleClass="phase-dialog"
+              modal="true">
+        <o:form useRequestURI="true" id="milestoneAlertForm">
+            <div class="add-new-phase-popup-ctn" id="managealerts-mile" >
+                <h1>Manage Alerts 
+                 <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('create_milestone_alert').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>Customer: </label>
+                        <input class="inventory-input-field-01" name="" type="text" value="Toronto Real Estate Development Co." />
+                    </div>
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>Project:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="New Toronto Star Trek Mall" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>Phase:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="Phase 1 Planning, Design and Legal Approval" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>Milestone:</label>
+                        <input class="inventory-input-field-01" name="" type="text" value="Milestone 1 Planning, Design and Legal Approval" />
+                    </div>
+                    <div class="prosum-field-area">
+                        <label>POC Alerts:</label>
+                        <textarea class="prosum-textarea-field-01" name="" cols="" rows="">When POC% reaches significant levels, alerts are automatically sent out to Project Managers and Supervisors. You can select the significant POC % levels where alerts will be sent out.</textarea>
+                    </div>
+                    <div class="pocalertcheck-field-area clearfix">
+                        <div class="artcheck-ctn">
+                            <input class="artcheck" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-01" name="" type="text" value="25% POC" />
+                        </div>
+                        <div class="artcheck-ctn">
+                            <input class="artcheck" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-01" name="" type="text" value="50% POC" />
+                        </div>
+                        <div class="artcheck-ctn">
+                            <input class="artcheck" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-01" name="" type="text" value="75% POC" />
+                        </div>
+                        <div class="artcheck-ctn">
+                            <input class="artcheck" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-01" name="" type="text" value="100% POC" />
+                        </div>
+                    </div>
+                    <div class="prosum-field-area">
+                        <label>PPC Lag Alerts:</label>
+                        <textarea class="prosum-textarea-field-01" name="" cols="" rows="">Physical Percentage of Completion (PPC) Lag Alerts are automatically sent out to Project Managers and Supervisors when there is a significant difference between POC % and PPC%. You can select the PPC Lag % level where alerts will be sent out.</textarea>
+                    </div>
+                    <div class="pocalertcheck-field-area clearfix">
+                        <div class="artcheck-ctn">
+                            <input class="artcheck" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-01" name="" type="text" value="10% PPC Lag" /> 
+                        </div>
+                        <div class="artcheck-ctn">
+                            <input class="artcheck" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-01" name="" type="text" value="20% PPC Lag" />
+                        </div>
+                        <div class="artcheck-ctn">
+                            <input class="artcheck" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-01" name="" type="text" value="30% PPC Lag" />
+                        </div>
+                        <div class="artcheck-ctn">
+                            <input class="artcheck" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-01" name="" type="text" value="50% PPC Lag" />
+                        </div>
+                    </div>
+                    <div class="lable-field-area-02"> <a class="attach-file-btn-01 fancybox" href="#ppcdetails-mile">Update PPC</a> </div>
+                    <br clear="all" />
+                    <div class="prosum-field-area">
+                        <label>Approval Alerts:</label>
+                        <textarea class="prosum-textarea-field-01" name="" cols="" rows="">Send alerts automatically to Project Managers and Supervisors when the following items are awaiting approval:</textarea>
+                    </div>
+                    <div class="pocalertcheck-field-area clearfix">
+                        <div class="artcheck-ctn-01">
+                            <input class="artcheck-01" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-02" name="" type="text" value="Timesheets and Expense Reports " />
+                        </div>
+                        <div class="artcheck-ctn-01">
+                            <input class="artcheck-01" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-02" name="" type="text" value="Equipment Expenses" />
+                        </div>
+                    </div>
+                    <div class="pocalertcheck-field-area clearfix">
+                        <div class="artcheck-ctn-01">
+                            <input class="artcheck-01" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-02" name="" type="text" value="Material Expenses" />
+                        </div>
+                        <div class="artcheck-ctn-01">
+                            <input class="artcheck-01" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-02" name="" type="text" value="Sub-Contractor Expenses" />
+                        </div>
+                    </div>
+                    <div class="pocalertcheck-field-area clearfix">
+                        <div class="artcheck-ctn-01">
+                            <input class="artcheck-01" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-02" name="" type="text" value="Change Orders" />
+                        </div>
+
+                        <div class="artcheck-ctn-01">
+                            <input class="artcheck-01" name="" type="checkbox" value="" />
+                            <input class="artcheck-input-field-02" name="" type="text" value="Invoices" />
+                        </div>
+                    </div>
+                    <a class="auditnotes-link" onClick="showhide7()">Audit Trail and Notes:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote7">
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                    </div>
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right"> <a class="cancel-new-btn" onclick="PF('create_milestone_alert').hide();" href="#">Cancel</a> <a class="save-new-btn-01 mrg-rgt" href="#">Save</a> </div>
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+</ui:composition>

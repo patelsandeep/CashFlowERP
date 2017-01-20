@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <o:form useRequestURI="true" id="subcontractor_expense_form">
+        <div id="tab9" class="tab_content clearfix">
+            <div class="protab-para-ctn">
+                <h1>#{subContractorExpenseTabTranslationService.subContractorExpenses}</h1>
+                <p>#{subContractorExpenseTabTranslationService.expenseDetails1} #{subContractorExpenseTabTranslationService.expenseDetails2}
+                    <a href="#">#{subContractorExpenseTabTranslationService.knowledgeBaseLabel}</a> and view <a href="#">#{subContractorExpenseTabTranslationService.subContractorLEMSLabel}</a></p>
+            </div>
+            <div class="tabtitle clearfix">
+                <h1>#{subContractorExpenseTabTranslationService.subContractorExpenses}</h1>
+                <p:commandLink actionListener="#{subContractorExpenseController.checkApprovedProject()}"
+                               styleClass="addtm-btn fancybox"
+                               process="@this"
+                               update="add_subcontractor_expense_form"
+                               value="+ #{subContractorExpenseTabTranslationService.addNewSubContractorExpenses}" />
+
+                <div class="all-customer-field-ctn-01">
+                    <h:inputText class="search-field"
+                                 value="#{subContractorExpenseListController.searchValue}">
+                    </h:inputText>
+                    <h:selectOneMenu styleClass="all-sel-field-02"
+                                     value="#{subContractorExpenseListController.searchSupplierUUID}">
+                        <f:selectItem itemLabel="#{subContractorExpenseTabTranslationService.filterByLabel}"
+                                      />
+                        <f:selectItems value="#{subContractorExpenseListController.suppliers}"
+                                       var="sup"
+                                       itemLabel="#{sup.name}"
+                                       itemValue="#{sup.uuid}"/>
+
+                    </h:selectOneMenu>
+                    <h:selectOneMenu styleClass="all-sel-field-02"
+                                     value="#{subContractorExpenseListController.searchExpenseStatus}">
+                        <f:selectItems value="#{subContractorExpenseListController.expenseStatuses}"/>
+
+                    </h:selectOneMenu>
+                    <p:commandLink class="trgth-btns" 
+                                   value="Search" 
+                                   update="@form" />
+                </div>
+            </div>
+            <div class="pro-table-ctrn">
+                <table cellpadding="0" cellspacing="0" border="0" width="1300px">
+                    <tr class="border-head">
+                        <td>#{subContractorExpenseTabTranslationService.projectID}</td>
+                        <td>#{subContractorExpenseTabTranslationService.subContractor}</td>
+                        <td>#{subContractorExpenseTabTranslationService.supplierID}</td>
+                        <td>#{subContractorExpenseTabTranslationService.invoiceDate}</td>
+                        <td>#{subContractorExpenseTabTranslationService.invoiceNumber}</td>
+                        <td>#{subContractorExpenseTabTranslationService.costAmount}</td>
+                        <td>#{subContractorExpenseTabTranslationService.markUpAmount}</td>
+                        <td>#{subContractorExpenseTabTranslationService.billAmount}</td>
+                        <td>#{subContractorExpenseTabTranslationService.status}</td>
+                        <td>#{subContractorExpenseTabTranslationService.action}</td>
+                    </tr>
+                    <ui:repeat value="#{subContractorExpenseListController.subContractorExpenses}"
+                               var="expenseInfo" >
+                        <tr class="border-td">
+                            <td>#{expenseInfo.projectId}</td>
+                            <td>#{expenseInfo.subContractorName}</td>
+                            <td>#{expenseInfo.supplierID}</td>
+                            <td>
+                                <h:outputText value="#{expenseInfo.invoiceDate.time}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:outputText>
+                            </td>
+                            <td>
+                                <p:commandLink styleClass="fancybox"
+                                               update="add_subcontractor_expense_form"
+                                               actionListener="#{subContractorExpenseController.viewExpense(expenseInfo.expenseUuid)}"
+                                               onsuccess="PF('add_subcontractor_expense').show();"
+                                               value="#{expenseInfo.invoiceNumber}">
+                                    <f:param name="mode" value="view" />
+                                </p:commandLink>
+                            </td>
+                            <td>#{expenseInfo.costAmount}</td>
+                            <td>#{expenseInfo.markUpAmount}</td>
+                            <td>#{expenseInfo.billableAmount}</td>
+                            <td>
+                                <ui:fragment rendered="#{expenseInfo.expenseStatus eq 'SAVED'}">
+                                    <a href="#" class="pending-btn-02">#{expenseInfo.expenseStatus}</a>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{expenseInfo.expenseStatus eq 'APPROVED'}">
+                                    <a href="#" class="safe-btn">#{expenseInfo.expenseStatus}</a>
+                                </ui:fragment>
+                            </td>
+                            <td>
+                                <p:commandLink update="add_subcontractor_expense_form"
+                                               actionListener="#{subContractorExpenseController.viewExpense(expenseInfo.expenseUuid)}"
+                                               onsuccess="PF('add_subcontractor_expense').show();">
+                                    <f:param name="mode" value="edit" />
+                                    <img src="/resources/images/ac-edit-icon.png" alt="" />
+                                </p:commandLink>
+
+                                <p:commandLink update="add_subcontractor_expense_form"
+                                               actionListener="#{subContractorExpenseController.viewExpense(expenseInfo.expenseUuid)}"
+                                               onsuccess="PF('add_subcontractor_expense').show();">
+                                    <f:param name="mode" value="view" />
+                                    <img src="/resources/images/view-icon.png" alt="" />
+                                </p:commandLink>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                </table>
+            </div>
+            <div class="paging-ctnr clearfix">
+                <h:selectOneMenu value="#{subContractorExpenseListController.limit}" 
+                                 styleClass="col-sel-field">
+                    <f:selectItems value="#{subContractorExpenseListController.limits}"/>
+                    <p:ajax update="@form" />
+                </h:selectOneMenu>
+                <div class="next-prev-ctn clearfix">
+                    <p:commandLink styleClass="prev-btn"
+                                   value="Previous"
+                                   actionListener="#{subContractorExpenseListController.previousPage()}"
+                                   disabled="#{subContractorExpenseListController.page lt 1}"
+                                   update="@form"/>
+                    <span class="pages-info">#{subContractorExpenseListController.page + 1} of #{subContractorExpenseListController.pageCount}</span>
+                    <p:commandLink styleClass="next-btn" 
+                                   value="Next" 
+                                   actionListener="#{subContractorExpenseListController.nextPage()}"
+                                   disabled="#{subContractorExpenseListController.page ge subContractorExpenseListController.maxPage}"
+                                   update="@form"/>
+                </div>
+                <h:selectOneMenu value="#{subContractorExpenseListController.page}" 
+                                 styleClass="page-sel-field">
+                    <f:selectItems value="#{subContractorExpenseListController.pages}"/>
+                    <p:ajax update="@form" />
+                </h:selectOneMenu>
+            </div>
+            <hr class="hrline-02" />
+            <div class="btns-ctnr-04 clearfix">
+                <div class="right"> 
+                    <p:link href="#{subContractorExpenseListController.redirectProjectSummary()}"
+                            value="#{subContractorExpenseTabTranslationService.cancel}"
+                            styleClass="cancel-new-btn">
+                    </p:link>
+                </div>
+            </div>
+        </div>
+    </o:form>
+    <ui:include src="/timeandexpense/validation-popup.xhtml" />
+    <ui:include src="/sub-contractors/subcontractor-expense.xhtml" />
+    <ui:include src="/sub-contractors/success-popup.xhtml" />
+</ui:composition>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.cashflow</groupId>
+        <artifactId>cashflow-module-parent-pom</artifactId>
+        <version>1.0.1</version>
+    </parent>
+    
+    <groupId>com.cashflow</groupId>
+    <artifactId>cashflow-project</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+	
+    <properties>
+        <com.cashflow.project.version>${project.version}</com.cashflow.project.version>
+    </properties>
+    
+    <profiles>
+        <profile>
+            <id>xa-datasource</id>
+            <properties>
+                <com.cashflow.jta-datasource>java:/jboss/datasources/project-xa</com.cashflow.jta-datasource>
+            </properties>
+        </profile>
+    </profiles>
+    
+    <modules>
+        <module>cashflow-project-domain</module>
+        <module>cashflow-project-domain-facade</module>
+        <module>cashflow-project-service-api</module>
+        <module>cashflow-project-domain-service</module>
+        <module>cashflow-project-config</module>
+        <module>cashflow-project-config-client</module>
+        <module>cashflow-project-service-client</module>
+        <module>cashflow-project-service-endpoint</module>
+        <module>cashflow-project-translation</module>
+        <module>cashflow-project-translation-client</module>
+        <module>cashflow-project-frontend</module>
+        <module>cashflow-project-frontend-web</module>
+    </modules>
+    
+</project>

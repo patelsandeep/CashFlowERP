@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="expense_files"
+              appendTo="@(body)"
+              styleClass="message_dialog"
+              widgetVar="expense_files"
+              showHeader="false"
+              modal="true">
+        <o:form useRequestURI="true" id="expenseFileForm">
+
+            <div class="add-new-phase-popup-ctn" id="addnewphase" >
+                <h1> #{expenseTranslationService.downloadExpenseFilesLabel}
+
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('expense_files').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <ui:repeat value="#{expenseController.files}"
+                               var="doc">
+                        <label class="file-view">
+                            <p:commandLink value="#{doc.name}"
+                                           styleClass="auditnotes-link"
+                                           ajax="false">
+                                <p:fileDownload value="#{staticContentController.content}" 
+                                                class="item-photo" />
+                                <f:param name="fileUUID" value="#{doc.uuid}" />
+                            </p:commandLink>
+                        </label>
+                    </ui:repeat>
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a href="#"
+                               class="save-new-btn-01 mrg-rgt ok-btn" 
+                               onclick="PF('expense_files').hide();">#{expenseTranslationService.cancelLabel}</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </o:form>
+    </p:dialog>
+</ui:composition>

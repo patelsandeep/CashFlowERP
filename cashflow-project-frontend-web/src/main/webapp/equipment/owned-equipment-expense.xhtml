@@ -1,0 +1,353 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="add_owned_equipment"
+              widgetVar="add_owned_equipment"
+              styleClass="phase-dialog"
+              showHeader="false"
+              resizable="false"
+              modal="true">
+        <o:form useRequestURI="true" enctype="multipart/form-data" id="add_owned_equipment_form">
+
+            <div class="phase-finance-popup-ctn" id="own-eqnt-sch" >
+                <h1>#{ownedEquipmentExpenseTranslationService.ownedEquipmentHeader}
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('add_owned_equipment').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{ownedEquipmentExpenseTranslationService.equipmentChargeScheduleId}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.ownedEquipmentId}"/>
+
+                    </div>
+                    <br clear="all" />
+
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.customerLabel}</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.customer}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.projectLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.project}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.phaseLabel}</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         value="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.phase}">
+                            <f:selectItem itemLabel="#{ownedEquipmentExpenseTranslationService.selectPhaseLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{ownedEquipmentExpenseController.projectPhases}"
+                                           var="phase"
+                                           itemLabel="#{phase.name}"
+                                           itemValue="#{phase.uuid}"/>
+                            <p:ajax update="mile"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.milestoneLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="mile"
+                                         value="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.milestone}">
+                            <f:selectItem itemLabel="#{ownedEquipmentExpenseTranslationService.selectMilestoneLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{ownedEquipmentExpenseController.milestones}"
+                                           var="milestone"
+                                           itemLabel="#{milestone.name}"
+                                           itemValue="#{milestone.uuid}"/>
+                            <p:ajax update="task"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.taskLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="task"
+                                         value="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.task}">
+                            <f:selectItem itemLabel="#{ownedEquipmentExpenseTranslationService.selectTaskLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{ownedEquipmentExpenseController.projectTasks}"
+                                           var="task"
+                                           itemLabel="#{task.name}"
+                                           itemValue="#{task.uuid}"/>
+
+                            <p:ajax update="taskId" listener="#{ownedEquipmentExpenseController.updateTaskID}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{ownedEquipmentExpenseTranslationService.taskIdLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="taskId"
+                                     readonly="true"
+                                     value="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.taskId}"/>
+                    </div>
+                    <br clear="all" />
+                    <div class="lable-field-area-02">
+                        <label>#{ownedEquipmentExpenseTranslationService.weekStartLabel}:</label>
+                        <p:calendar id="startDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.weekStartDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                            <p:ajax event="dateSelect" update="equipTable"/>
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="startDate"/>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{ownedEquipmentExpenseTranslationService.weekEndingLabel}:</label>
+                        <p:calendar id="endDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.weekEndingDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                            <p:ajax event="dateSelect" update="equipTable"/>
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="endDate"/>
+                    </div>
+
+                    <br clear="all" />
+                    <h:panelGroup id="equipTable">
+                        <div class="pro-table-ctrn">
+                            <table cellpadding="0" cellspacing="0" border="0" width="180%">
+                                <tr class="border-head-01">
+                                    <td>#{ownedEquipmentExpenseTranslationService.dateLabel}</td>	
+                                    <td>#{ownedEquipmentExpenseTranslationService.categoryLabel} </td>         
+                                    <td>#{ownedEquipmentExpenseTranslationService.subCategoryLabel} </td>	       	 
+                                    <td>#{ownedEquipmentExpenseTranslationService.equipmentNameLabel}</td> 	
+                                    <td>#{ownedEquipmentExpenseTranslationService.equipmentIdLabel} </td>	
+                                    <td>#{ownedEquipmentExpenseTranslationService.costRateLabel}</td>	
+                                    <td class="twd150">#{ownedEquipmentExpenseTranslationService.billRateLabel}</td>          
+                                    <td>#{ownedEquipmentExpenseTranslationService.unitsLabel}</td>     
+                                    <td>#{ownedEquipmentExpenseTranslationService.amountLabel}</td>        
+                                    <td>#{ownedEquipmentExpenseTranslationService.billableLabel}</td>   
+                                    <td>#{ownedEquipmentExpenseTranslationService.attachFileLabel}</td>
+                                    <td>#{ownedEquipmentExpenseTranslationService.actionLabel}</td>
+                                </tr>
+                                <ui:repeat value="#{ownedEquipmentExpenseController.equipmentDetails}" var="equipment" varStatus="equ">
+                                    <tr class="border-td">
+                                        <td>
+                                            <p:calendar id="equipmentDate" 
+                                                        converter="generalCalendarConverter"
+                                                        class="p-calander" 
+                                                        value="#{equipment.equipmentDate}"
+                                                        mindate="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.weekStartDate.time}"
+                                                        maxdate="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.weekEndingDate.time}"
+                                                        pattern="yyyy-MM-dd"    
+                                                        pp:pattern="yyyy-MM-dd">
+                                                <p:ajax  update="@form"
+                                                         event="dateSelect"/>
+                                            </p:calendar>
+                                            <p:watermark value="YYYY-MM-DD" for="equipmentDate"/>
+                                        </td>	
+                                        <td>
+                                            <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                                             value="#{equipment.equipmentCategory}">
+                                                <f:selectItem itemLabel="#{ownedEquipmentExpenseTranslationService.selectCategoryLabel}"
+                                                              itemValue="#{null}"/>
+                                                <f:selectItems value="#{ownedEquipmentExpenseController.allFaParentCategories}"
+                                                               var="cat"
+                                                               itemLabel="#{cat.displayCatName}"
+                                                               itemValue="#{cat.value}"/>
+                                                <p:ajax update="@form" listener="#{ownedEquipmentExpenseController.getSubCategories(equipment)}"/>
+                                            </h:selectOneMenu>
+
+
+                                        </td>
+                                        <td>
+                                            <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                                             value="#{equipment.equipmentSubCategory}">
+                                               <f:selectItem itemLabel="#{ownedEquipmentExpenseTranslationService.selectSubCategoryLabel}"
+                                                              itemValue="#{null}"/>
+                                                <f:selectItems value="#{equipment.subCatList}"
+                                                               var="subCat"
+                                                               itemLabel="#{subCat.subCatName}"
+                                                               itemValue="#{subCat.value}"/>
+                                                <p:ajax update="@form" listener="#{ownedEquipmentExpenseController.getEquipments(equipment)}"/>
+                                            </h:selectOneMenu>
+
+
+                                        </td>
+                                        <td>
+                                            <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                                             value="#{equipment.ownedEquipment}">
+                                                <f:selectItem/>
+                                                <f:selectItems value="#{equipment.equipmentList}"
+                                                               var="equip"
+                                                               itemLabel="#{equip.assetName}"
+                                                               itemValue="#{equip}"/>
+                                                <p:ajax update="@form" listener="#{ownedEquipmentExpenseController.getEquipmentDetails(equipment)}"/>
+                                            </h:selectOneMenu>
+
+
+                                        </td>
+                                        <td class="twd150">
+
+                                            <p:autoComplete id="equipId"
+                                                            inputStyleClass="cus-sel-field"
+                                                            forceSelection="true"
+                                                            inputStyle="padding-right: 0px; padding-left: 0px; box-shadow: none;width: 100px;"
+                                                            style="margin-left: 5px; padding-left: 0px"
+                                                            minQueryLength="2"
+                                                            dropdown="true"
+                                                            emptyMessage="No Equipment found with the specified ID"
+                                                            completeMethod="#{ownedEquipmentExpenseController.getEquipmentByID}"
+                                                            queryDelay="400"
+                                                            var="equip"
+                                                            itemValue="#{equip}"
+                                                            itemLabel="#{equip.assetItemID}"
+                                                            value="#{equipment.ownedEquipment}"
+                                                            cache="true">
+                                                <p:ajax event="itemSelect" 
+                                                        update="@form"
+                                                        listener="#{ownedEquipmentExpenseController.getEquipmentDetails(equipment)}"/>
+
+                                            </p:autoComplete>
+
+                                        </td>
+                                        <td> 
+                                            <h:inputText styleClass="inventory-input-field-01 twd100"
+                                                         readonly="true"
+                                                         value="#{equipment.costRate}">
+
+                                            </h:inputText>
+                                        </td> 
+                                        <td> #{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.currency}
+                                            <h:inputText styleClass="inventory-input-field-01 twd100"
+                                                         value="#{equipment.billRate}">
+                                                <f:convertNumber pattern="#,##0.00"
+                                                                 maxFractionDigits="2" />
+                                                <p:ajax update="@form" 
+                                                        listener="#{ownedEquipmentExpenseController.calculateEquipmentAmount(equipment)}"/>
+                                            </h:inputText>
+                                        </td> 
+                                        <td> 
+                                            <h:inputText styleClass="inventory-input-field-01 twd100"
+                                                         value="#{equipment.unit}">
+                                                <p:ajax update="@form" 
+                                                        listener="#{ownedEquipmentExpenseController.calculateEquipmentAmount(equipment)}"/>
+                                            </h:inputText>
+                                        </td> 
+
+                                        <td> <h:inputText styleClass="inventory-input-field-01"
+                                                          readonly="true"
+                                                          value="#{equipment.equipmentAmount}">
+                                            </h:inputText></td>
+                                        <td>
+                                            <h:selectOneMenu value="#{equipment.billable}" 
+                                                             styleClass="inventory-sel-field-01">
+                                                <f:selectItems value="#{ownedEquipmentExpenseController.billableType}"/>
+                                                <p:ajax />
+                                            </h:selectOneMenu>
+
+                                        </td>
+
+                                        <td class="acction-ctn">
+                                            <h:outputLabel styleClass="cur">
+                                                <img src="/resources/images/dwnld-icon.png" alt="" />
+                                            </h:outputLabel>
+
+                                            <h:outputLabel for="equip_details_file_input" styleClass="upload-icon cur">
+                                                <img src="/resources/images/upld-icon.png" alt="" />
+                                            </h:outputLabel>
+
+                                            <p:fileUpload mode="advanced"
+                                                          widgetVar="equip_details_file"
+                                                          id="equip_details_file"
+                                                          auto="true"
+                                                          fileLimit="5"
+                                                          styleClass="ui-helper-hidden"
+                                                          multiple="true"
+                                                          skinSimple="true"
+                                                          update="ownedEquipSuccessForm"
+                                                          dragDropSupport="true"
+                                                          oncomplete="PF('owned_equip_success_message').show();"
+                                                          allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xlsx|csv|xls)$/"
+                                                          fileUploadListener="#{ownedEquipmentExpenseController.fileUpload}"
+                                                          >
+                                                <f:attribute name="equipUUID" value="#{equipment.uuid}" />
+                                            </p:fileUpload>
+
+
+
+
+                                        </td>
+                                        <td>
+                                            <p:commandLink immediate="true"
+                                                           process="@this"
+                                                           update="@form"
+                                                           actionListener="#{ownedEquipmentExpenseController.ownedEquipmentExpenseModel.equipmentDetailModels.remove(equipment)}">
+                                                <p:graphicImage value="/resources/images/del-icon.png"/>
+
+                                            </p:commandLink>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                                <tr class="border-td">
+                                    <td colspan="11">
+                                        <p:commandLink styleClass="add-reminder-link" 
+                                                       immediate="true" 
+                                                       process="@this"
+                                                       partialSubmit="true" 
+                                                       update="add_owned_equipment_form:equipTable"
+                                                       actionListener="#{ownedEquipmentExpenseController.addEquipmentData()}"
+                                                       value="#{ownedEquipmentExpenseTranslationService.addLineLabel}">
+
+                                        </p:commandLink>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </h:panelGroup>
+                    <a class="auditnotes-link" onclick="showhide27()">Audit Trail and Notes:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote27">
+
+                    </div>
+                    <hr />
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a class="cancel-new-btn" 
+                               onclick="PF('add_owned_equipment').hide();">#{ownedEquipmentExpenseTranslationService.cancelLabel}</a> 
+
+                            <p:commandLink value="#{ownedEquipmentExpenseTranslationService.saveLabel}"
+                                           styleClass="save-new-btn-01 mrg-rgt"
+                                           actionListener="#{ownedEquipmentExpenseController.saveOwnedEquipment()}"
+                                           update="@form ownedEquipSuccessForm"
+                                           onsuccess="PF('add_owned_equipment').hide();PF('owned_equip_success_message').show()">
+                                <f:param name="action" value="save"/>
+                            </p:commandLink>
+                            
+                              <p:commandLink value="#{ownedEquipmentExpenseTranslationService.approveLabel}"
+                                           styleClass="save-new-btn-01 mrg-rgt"
+                                           actionListener="#{ownedEquipmentExpenseController.saveOwnedEquipment()}"
+                                           update="@form ownedEquipSuccessForm"
+                                           onsuccess="PF('add_owned_equipment').hide();PF('owned_equip_success_message').show()">
+                              <f:param name="action" value="approve"/>
+                              </p:commandLink>
+                        </div>
+                    </div>
+                    <hr />
+                    <a class="advanced-settings-btn" onclick="showhide26()">Advanced Settings</a>
+
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+    <ui:include src="/equipment/equipment-success-popup.xhtml"/>
+</ui:composition>

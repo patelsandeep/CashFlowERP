@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:composition template="/main-template.xhtml"> 
+        <ui:define name="content"> 
+            <div class="condent-right">
+                <div class="content-right-ctn">
+                    <div class="title-01 clearfix">
+                        <ui:fragment rendered="#{empty projectController.projectModel.projectUUID}">
+                            <h1>#{projectTranslationService.createProjectHeader}</h1>
+                        </ui:fragment> 
+
+                        <ui:fragment rendered="#{!empty projectController.projectModel.projectUUID}">
+                            <h1>#{projectController.projectModel.projectName}</h1>
+                        </ui:fragment>
+                    </div>
+                    <div class="content-ctnr-03 clearfix">
+                        <o:form useRequestURI="true" id="createProjectForm" >
+                            <div class="clearfix">
+                                <div class="lable-field-area lfa-mrgt">
+                                    <label>#{projectTranslationService.projectNameLabel}:</label>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 value="#{projectController.projectModel.projectName}"/>
+                                </div>
+                                <div class="lable-field-area lfa-mrgt">
+                                    <label>#{projectTranslationService.projectIdLabel}:</label>
+                                    <h:inputText styleClass="inventory-input-field-01" 
+                                                 value="#{projectController.projectModel.projectId}"/>
+                                </div>
+                                <div class="lable-field-area">
+                                    <h:panelGroup id="custLabel">
+                                        <ui:fragment rendered="#{projectController.projectModel.projectType eq 'CUSTOMER_PROJECT'}">
+                                            <label>#{projectTranslationService.customerNameLabel}:</label>
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{projectController.projectModel.projectType eq 'INTERNAL_PROJECT'}">
+                                            <label>#{projectTranslationService.departmentNameLabel}:</label>
+                                        </ui:fragment>
+                                    </h:panelGroup>
+                                    <p:autoComplete cache="true"
+                                                    inputStyleClass="inventory-input-field-01"
+                                                    inputStyle="padding-right: 0px; padding-left: 0px; box-shadow: none;"
+                                                    completeMethod="#{projectController.loadProjectTypeValues}"
+                                                    emptyMessage="#{projectTranslationService.noCustomerOrDeptFoundMessage}"
+                                                    forceSelection="true"
+                                                    queryDelay="400"
+                                                    minQueryLength="3"
+                                                    placeholder="#{projectTranslationService.messageForCustomerDeptSearch}"
+                                                    value="#{projectController.projectModel.projectTypeEntityModel}"
+                                                    title="#{projectTranslationService.messageForCustomerDeptSearch}"
+                                                    var="bem"
+                                                    itemValue="#{bem}"
+                                                    itemLabel="#{bem.entityName}"
+                                                    style="width: 320px">
+                                        <p:ajax event="itemSelect"
+                                                update="custOrDeptId custLabel currency costCurrency profitCurrency revenueCurrency tabContent"
+                                                listener="#{projectController.updateCustorDeptId()}"/>
+                                    </p:autoComplete>
+                                </div>
+                                <h:panelGroup id="custOrDeptId">
+                                    <ui:fragment rendered="#{projectController.projectModel.projectType eq 'CUSTOMER_PROJECT'}">
+                                        <div class="lable-field-area">
+                                            <label>#{projectTranslationService.customerIdLabel}:</label>
+                                            <h:inputText styleClass="inventory-input-field-01" value="#{projectController.projectModel.customerId}"/>
+                                        </div>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{projectController.projectModel.projectType eq 'INTERNAL_PROJECT'}">  
+                                        <div class="lable-field-area">
+                                            <label>#{projectTranslationService.departmentIdLabel}:</label>
+                                            <h:inputText styleClass="inventory-input-field-01" value="#{projectController.projectModel.departmentId}"/>
+                                        </div>
+                                    </ui:fragment>
+                                </h:panelGroup>
+                                <div class="lable-field-area">
+                                    <label>#{projectTranslationService.startDateLabel}:</label>
+                                    <p:calendar id="startDate" 
+                                                class="p-calander" 
+                                                value="#{projectController.projectModel.startDate}"
+                                                pattern="yyyy-MM-dd">
+                                    </p:calendar>
+                                    <p:watermark value="YYYY-MM-DD" for="startDate"/>
+                                </div>
+                                <div class="lable-field-area">
+                                    <label>#{projectTranslationService.endDateLabel}:</label>
+                                    <p:calendar id="endDate" 
+                                                value="#{projectController.projectModel.endDate}"
+                                                class="p-calander" 
+                                                pattern="yyyy-MM-dd">
+                                    </p:calendar>
+                                    <p:watermark value="YYYY-MM-DD" for="endDate"/>
+                                </div>
+                                <div class="lable-field-area">
+                                    <label>#{projectTranslationService.contractTypeLabel}:</label>
+                                    <h:selectOneMenu id="contractType" 
+                                                     value="#{projectController.projectModel.contractType}"
+                                                     styleClass="inventory-sel-field-01">
+
+                                        <f:selectItems value="#{projectController.contractTypes}"/>
+
+                                        <p:ajax listener="#{projectController.updateRevenueMethod}" event="change" update="revenueMethod"/>
+                                    </h:selectOneMenu>
+
+                                </div>
+                                <div class="lable-field-area">
+                                    <label>#{projectTranslationService.revenueRecMethodLabel}:</label>
+                                    <h:selectOneMenu id="revenueMethod" 
+                                                     value="#{projectController.projectModel.revenueRecMethod}"
+                                                     styleClass="inventory-sel-field-01">
+
+                                        <f:selectItems value="#{projectController.revenueRecodingMethods}"/>
+
+                                    </h:selectOneMenu>
+
+                                </div>
+                                <div class="lable-field-area">
+                                    <label>#{projectTranslationService.currencyLabel}:</label>
+                                    <h:selectOneMenu id="currency" 
+                                                     value="#{projectController.projectModel.currency}"
+                                                     styleClass="inventory-sel-field-01">
+
+                                        <f:selectItems value="#{projectController.currencies}"/>
+                                        <p:ajax update="costCurrency revenueCurrency profitCurrency tabContent"/>
+
+                                    </h:selectOneMenu>
+
+                                </div>
+
+                                <div class="lable-field-area">
+                                    <label>#{projectTranslationService.projectBudgetedCostLabel}:</label>
+                                    <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                                 id="costCurrency"
+                                                 readonly="true"
+                                                 value="#{projectController.projectModel.currency}"/>
+                                    <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                                 value="#{projectController.projectModel.projectBudgedCost}">
+                                        <f:convertNumber pattern="#,##0.00" 
+                                                         maxFractionDigits="2" />  
+                                        <p:ajax update="@this grossProfit" listener="#{projectController.calculateProjectGrossProfit}" />
+                                    </h:inputText>
+
+                                </div>
+                                <div class="lable-field-area">
+                                    <label>#{projectTranslationService.projectRevenueLabel}:</label>
+                                    <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                                 id="revenueCurrency"
+                                                 readonly="true"
+                                                 value="#{projectController.projectModel.currency}"/>
+                                    <h:inputText styleClass="inventory-input-field-07 input-val-07"
+                                                 value="#{projectController.projectModel.projectRevenue}">
+                                        <f:convertNumber pattern="#,##0.00" 
+                                                         maxFractionDigits="2" />  
+                                        <p:ajax update="@this grossProfit" listener="#{projectController.calculateProjectGrossProfit}"/>
+                                    </h:inputText>
+                                </div>
+                                <div class="lable-field-area">
+                                    <label>#{projectTranslationService.projectGrossProfitLabel}:</label>
+                                    <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                                 id="profitCurrency"
+                                                 readonly="true"
+                                                 value="#{projectController.projectModel.currency}"/>
+                                    <h:inputText styleClass="inventory-input-field-07 input-val-07"
+                                                 readonly="true"
+                                                 id="grossProfit"
+                                                 value="#{projectController.projectModel.projectGrossProfit}">
+                                         <f:convertNumber pattern="#,##0.00" 
+                                                         maxFractionDigits="2" />  
+                                    </h:inputText>
+                                </div>
+                                <div class="lable-field-area">
+                                    <label>#{projectTranslationService.projectManagerLabel}:</label>
+                                    <h:selectOneMenu id="manager" 
+                                                     value="#{projectController.projectModel.projectManager}"
+                                                     styleClass="inventory-sel-field-01">
+
+                                        <f:selectItems value="#{projectController.loadProjectManagers}"
+                                                       var="manager"
+                                                       itemValue="#{manager}"
+                                                       itemLabel="#{manager.name}"/>
+
+
+                                    </h:selectOneMenu>
+
+                                </div>
+                                <div class="lable-field-area">
+                                    <label>#{projectTranslationService.projectStatusLabel}:</label>
+                                    <h:selectOneMenu id="projectStatus" 
+                                                     value="#{projectController.projectModel.projectStatus}"
+                                                     styleClass="inventory-sel-field-01">
+
+                                        <f:selectItems value="#{projectController.projectStatuses}"/>
+
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                        </o:form>
+                        <div class="pro-tab-ctnr clearfix">
+                            <h:panelGroup id="tabContent" layout="block">
+                                <ul class="tabs">
+                                    <h:panelGroup id="tabPanel" layout="block">
+                                        <ui:repeat value="#{tabViewController.tabModels}" var="tab">
+                                            <li class="#{tab.selected ? 'active' : ''}">
+                                                <p:link value="#{tab.name}" href="#{tab.templateUrl}"/>
+                                            </li>
+                                        </ui:repeat>
+                                    </h:panelGroup>
+                                </ul>
+                                <div class="tab_container">
+                                    <div class="tab_content clearfix">
+                                        <ui:include src="#{tabViewController.currentTab.template}"/>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>

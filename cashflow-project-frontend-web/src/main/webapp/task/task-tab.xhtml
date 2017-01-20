@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <!---including same form as listing is same for phase,milestone and task-->
+    <o:form useRequestURI="true" id="phaseForm">
+        <div class="protab-para-ctn">
+            <h1>#{taskTranslationService.header}</h1>
+            <p>#{taskTranslationService.taskDetails1} #{taskTranslationService.taskDetails2} <a href="#">#{taskTranslationService.knowledgeBaseLabel}</a> and view <a href="#">#{taskTranslationService.projectTasksLabel}</a></p>
+        </div>
+        <div class="tabtitle clearfix">
+            <h1>#{taskTranslationService.header}</h1>
+            <a class="trgth-btns fancybox" href="#"
+               onclick="PF('create_project_task').show()">
+                + #{taskTranslationService.addNewTask}
+            </a> 
+        </div>
+        <ui:fragment rendered="#{phaseListController.projectLevelCategory eq 'PHASE' or phaseListController.projectLevelCategory eq 'MILESTONE'}">
+            <ui:include src="/phase/phase-list.xhtml" />
+        </ui:fragment>
+        <ui:fragment rendered="#{phaseListController.projectLevelCategory eq 'TASK'}">
+            <ui:include src="/task/task-list.xhtml" />
+        </ui:fragment>
+        <hr class="hrline-02" />
+        <div class="btns-ctnr-04 clearfix">
+            <div class="right"> 
+                <a class="cancel-new-btn" href="#">
+                    #{taskTranslationService.cancel}
+                </a>
+            </div>
+        </div>
+    </o:form>
+    <ui:include src="/task/add-task-popup.xhtml"/>
+    <ui:include src="/task/view-task-popup.xhtml"/>
+</ui:composition>

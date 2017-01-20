@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:panelGroup id="childContent"
+                  layout="block">
+        <div class="pro-table-ctrn">
+            <table cellpadding="0" cellspacing="0" border="0" width="1200px">
+                <tr class="border-head">
+                    <td class="twd90 border-left">#{mileStoneTranslationService.count}</td>
+                    <td class="twd90">#{mileStoneTranslationService.phaseID}</td>
+                    <td class="twd240">#{mileStoneTranslationService.phaseName}</td>
+                    <td class="twd80">#{mileStoneTranslationService.startDate}</td>
+                    <td class="twd80">#{mileStoneTranslationService.endDate}</td>
+                    <td class="twd240">#{mileStoneTranslationService.milestones}</td>
+                    <td class="twd60">#{mileStoneTranslationService.tasks}</td>
+                    <td class="twd60">#{mileStoneTranslationService.progress}</td>
+                    <td class="twd40">#{mileStoneTranslationService.status}</td>
+                    <td class="twd40">#{mileStoneTranslationService.alerts}</td>
+                    <td class="twd80 border-right">#{mileStoneTranslationService.action}</td>
+                </tr>
+                <ui:repeat value="#{phaseListController.projectPhases}" var="phase">
+                    <tr class="border-td show-m1">
+                        <td>
+                            <p:commandLink actionListener="#{phaseListController.showOrHideChilds(phase.uuid)}"
+                                           update="phaseForm:childContent" 
+                                           value="#{phase.phaseNumber}" />
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{phaseListController.showOrHideChilds(phase.uuid)}"
+                                           update="phaseForm:childContent"
+                                           value="#{phase.id}" />
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{phaseListController.showOrHideChilds(phase.uuid)}"
+                                           update="phaseForm:childContent"
+                                           value="#{phase.name}" />
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{phaseListController.showOrHideChilds(phase.uuid)}"
+                                           update="phaseForm:childContent"
+                                           >
+                                <h:outputText value="#{phase.startDate.time}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:outputText>
+                            </p:commandLink>
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{phaseListController.showOrHideChilds(phase.uuid)}"
+                                           update="phaseForm:childContent"
+
+                                           >
+                                <h:outputText value="#{phase.endDate.time}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:outputText>
+                            </p:commandLink>
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{phaseListController.showOrHideChilds(phase.uuid)}"
+                                           update="phaseForm:childContent"
+                                           value="#{phaseListController.phaseMileStones.get(phase.uuid).count} Milestones" />
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{phaseListController.showOrHideChilds(phase.uuid)}"
+                                           update="phaseForm:childContent" 
+                                           value="#{phaseListController.countTaskList(phase.uuid)} Tasks" />
+                        </td>
+                        <c:set value="#{phaseListController.getProjectLevelProgress(phase.uuid)}"
+                               var="phaseProgress" />
+                        <td>
+                            <p:commandLink actionListener="#{phaseListController.showOrHideChilds(phase.uuid)}"
+                                           update="phaseForm:childContent"
+                                           value="#{phaseProgress.percentOfCompletion} %" />
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{phaseListController.showOrHideChilds(phase.uuid)}"
+                                           styleClass="pending-btn-02"
+                                           update="phaseForm:childContent"
+                                           value="#{phaseProgress.projectStatus}" />
+                        </td>
+                        <ui:fragment rendered="#{phase.safetyRating eq 'SAFE'}">
+                            <td>
+                                <p:commandLink actionListener="#{phaseListController.showOrHideChilds(phase.uuid)}"
+                                               styleClass="safe-btn"
+                                               update="phaseForm:childContent"
+                                               value="#{phase.safetyRating}" />
+                            </td>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{phase.safetyRating eq 'RISKY'}">
+                            <td>
+                                <p:commandLink actionListener="#{phaseListController.showOrHideChilds(phase.uuid)}"
+                                               styleClass="alert-btn"
+                                               update="phaseForm:childContent"
+                                               value="#{phase.safetyRating}" />
+                            </td>
+                        </ui:fragment>
+                        <td class="acction-ctn">
+                            <a href="#">
+                                <img src="/resources/images/ac-edit-icon.png" alt="" />
+                            </a>
+                            <a href="#">
+                                <img src="/resources/images/view-icon.png" alt="" />
+                            </a>
+                        </td>
+                    </tr>
+                    <ui:fragment rendered="#{phaseListController.phaseMileStones.get(phase.uuid).rendered}">
+
+                        <ui:repeat value="#{phaseListController.phaseMileStones.get(phase.uuid).childEntities}"
+                                   var="milestoneDtl">
+                            <tr class="border-td">
+                                <td class="twd90">
+                                    <p:commandLink styleClass="colb"
+                                                   actionListener="#{phaseListController.showOrHideChilds(milestoneDtl.uuid)}"
+                                                   update="phaseForm:childContent" 
+                                                   value="#{milestoneDtl.milestoneNumber}" />
+
+                                </td>
+                                <td class="twd90">
+                                    <p:commandLink styleClass="colb"
+                                                   actionListener="#{phaseListController.showOrHideChilds(milestoneDtl.uuid)}"
+                                                   update="phaseForm:childContent" 
+                                                   value="#{milestoneDtl.id}" />
+
+                                </td>
+                                <td class="twd240">
+                                    <p:commandLink styleClass="colb"
+                                                   actionListener="#{phaseListController.showOrHideChilds(milestoneDtl.uuid)}"
+                                                   update="phaseForm:childContent" 
+                                                   value="#{milestoneDtl.name}" />
+
+                                </td>
+                                <td class="twd80">
+                                    <p:commandLink styleClass="colb"
+                                                   actionListener="#{phaseListController.showOrHideChilds(milestoneDtl.uuid)}"
+                                                   update="phaseForm:childContent">
+                                        <h:outputText value="#{milestoneDtl.startDate.time}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:outputText>
+                                    </p:commandLink>
+                                </td>
+                                <td class="twd80">
+                                    <p:commandLink styleClass="colb"
+                                                   actionListener="#{phaseListController.showOrHideChilds(milestoneDtl.uuid)}"
+                                                   update="phaseForm:childContent">
+                                        <h:outputText value="#{milestoneDtl.endDate.time}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:outputText>
+                                    </p:commandLink>
+                                </td>
+                                <td class="twd240">
+                                    <p:commandLink styleClass="colb"
+                                                   actionListener="#{phaseListController.showOrHideChilds(milestoneDtl.uuid)}"
+                                                   update="phaseForm:childContent" 
+                                                   value="#{milestoneDtl.name}" />
+                                </td>
+                                <td class="twd60">
+                                    <p:commandLink styleClass="colb"
+                                                   actionListener="#{phaseListController.showOrHideChilds(milestoneDtl.uuid)}"
+                                                   update="phaseForm:childContent" 
+                                                   value="#{phaseListController.countTaskList(milestoneDtl.uuid)} Tasks" />
+                                </td>
+                                <c:set value="#{phaseListController.getProjectLevelProgress(milestoneDtl.uuid)}"
+                                       var="milestoneProgress" />
+                                <td class="twd60">
+                                    <p:commandLink styleClass="colb"
+                                                   actionListener="#{phaseListController.showOrHideChilds(milestoneDtl.uuid)}"
+                                                   update="phaseForm:childContent" 
+                                                   value="#{milestoneProgress.percentOfCompletion} %" />
+
+                                </td>
+                                <td class="twd40">
+                                    <a class="pending-btn-02" href="#">
+                                        #{milestoneProgress.projectStatus}
+                                    </a>
+                                </td>
+                                <ui:fragment rendered="#{milestoneDtl.safetyRating eq 'SAFE'}">
+                                    <td>
+                                        <a class="safe-btn" href="#">
+                                            #{milestoneDtl.safetyRating}
+                                        </a>
+                                    </td>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{milestoneDtl.safetyRating eq 'RISKY'}">
+                                    <td>
+                                        <a class="alert-btn" href="#">
+                                            #{milestoneDtl.safetyRating}
+                                        </a>
+                                    </td>
+                                </ui:fragment>
+                                <td class="acction-ctn twd90">
+                                    <a href="#">
+                                        <img src="/resources/images/ac-edit-icon.png" alt="" />
+                                    </a>
+                                    <a href="#">
+                                        <img src="/resources/images/view-icon.png" alt="" />
+                                    </a>
+                                </td>
+                            </tr>
+                            <ui:fragment rendered="#{phaseListController.phaseTasks.get(milestoneDtl.uuid).rendered}">
+                                <ui:repeat value="#{phaseListController.phaseTasks.get(milestoneDtl.uuid).childEntities}"
+                                           var="taskDtl">
+                                    <tr class="border-td" style="display: table-row;">
+                                        <td>#{taskDtl.number}</td>
+                                        <td>#{taskDtl.id}</td>
+                                        <td>#{taskDtl.name}</td>
+                                        <td><h:outputText value="#{taskDtl.startDate.time}">
+                                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                                            </h:outputText>
+                                        </td>
+                                        <td>
+                                            <h:outputText value="#{taskDtl.endDate.time}">
+                                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                                            </h:outputText>
+                                        </td>
+                                        <td>#{taskDtl.name}</td>
+                                        <td></td>
+                                        <c:set value="#{phaseListController.getProjectLevelProgress(taskDtl.uuid)}"
+                                               var="taskProgress" />
+                                        <td>#{taskProgress.percentOfCompletion} %</td>
+                                        <td>
+                                            <p:commandLink 
+                                                styleClass="pending-btn-02"
+                                                value="#{phaseProgress.projectStatus}" />
+                                        </td>
+                                        <ui:fragment rendered="#{taskDtl.safetyRating eq 'SAFE'}">
+                                            <td>
+                                                <p:commandLink 
+                                                    styleClass="safe-btn"
+                                                    value="#{taskDtl.safetyRating}" />
+                                            </td>
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{taskDtl.safetyRating eq 'RISKY'}">
+                                            <td>
+                                                <p:commandLink 
+                                                    styleClass="alert-btn"
+                                                    value="#{taskDtl.safetyRating}" />
+                                            </td>
+                                        </ui:fragment>
+                                        <td>
+                                            <p:commandLink actionListener="#{projectTaskController.editProjectTask(taskDtl.uuid)}"
+                                                           onsuccess="PF('create_project_task').show();"
+                                                           update="addTaskForm"
+                                                           title="#{mileStoneTranslationService.editTaskLabel}">
+                                                <img src="/resources/images/ac-edit-icon.png" alt="" />
+                                            </p:commandLink>
+
+                                            <p:commandLink actionListener="#{viewProjectTaskController.viewProjectTask(taskDtl.uuid)}"
+                                                           onsuccess="PF('view_project_task').show();"
+                                                           update="viewTaskForm"
+                                                           title="#{mileStoneTranslationService.viewTaskLabel}">
+
+                                                <img src="/resources/images/view-icon.png" alt="" />
+                                            </p:commandLink>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                            </ui:fragment>
+                        </ui:repeat>
+                    </ui:fragment>
+                </ui:repeat>
+            </table>
+        </div>
+    </h:panelGroup>
+
+
+    <div class="paging-ctnr clearfix">
+        <h:selectOneMenu value="#{phaseListController.limit}" 
+                         styleClass="col-sel-field">
+            <f:selectItems value="#{phaseListController.limits}"/>
+            <p:ajax listener="#{phaseListController.initPhases()}"
+                    update="@form" />
+        </h:selectOneMenu>
+        <div class="next-prev-ctn clearfix">
+            <p:commandLink styleClass="prev-btn"
+                           value="Previous"
+                           actionListener="#{phaseListController.previousPage()}"
+                           disabled="#{phaseListController.page lt 1}"
+                           update="@form"/>
+            <span class="pages-info">#{phaseListController.page + 1} of #{phaseListController.pageCount}</span>
+            <p:commandLink styleClass="next-btn" 
+                           value="Next" 
+                           actionListener="#{phaseListController.nextPage()}"
+                           disabled="#{phaseListController.page ge phaseListController.maxPage}"
+                           update="@form"/>
+        </div>
+        <h:selectOneMenu value="#{phaseListController.page}" styleClass="page-sel-field">
+            <f:selectItems value="#{phaseListController.pages}"/>
+            <p:ajax listener="#{phaseListController.initPhases()}"
+                    update="@form" />
+        </h:selectOneMenu>
+    </div>
+</ui:composition>

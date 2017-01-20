@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pp="http://java.sun.com/jsf/passthrough"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="/main-template.xhtml"> 
+        <ui:define name="content"> 
+            <o:form id="expensesForm" useRequestURI="true">
+                <div class="condent-right">
+                    <div class="content-right-ctn">
+                        <div class="title-01 clearfix">
+                            <h1>Expense Summary</h1>
+                            <a class="trgth-btns" href="#">Record New Expenses</a>
+                        </div>
+                        <div class="content-ctnr clearfix">
+                            <div class="all-customer-field-ctn-01">
+                                <form action="#" class="clearfix">
+                                    <input class="search-field" name="" type="text" value="Search" />
+                                    <select class="all-sel-field-01">
+                                        <option>All Project</option>
+                                    </select>
+                                    <select class="all-sel-field-01">
+                                        <option>All Departments</option>
+                                    </select>
+                                    <select class="all-sel-field-01">
+                                        <option>Billable/Non-Billable</option>
+                                    </select>
+                                    <input class="all-inputdate-field" id="datepicker-from" name="" type="text" value="From:" />
+                                    <input class="all-inputdate-field" id="datepicker-to" name="" type="text" value="To:" />
+                                </form>
+                            </div>
+                            <div class="invoice-table-ctn-01">
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                    <tr>
+                                        <th class="border-left">Date</th>
+                                        <th>Department</th>             
+                                        <th>Project</th>              
+                                        <th>Resource Type</th>         
+                                        <th>Expense Type</th>          
+                                        <th>Billable</th>          
+                                        <th>Non-Billable</th>         
+                                        <th>Tax</th>               
+                                        <th class="border-right">Total</th>  
+                                    </tr>
+                                    <tr class="alt">
+                                        <td>23-05-2015</td>     
+                                        <td>Department</td>             
+                                        <td>Project</td>              
+                                        <td>Resource Type</td>         
+                                        <td>Expense Type</td>          
+                                        <td>$2,250.75</td>      
+                                        <td>$520.50</td>                
+                                        <td>$138.56</td>      
+                                        <td>$2,909.81</td>
+                                    </tr>
+                                    <tr>
+                                        <td>23-05-2015</td>     
+                                        <td>Department</td>             
+                                        <td>Project</td>              
+                                        <td>Resource Type</td>         
+                                        <td>Expense Type</td>          
+                                        <td>$2,250.75</td>      
+                                        <td>$520.50</td>                
+                                        <td>$138.56</td>      
+                                        <td>$2,909.81</td>
+                                    </tr>
+                                    <tr class="alt">
+                                        <td>23-05-2015</td>     
+                                        <td>Department</td>             
+                                        <td>Project</td>              
+                                        <td>Resource Type</td>         
+                                        <td>Expense Type</td>          
+                                        <td>$2,250.75</td>      
+                                        <td>$520.50</td>                
+                                        <td>$138.56</td>      
+                                        <td>$2,909.81</td>
+                                    </tr>
+                                    <tr>
+                                        <td>23-05-2015</td>     
+                                        <td>Department</td>             
+                                        <td>Project</td>              
+                                        <td>Resource Type</td>         
+                                        <td>Expense Type</td>          
+                                        <td>$2,250.75</td>      
+                                        <td>$520.50</td>                
+                                        <td>$138.56</td>      
+                                        <td>$2,909.81</td>
+                                    </tr>
+                                    <tr class="alt">
+                                        <td>23-05-2015</td>     
+                                        <td>Department</td>             
+                                        <td>Project</td>              
+                                        <td>Resource Type</td>         
+                                        <td>Expense Type</td>          
+                                        <td>$2,250.75</td>      
+                                        <td>$520.50</td>                
+                                        <td>$138.56</td>      
+                                        <td>$2,909.81</td>
+                                    </tr>
+                                    <tr>
+                                        <td>23-05-2015</td>     
+                                        <td>Department</td>             
+                                        <td>Project</td>              
+                                        <td>Resource Type</td>         
+                                        <td>Expense Type</td>          
+                                        <td>$2,250.75</td>      
+                                        <td>$520.50</td>                
+                                        <td>$138.56</td>      
+                                        <td>$2,909.81</td>
+                                    </tr>
+                                    <tr class="alt">
+                                        <td>23-05-2015</td>     
+                                        <td>Department</td>             
+                                        <td>Project</td>              
+                                        <td>Resource Type</td>         
+                                        <td>Expense Type</td>          
+                                        <td>$2,250.75</td>      
+                                        <td>$520.50</td>                
+                                        <td>$138.56</td>      
+                                        <td>$2,909.81</td>
+                                    </tr>
+                                    <tr>
+                                        <td>23-05-2015</td>     
+                                        <td>Department</td>             
+                                        <td>Project</td>              
+                                        <td>Resource Type</td>         
+                                        <td>Expense Type</td>          
+                                        <td>$2,250.75</td>      
+                                        <td>$520.50</td>                
+                                        <td>$138.56</td>      
+                                        <td>$2,909.81</td>
+                                    </tr>
+                                    <tr>
+                                        <td>23-05-2015</td>     
+                                        <td>Department</td>             
+                                        <td>Project</td>              
+                                        <td>Resource Type</td>         
+                                        <td>Expense Type</td>          
+                                        <td>$2,250.75</td>      
+                                        <td>$520.50</td>                
+                                        <td>$138.56</td>      
+                                        <td>$2,909.81</td>
+                                    </tr>
+                                    <tr>
+                                        <td>23-05-2015</td>     
+                                        <td>Department</td>             
+                                        <td>Project</td>              
+                                        <td>Resource Type</td>         
+                                        <td>Expense Type</td>          
+                                        <td>$2,250.75</td>      
+                                        <td>$520.50</td>                
+                                        <td>$138.56</td>      
+                                        <td class="border-right">$2,909.81</td>    
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="paging-ctnr clearfix">
+                                <select class="col-sel-field">
+                                    <option>25</option>
+                                </select>
+                                <div class="next-prev-ctn clearfix">
+                                    <a class="prev-btn" href="#">Previous</a>
+                                    <span class="pages-info">1 of 1000</span>
+                                    <a class="next-btn" href="#">Next</a>
+                                </div>
+                                <select class="page-sel-field">
+                                    <option>1</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </o:form>
+        </ui:define>
+    </ui:composition>
+</html>

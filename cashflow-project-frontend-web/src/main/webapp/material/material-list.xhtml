@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:panelGroup id="taskContent"
+                  layout="block">
+        <div class="pro-table-ctrn">
+            <table cellpadding="0" cellspacing="0" border="0" width="1200px">
+                <tr class="border-head">
+                    <td class="twd90 border-left">#{materialExpenseTranslationService.projectIdLabel}</td>
+                    <td class="twd90">#{materialExpenseTranslationService.phaseIdLabel}</td>
+                    <td class="twd90">#{materialExpenseTranslationService.milestoneIdLabel}</td>
+                    <td class="twd90">#{materialExpenseTranslationService.taskIdLabel}</td>
+                    <td class="twd90">#{materialExpenseTranslationService.materialNameLabel}</td>
+                    <td class="twd90">#{materialExpenseTranslationService.materialIdLabel}</td>
+                    <td class="twd90">#{materialExpenseTranslationService.inventoryLabel}</td>
+                    <td class="twd90">#{materialExpenseTranslationService.costRateLabel}</td>
+                    <td class="twd90">#{materialExpenseTranslationService.billRateLabel}</td>
+                    <td class="twd90">#{materialExpenseTranslationService.unitsLabel}</td>
+                    <td class="twd90">#{materialExpenseTranslationService.amountLabel}</td>
+                    <td class="twd80 border-right">#{materialExpenseTranslationService.actionLabel}</td>
+                </tr>
+                <ui:repeat value="#{materialExpenseListController.materialExpenses}" var="materialExpnse">
+                    <tr class="border-td show-m1">
+                        <td>#{materialExpnse.projectId}</td>
+                        <td>#{materialExpnse.phaseId}</td>
+                        <td>#{materialExpnse.milestoneId}</td>
+                        <td>#{materialExpnse.taskId}</td>
+                        <td>#{materialExpnse.materialName}</td>
+                        <td>#{materialExpnse.materialId}</td>
+                        <td>#{materialExpnse.inventory}</td>
+                        <td>#{materialExpnse.costRate}</td>
+                        <td>#{materialExpnse.billRate}</td>
+                        <td>#{materialExpnse.units}</td>
+                        <td>#{materialExpnse.amount}</td>
+
+                        <td class="acction-ctn">
+                            <p:commandLink actionListener="#{materialExpenseListController.viewOrEditProjectMaterialExpense(materialExpnse.materialId)}"
+                                           title="#{materialExpenseTranslationService.materialEditLabel}">
+                                <img src="/resources/images/ac-edit-icon.png" alt="" />
+                            </p:commandLink>
+
+                            <p:commandLink actionListener="#{materialExpenseListController.viewOrEditProjectMaterialExpense(materialExpnse.materialId)}"
+                                           title="#{materialExpenseTranslationService.materialViewLabel}">
+                                <img src="/resources/images/view-icon.png" alt="" />
+                            </p:commandLink>
+                        </td>
+                    </tr>
+                </ui:repeat>
+            </table>
+        </div>
+    </h:panelGroup>
+
+    <div class="paging-ctnr clearfix">
+        <h:selectOneMenu value="#{materialExpenseListController.limit}" 
+                         styleClass="col-sel-field">
+            <f:selectItems value="#{materialExpenseListController.limits}"/>
+            <p:ajax listener="#{materialExpenseListController.initMaterialExpenses()}" update="@form"/>
+        </h:selectOneMenu>
+        <div class="next-prev-ctn clearfix">
+            <p:commandLink styleClass="prev-btn"
+                           value="Previous"
+                           update="@form"
+                           actionListener="#{materialExpenseListController.previousPage()}"
+                           disabled="#{materialExpenseListController.page lt 1}"/>
+            <span class="pages-info">#{materialExpenseListController.page + 1} of #{materialExpenseListController.pageCount}</span>
+            <p:commandLink styleClass="next-btn" 
+                           value="Next" 
+                           update="@form"
+                           actionListener="#{materialExpenseListController.nextPage()}"
+                           disabled="#{materialExpenseListController.page ge materialExpenseListController.maxPage}"/>
+        </div>
+        <h:selectOneMenu value="#{materialExpenseListController.page}" styleClass="page-sel-field">
+            <f:selectItems value="#{materialExpenseListController.pages}"/>
+            <p:ajax listener="#{materialExpenseListController.initMaterialExpenses()}" update="@form"/>
+        </h:selectOneMenu>
+    </div>
+</ui:composition>

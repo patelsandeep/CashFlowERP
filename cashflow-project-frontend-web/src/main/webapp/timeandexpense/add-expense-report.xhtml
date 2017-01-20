@@ -1,0 +1,354 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="add_expense_report"
+              widgetVar="add_expense_report"
+              styleClass="phase-dialog"
+              showHeader="false"
+              resizable="false"
+              modal="true">
+        <o:form useRequestURI="true" id="add_expense_report_form">
+            <div class="phase-finance-popup-ctn" id="new-exp-rep" >
+                <h1>#{expenseTranslationService.newExpenseHeader} 
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('add_expense_report').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{expenseTranslationService.expenseReportIdLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{expenseController.expenseReportModel.expenseReportId}"/>
+                    </div>
+                    <br clear="all" />
+
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.customerLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{expenseController.expenseReportModel.customer}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.projectLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{expenseController.expenseReportModel.project}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.phaseLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         value="#{expenseController.expenseReportModel.phase}">
+                            <f:selectItem itemLabel="#{expenseTranslationService.selectPhaseLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{expenseController.projectPhases}"
+                                           var="phase"
+                                           itemLabel="#{phase.name}"
+                                           itemValue="#{phase.uuid}"/>
+                            <p:ajax update="mile"/>
+
+                        </h:selectOneMenu>
+
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.milestoneLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="mile"
+                                         value="#{expenseController.expenseReportModel.milestone}">
+                            <f:selectItem itemLabel="#{expenseTranslationService.selectMilestoneLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{expenseController.milestones}"
+                                           var="milestone"
+                                           itemLabel="#{milestone.name}"
+                                           itemValue="#{milestone.uuid}"/>
+                            <p:ajax update="task"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.taskLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="task"
+                                         value="#{expenseController.expenseReportModel.task}">
+                            <f:selectItem itemLabel="#{expenseTranslationService.selectTaskLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{expenseController.projectTasks}"
+                                           var="task"
+                                           itemLabel="#{task.name}"
+                                           itemValue="#{task.uuid}"/>
+
+                            <p:ajax update="taskId team" listener="#{expenseController.updateTaskID}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.taskIdLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="taskId"
+                                     readonly="true"
+                                     value="#{expenseController.expenseReportModel.taskId}"/>
+
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.nameLabel}: </label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="team"
+
+                                         value="#{expenseController.expenseReportModel.member}">
+                            <f:selectItem itemLabel="#{expenseTranslationService.selectMemberLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{expenseController.projectMembers}"
+                                           var="members"
+                                           itemLabel="#{members.name}"
+                                           itemValue="#{members.uuid}"/>
+                            <p:ajax update="memberId projectRole" 
+                                    listener="#{expenseController.updateMemberValue()}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.employeeIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="memberId"
+                                     readonly="true"
+                                     value="#{expenseController.expenseReportModel.memberId}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.projectRoleLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="projectRole"
+                                     readonly="true"
+                                     value="#{expenseController.expenseReportModel.projectRole}"/>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{expenseTranslationService.weekStartLabel}:</label>
+                        <p:calendar id="startDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{expenseController.expenseReportModel.weekStartDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                            <p:ajax event="dateSelect" update="expenseTable"/>
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="startDate"/>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{expenseTranslationService.weekEndingLabel}:</label>
+                        <p:calendar id="endDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{expenseController.expenseReportModel.weekEndingDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                            <p:ajax event="dateSelect" update="expenseTable"/>
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="endDate"/>
+                    </div>
+
+                    <br clear="all" />
+                    <h:panelGroup id="expenseTable">
+                        <div class="pro-table-ctrn">
+                            <table cellpadding="0" cellspacing="0" border="0" width="140%">
+                                <tr class="border-head-01">
+                                    <td>#{expenseTranslationService.dateLabel}</td>
+                                    <td>#{expenseTranslationService.expenseTypeLabel}</td>
+                                    <td>#{expenseTranslationService.amountLabel}</td>
+                                    <td>#{expenseTranslationService.taxLabel}</td>
+                                    <td>#{expenseTranslationService.taxLabel}</td>
+                                    <td>#{expenseTranslationService.billableLabel}</td>
+                                    <td>#{expenseTranslationService.totalLabel}</td>
+                                    <td>#{expenseTranslationService.attachReceiptLabel}</td>
+                                    <td>#{expenseTranslationService.actionLabel}</td>
+                                </tr>
+                                <ui:repeat value="#{expenseController.expenseData}" var="expense">
+                                    <tr class="border-td">
+                                        <td>
+                                            <p:calendar id="expenseDate" 
+                                                        converter="generalCalendarConverter"
+                                                        class="p-calander" 
+                                                        value="#{expense.expenseDate}"
+                                                        mindate="#{expenseController.expenseReportModel.weekStartDate.time}"
+                                                        maxdate="#{expenseController.expenseReportModel.weekEndingDate.time}"
+                                                        pattern="yyyy-MM-dd"    
+                                                        pp:pattern="yyyy-MM-dd">
+                                                <p:ajax  update="@form"
+                                                         event="dateSelect"/>
+                                            </p:calendar>
+                                            <p:watermark value="YYYY-MM-DD" for="expenseDate"/>
+                                        </td>	
+                                        <td>
+                                            <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                                             value="#{expense.expenseType}">
+                                                <f:selectItems value="#{expenseController.expenseType}"/>
+                                                <p:ajax update="@form"/>
+                                            </h:selectOneMenu>
+
+
+                                        </td>	
+                                        <td>#{expenseController.expenseReportModel.expenseCurrency} 
+                                            <h:inputText styleClass="inventory-input-field-01 twd100"
+                                                         value="#{expense.expenseAmount}">
+                                                <f:convertNumber pattern="#,##0.00"
+                                                                 maxFractionDigits="2" />
+                                                <p:ajax update="@form" 
+                                                        listener="#{expenseController.calculateExpense(expense)}"/>
+                                            </h:inputText>
+                                        </td> 
+
+                                        <td>
+                                            <h:selectOneMenu value="#{expense.taxId}" styleClass="inventory-sel-field-01">
+                                                <f:selectItem itemLabel="#{expenseTranslationService.selectTaxLabel}"
+                                                              itemValue="#{null}"/>
+                                                <f:selectItems value="#{expenseController.taxRates}" 
+                                                               var="tax" itemLabel="#{tax.taxCategory.code}-#{tax.rate}%" 
+                                                               itemValue="#{tax.taxId}"/>
+                                                <p:ajax update="@form"
+                                                        listener="#{expenseController.calculateExpense(expense)}"/>
+                                            </h:selectOneMenu>
+
+                                        </td>	
+
+                                        <td>
+                                            <h:selectOneMenu value="#{expense.taxId2}" styleClass="inventory-sel-field-01">
+                                                <f:selectItem itemLabel="#{expenseTranslationService.selectTaxLabel}"
+                                                              itemValue="#{null}"/>
+                                                <f:selectItems value="#{expenseController.taxRates}" 
+                                                               var="tax" itemLabel="#{tax.taxCategory.code}-#{tax.rate}%" 
+                                                               itemValue="#{tax.taxId}"/>
+                                                <p:ajax update="@form"
+                                                        listener="#{expenseController.calculateExpense(expense)}"/>
+                                            </h:selectOneMenu>
+
+                                        </td>	
+
+                                        <td>
+                                            <h:selectOneMenu value="#{expense.billable}" 
+                                                             styleClass="inventory-sel-field-01">
+                                                <f:selectItems value="#{expenseController.billableType}"/>
+                                                <p:ajax />
+                                            </h:selectOneMenu>
+
+                                        </td>	  
+
+                                        <td> <h:inputText styleClass="inventory-input-field-01"
+                                                          id="expTotal"
+                                                          readonly="true"
+                                                          value="#{expense.totalAmount}">
+                                            </h:inputText></td>
+                                        <td class="acction-ctn">
+                                            <h:outputLabel>
+                                                <img src="/resources/images/dwnld-icon.png" alt="" />
+                                            </h:outputLabel>
+
+                                            <h:outputLabel for="expense_details_file_input">
+                                                <img src="/resources/images/upld-icon.png" alt="" />
+                                            </h:outputLabel>
+
+                                            <p:fileUpload mode="advanced"
+                                                          widgetVar="expense_details_file"
+                                                          id="expense_details_file"
+                                                          auto="true"
+                                                          fileLimit="5"
+                                                          styleClass="ui-helper-hidden"
+                                                          multiple="true"
+                                                          skinSimple="true"
+                                                          dragDropSupport="true"
+                                                          allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xlsx|csv|xls)$/"
+                                                          fileUploadListener="#{expenseController.fileUpload}"
+                                                          >
+                                                <f:attribute name="expDataUUID" value="#{expense.uuid}" />
+                                            </p:fileUpload>
+
+
+
+
+                                        </td>
+                                        <td>
+                                            <p:commandLink immediate="true"
+                                                           process="@this"
+                                                           update="@form"
+                                                           actionListener="#{expenseController.expenseReportModel.reportDataModels.remove(expense)}">
+                                                <p:graphicImage value="/resources/images/del-icon.png"/>
+                                                <p:ajax listener="#{expenseController.calculateExpense(expense)}"/>
+                                            </p:commandLink>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+
+                                <tr class="border-td">
+                                    <td colspan="8">
+                                        <p:commandLink styleClass="add-reminder-link" 
+                                                       immediate="true" 
+                                                       process="@this"
+                                                       partialSubmit="true" 
+                                                       update="add_expense_report_form:expenseTable"
+                                                       actionListener="#{expenseController.addExpenseData}"
+                                                       value="#{expenseTranslationService.addLineLabel}">
+
+                                        </p:commandLink>
+
+                                    </td>
+                                </tr>
+                                <h:panelGroup id="totalPanel">
+                                    <tr class="border-td title-td">
+                                        <td>#{expenseTranslationService.totalsLabel}</td>
+                                        <td></td>			
+                                        <td>#{expenseController.expenseReportModel.expenseTotal}</td>       
+                                        <td>#{expenseController.expenseReportModel.taxTotal}</td>     	
+                                        <td>#{expenseController.expenseReportModel.tax2Total}</td>      
+                                        <td></td>                
+                                        <td>#{expenseController.expenseReportModel.totalExpenseAmount}</td>
+                                        <td></td> 
+                                    </tr>
+                                </h:panelGroup>
+                            </table>
+                        </div>
+                    </h:panelGroup>
+                    <a class="auditnotes-link" >#{expenseTranslationService.auditTrailAndNotesLabel}:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote23">
+
+                    </div>
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right"> 
+                            <a class="cancel-new-btn" onclick="PF('add_expense_report').hide();">#{expenseTranslationService.cancelLabel}</a>
+                            <ui:fragment rendered="#{expenseController.expenseReportModel.expenseReportUUID eq null}">
+                                <p:commandLink styleClass="save-new-btn-01 mrg-rgt" 
+                                               value="#{expenseTranslationService.saveLabel}"
+                                               update="@form expenseSuccessForm"
+                                               actionListener="#{expenseController.saveExpenseReport()}"
+                                               onsuccess="PF('add_expense_report').hide();PF('expense_success_message').show();">
+                                    <f:param name="action" value="save"/>
+                                </p:commandLink>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{expenseController.expenseReportModel.expenseReportUUID ne null}">
+                                <p:commandLink styleClass="save-new-btn-01 mrg-rgt" 
+                                               value="#{expenseTranslationService.update}"
+                                               update="@form expenseSuccessForm"
+                                               actionListener="#{expenseController.saveExpenseReport()}"
+                                               onsuccess="PF('add_expense_report').hide();PF('expense_success_message').show();">
+                                    <f:param name="action" value="update"/>
+                                </p:commandLink>
+                            </ui:fragment>
+                            <p:commandLink styleClass="save-new-btn-01 mrg-rgt" 
+                                           value="#{expenseTranslationService.submitLabel}"
+                                           update="@form expenseSuccessForm"
+                                           actionListener="#{expenseController.saveExpenseReport()}"
+                                           onsuccess="PF('add_expense_report').hide();PF('expense_success_message').show();">
+                                <f:param name="action" value="submit"/>
+                            </p:commandLink>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+    <ui:include src="/timeandexpense/expense-message-popup.xhtml"/>
+
+</ui:composition>

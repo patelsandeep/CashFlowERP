@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/approval/manage-approval-template.xhtml">
+    <ui:define name="projectLevelDetails">
+        <div class="lable-field-area lfa-mrgt">
+            <label>#{manageApprovalTranslationService.customer}:</label>
+            <h:inputText styleClass="inventory-input-field-01"
+                         value="Toronto Real Estate Development Co." />
+        </div>
+        <div class="lable-field-area lfa-mrgt">
+            <label>#{manageApprovalTranslationService.project}: </label>
+            <h:inputText styleClass="inventory-input-field-01"
+                         value="New Toronto Star Trek Mall" />
+        </div>
+        <div class="lable-field-area">
+            <label>#{manageApprovalTranslationService.phase}: </label>
+            <h:inputText styleClass="inventory-input-field-01"
+                         value="Phase 1 Planning, Design and Legal Approval" />
+        </div>
+        <div class="lable-field-area">
+            <label>#{manageApprovalTranslationService.phaseID}:</label>
+            <h:inputText styleClass="inventory-input-field-01"
+                         value="PP001" />
+        </div>
+    </ui:define>
+</ui:composition>

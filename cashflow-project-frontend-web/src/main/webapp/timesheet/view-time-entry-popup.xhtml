@@ -1,0 +1,434 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="view_time_entry"
+              widgetVar="view_time_entry"
+              closeOnEscape="true"
+              resizable="false"
+              showHeader="false"
+              styleClass="phase-dialog"
+              modal="true">
+        <o:form useRequestURI="true" id="view_time_entry_form" >
+            <div class="phase-finance-popup-ctn" id="time-entry-detail" >
+                <h1>#{timeEntryTranslationService.detailHeader}
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('view_time_entry').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <ui:fragment rendered="#{labourExpenseViewController.timeSheetEntryModel.timesheetStatus eq 'SAVED'}">
+                        <p:commandLink actionListener="#{timeSheetEntryController.edit(labourExpenseViewController.timeSheetEntryModel.timeSheetID)}"
+                                       styleClass="trgth-btns"
+                                       onsuccess="PF('view_time_entry').hide();PF('time_entry').show();"
+                                       update="time_entry_form"
+                                       value="#{timeEntryTranslationService.editLabel}"/>
+                    </ui:fragment>
+
+                    <br clear="all" />
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{timeEntryTranslationService.timesheetID}: </label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         value="#{labourExpenseViewController.timeSheetEntryModel.timeSheetID}">
+                            <f:selectItems value="#{labourExpenseViewController.labourExpenseModel.timsheets}" 
+                                           var="timesheet"
+                                           itemLabel="#{timesheet.timeSheetID}"
+                                           itemValue="#{timesheet.timeSheetID}"/>
+                            <p:ajax update="@form" 
+                                    listener="#{labourExpenseViewController.updateTimesheetDetail()}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{timeEntryTranslationService.approvalDate}:</label>
+                        <p:calendar id="approvalDate" 
+                                    converter="generalCalendarConverter"
+                                    value="#{labourExpenseViewController.timeSheetEntryModel.approvalDate}"
+                                    class="p-calander" 
+                                    pattern="yyyy-MM-dd"
+                                    pp:pattern="yyyy-MM-dd">
+
+                        </p:calendar>
+                    </div>
+                    <br clear="all"/>
+
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.customerLabel}:</label>
+                        <h:outputText styleClass="inventory-input-field-01"
+                                      value="#{labourExpenseViewController.timeSheetEntryModel.customer}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.projectLabel}:</label>
+                        <h:outputText styleClass="inventory-input-field-01"
+                                      value="#{labourExpenseViewController.timeSheetEntryModel.project}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.phaseLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.timeSheetEntryModel.phaseName}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.milestoneLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.timeSheetEntryModel.mileStoneName}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.taskLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.timeSheetEntryModel.taskname}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.taskIdLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.timeSheetEntryModel.taskID}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.name}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.timeSheetEntryModel.memberName}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.teamMemberIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.timeSheetEntryModel.memberID}" />
+                    </div>
+                    <ui:fragment rendered="#{labourExpenseViewController.timeSheetEntryModel.teamMemberCategory ne 'EMPLOYEE'}">
+                        <div class="lable-field-area">
+                            <label>#{timeEntryTranslationService.supplierLabel}: </label>
+                            <h:inputText value="#{labourExpenseViewController.timeSheetEntryModel.supplierName}"
+                                         readonly="true"
+                                         styleClass="inventory-input-field-01" />
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{timeEntryTranslationService.supplierTypeLabel}: </label>
+                            <h:inputText value="#{labourExpenseViewController.timeSheetEntryModel.supplierType}"
+                                         readonly="true"
+                                         styleClass="inventory-input-field-01" />
+                        </div>
+                    </ui:fragment>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.projectRole}:</label>
+                        <h:inputText value="#{labourExpenseViewController.timeSheetEntryModel.projectRole}"
+                                     readonly="true"
+                                     styleClass="inventory-input-field-01" />
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{timeEntryTranslationService.weekStart}:</label>
+                        <p:calendar id="startDate" 
+                                    converter="generalCalendarConverter"
+                                    value="#{labourExpenseViewController.timeSheetEntryModel.weekStartDate}"
+                                    class="p-calander" 
+                                    pattern="yyyy-MM-dd"
+                                    pp:pattern="yyyy-MM-dd">
+
+                        </p:calendar>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{timeEntryTranslationService.weekEnding}:</label>
+                        <p:calendar id="endDate" 
+                                    converter="generalCalendarConverter"
+                                    value="#{labourExpenseViewController.timeSheetEntryModel.weekEndDate}"
+                                    class="p-calander" 
+                                    pattern="yyyy-MM-dd"
+                                    pp:pattern="yyyy-MM-dd">
+
+                        </p:calendar>
+                    </div>
+
+                    <br clear="all" />
+
+                    <div class="pro-table-ctrn">
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <tr class="border-head-01">
+                                <td>#{timeEntryTranslationService.date}</td>
+                                <td>#{timeEntryTranslationService.day}</td>
+                                <td>#{timeEntryTranslationService.regularTime}</td>
+                                <td>#{timeEntryTranslationService.overTime}</td>
+                                <td title="#{timeEntryTranslationService.paidTimeOffMessage}">
+                                    #{timeEntryTranslationService.pto}
+                                </td>
+                                <td>#{timeEntryTranslationService.billable}</td>
+                                <td>#{timeEntryTranslationService.total}</td>
+                            </tr>
+                            <ui:repeat value="#{labourExpenseViewController.timeSheetEntryModel.weeklyEntries}"
+                                       var="dailyEntry">
+                                <tr class="border-td">
+                                    <td>
+                                        <h:outputText styleClass="inventory-input-field-01 twd80"
+                                                      value="#{dailyEntry.timeSheetDate.time}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText 
+                                            styleClass="inventory-input-field-01 twd40"
+                                            value="#{dailyEntry.timeSheetDate.time}">
+                                            <f:convertDateTime pattern="EEE"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText styleClass="inventory-input-field-01 twd80"
+                                                      value="#{dailyEntry.regularWorkTime}" >
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText styleClass="inventory-input-field-01 twd80"
+                                                      value="#{dailyEntry.overTimeWorkTime}" >
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText styleClass="inventory-input-field-01 twd80"
+                                                      value="#{dailyEntry.ptoWorkTime}" >
+                                        </h:outputText>
+                                    </td>
+                                    <td><h:outputText styleClass="inventory-input-field-01 twd40"
+                                                      value="#{dailyEntry.billableType}" />
+                                    </td>
+                                    <td> 
+                                        <h:outputText styleClass="inventory-input-field-01 twd80"
+                                                      value="#{dailyEntry.total}" >
+                                        </h:outputText>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                            <tr class="border-td title-td">
+                                <td>#{timeEntryTranslationService.totalHours}</td>
+                                <td></td>
+                                <td>
+                                    #{labourExpenseViewController.timeSheetEntryModel.totalRegularTime} #{timeEntryTranslationService.hrsLabel}
+                                </td>
+                                <td>
+                                    #{labourExpenseViewController.timeSheetEntryModel.totalOverTime} #{timeEntryTranslationService.hrsLabel}
+                                </td>
+                                <td>
+                                    #{labourExpenseViewController.timeSheetEntryModel.totalPtoTime} #{timeEntryTranslationService.hrsLabel}
+                                </td>
+                                <td></td>
+                                <td>
+                                    #{labourExpenseViewController.timeSheetEntryModel.finalTotal} #{timeEntryTranslationService.hrsLabel}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+                    <a class="auditnotes-link" onclick="showhide21()">Audit Trail and Notes:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote21">
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                    </div>
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a class="cancel-new-btn"
+                               href="#"
+                               onclick="PF('view_time_entry').hide();">
+                                #{timeEntryTranslationService.cancel}
+                            </a> 
+                            <h:panelGroup id="buttonPanel">
+                                <ui:fragment rendered="#{labourExpenseViewController.timeSheetEntryModel.timesheetStatus eq 'SAVED'}">
+
+                                    <p:commandLink styleClass="save-new-btn-01 mrg-rgt"
+                                                   update="@form viewTimeSheetSuccessForm"
+                                                   value="#{timeEntryTranslationService.submit}"
+                                                   onsuccess="PF('view_time_entry').hide();PF('view_timesheet_success_message').show();"
+                                                   actionListener="#{labourExpenseViewController.submitTimesheet()}"/>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{labourExpenseViewController.timeSheetEntryModel.timesheetStatus eq 'SUBMITTED' and accessScopeActivationController.hasScope(accessScopeID.PROJECTS_TIMESHEETSANDEXPENSES_APPROVE) }">
+                                    <p:commandLink styleClass="reject-btn-01 mrg-rgt"
+                                                   update="@form viewTimeSheetSuccessForm"
+                                                   value="#{timeEntryTranslationService.reject}"
+                                                   onsuccess="PF('view_time_entry').hide();PF('view_timesheet_success_message').show();"
+                                                   actionListener="#{labourExpenseViewController.rejectTimesheet()}"/>
+                                    <p:commandLink styleClass="save-new-btn-01 mrg-rgt"
+                                                   update="@form viewTimeSheetSuccessForm"
+                                                   value="#{timeEntryTranslationService.approve}"
+                                                   onsuccess="PF('view_time_entry').hide();PF('view_timesheet_success_message').show();"
+                                                   actionListener="#{labourExpenseViewController.approveTimesheet()}"/>
+
+                                </ui:fragment>
+
+                            </h:panelGroup>
+
+
+                        </div>
+                    </div>
+                    <hr />
+                    <a class="advanced-settings-btn" onclick="showhide22()">Advanced Settings</a>
+                    <div class="timede-adset" id="adset1">
+                        <h2>Record Regular and Overtime (Billable and Non-billable)</h2>
+                        <div class="pro-table-ctrn">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tr class="border-head-01">
+                                    <td>Date</td>
+                                    <td>Batch No.</td>
+                                    <td>JE No.</td>
+                                    <td>Account Name</td>
+                                    <td>Account Number</td>
+                                    <td>DR</td>
+                                    <td>CR</td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td>
+                                        <a class="acn-list-01a" href="#">Select</a>
+                                        <ul id="acn-list-ctn-01a" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Salaries and Wages Expenses- Accrued</a></li> 
+                                            <li><a href="#">Salaries and wages Payable - Accrued  </a></li>                                         
+                                        </ul>
+                                    </td>
+
+                                    <td>
+                                        <a class="ano-list-01a" href="#">Select</a>
+                                        <ul id="ano-list-ctn-01a" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">6110311-0002</a></li> 
+                                            <li><a href="#">2130212-0000</a></li>                                             
+                                        </ul>
+                                    </td>
+
+                                    <td>CAD 835.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td>
+                                        <a class="acn-list-02a" href="#">Select</a>
+                                        <ul id="acn-list-ctn-02a" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Salaries and Wages Expenses- Accrued</a></li> 
+                                            <li><a href="#">Salaries and wages Payable - Accrued  </a></li>                                              
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <a class="ano-list-02a" href="#">Select</a>
+                                        <ul id="ano-list-ctn-02a" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">6110311-0002</a></li> 
+                                            <li><a href="#">2130212-0000</a></li>                                             
+                                        </ul>
+                                    </td>
+                                    <td>CAD  80.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td>
+                                        <a class="acn-list-03a" href="#">Select</a>
+                                        <ul id="acn-list-ctn-03a" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Salaries and Wages Expenses- Accrued</a></li> 
+                                            <li><a href="#">Salaries and wages Payable - Accrued  </a></li>                                              
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <a class="ano-list-03a" href="#">Select</a>
+                                        <ul id="ano-list-ctn-03a" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">6110311-0002</a></li> 
+                                            <li><a href="#">2130212-0000</a></li>                                             
+                                        </ul>
+                                    </td>
+                                    <td></td>
+                                    <td>CAD 915.00</td>
+                                </tr>
+
+                                <tr class="border-td title-td">
+                                    <td colspan="5">Totals</td>
+                                    <td>CAD 915.00</td>
+                                    <td>CAD 915.00</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <h2>Record Paid Time Off (PTO)</h2>
+                        <div class="pro-table-ctrn">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tr class="border-head-01">
+                                    <td>Date</td>
+                                    <td>Batch No.</td>
+                                    <td>JE No.</td>
+                                    <td>Account Name</td>
+                                    <td>Account Number</td>
+                                    <td>DR</td>
+                                    <td>CR</td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-01b" href="#">Select</a>
+                                        <ul id="acn-list-ctn-01b" >
+                                            <li><a href="#">Salaries and wages Expense </a></li>
+                                            <li><a href="#">Salaries and Wages Expenses- Accrued PTO </a></li>
+                                        </ul></td>
+                                    <td><a class="ano-list-01b" href="#">Select</a>
+                                        <ul id="ano-list-ctn-01b" >
+                                            <li><a href="#">6110311-0002</a></li>
+                                            <li><a href="#">2130212-0000</a></li>
+                                        </ul></td>
+                                    <td>CAD  80.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-02b" href="#">Select</a>
+                                        <ul id="acn-list-ctn-02b" >
+                                            <li><a href="#">Salaries and wages Expense </a></li>
+                                            <li><a href="#">Salaries and Wages Expenses- Accrued PTO </a></li>
+                                        </ul></td>
+                                    <td><a class="ano-list-02b" href="#">Select</a>
+                                        <ul id="ano-list-ctn-02b" >
+                                            <li><a href="#">6110311-0002</a></li>
+                                            <li><a href="#">2130212-0000</a></li>
+                                        </ul></td>
+                                    <td></td>
+                                    <td>CAD 80.00</td>
+                                </tr>
+                                <tr class="border-td title-td">
+                                    <td colspan="5">Totals</td>
+                                    <td>CAD 915.00</td>
+                                    <td>CAD 915.00</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <a class="auditnotes-link fancybox" href="#jetransinfo">JE Transaction Tracking Info</a>        
+                        <hr />
+                        <div class="btns-ctnr-04 clearfix">
+                            <div class="right"> 
+                                <a class="cancel-new-btn" href="#">#{timeEntryTranslationService.cancel}</a>
+                                <a class="save-new-btn-01 mrg-rgt" href="#">#{timeEntryTranslationService.save}</a>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </o:form>
+        <ui:include src="/timesheet/view-timesheet-success-popup.xhtml"/>
+    </p:dialog>
+</ui:composition>

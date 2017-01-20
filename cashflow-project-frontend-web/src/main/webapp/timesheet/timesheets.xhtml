@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pp="http://java.sun.com/jsf/passthrough"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="/main-template.xhtml"> 
+        <ui:define name="content"> 
+            <o:form id="timesheetForm" useRequestURI="true">
+                <div class="condent-right">
+                    <div class="content-right-ctn">
+                        <div class="title-01 clearfix">
+                            <h1>#{timesheetTranslationService.header}</h1>
+                            <p:link href="#{timeSheetSummaryController.redirectTimeSheetSummary()}"
+                                    value="#{timesheetTranslationService.timesheetList}"
+                                    styleClass="trgth-btns">
+
+                            </p:link>
+                        </div>
+                        <div class="content-ctnr-03 clearfix">
+                            <div class="date-customer-ctn clearfix">
+                                <h1 class="date-title"> 
+                                    <span>
+                                        <ui:fragment rendered="#{timesheetController.timesheetModel.timesheetViewMode eq 'WEEK'}"> 
+                                            <h:outputText value="#{timesheetController.timesheetModel.monday.time}">
+                                                <f:convertDateTime pattern="dd MMM yyyy"/>
+                                            </h:outputText>
+                                            <h:outputText value=" - " />
+                                            <h:outputText value="#{timesheetController.timesheetModel.sunday.time}">
+                                                <f:convertDateTime pattern="dd MMM yyyy"/>
+                                            </h:outputText>
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{timesheetController.timesheetModel.timesheetViewMode eq 'DAY'}">
+                                            <h:outputText value="#{timesheetController.timesheetModel.currentDate.time}">
+                                                <f:convertDateTime pattern="dd MMM yyyy"/>
+                                            </h:outputText>
+                                        </ui:fragment>
+                                    </span>
+                                </h1>
+                                <div class="date-today clearfix">
+                                    <a class="date-arrow-lft" href="#"></a>
+                                    <p>#{timesheetTranslationService.today}</p>
+                                    <a class="date-arrow-rght" href="#"></a>
+                                </div>
+                                <div class="date-icon-ctn">
+                                    <a href="#"></a>
+                                </div>
+                                <div class="day-week-ctn clearfix">
+                                    <a href="#" class="day-txt">#{timesheetTranslationService.day}</a>
+                                    <a href="#" class="week-txt">#{timesheetTranslationService.week}</a>
+                                </div>
+                                <div class="cus-name-sel-ctn">
+                                    <a href="#">John Doe</a>
+                                </div>
+                            </div>
+
+                            <div class="enter-time-area clearfix">
+                                <a class="enter-time-icon" href="#">
+                                    <img src="/resources/images/enter-time-icon.png" alt="" />
+                                    <span>#{timesheetTranslationService.enterTime}</span>
+                                </a>
+                                <div class="enter-time-ctn clearfix">
+                                    <ui:fragment rendered="#{timesheetController.timesheetModel.timesheetViewMode eq 'WEEK'}"> 
+                                        <div class="enter-day-ctn #{timesheetController.isToday(timesheetController.timesheetModel.monday)}">
+                                            <h1>M</h1>
+                                            <p>0.00</p>
+                                        </div>
+                                        <div class="enter-day-ctn #{timesheetController.isToday(timesheetController.timesheetModel.tuesday)}">
+                                            <h1>T</h1>
+                                            <p>0.00</p>
+                                        </div>
+                                        <div class="enter-day-ctn #{timesheetController.isToday(timesheetController.timesheetModel.wednesday)}">
+                                            <h1>W</h1>
+                                            <p>0.30</p>
+                                        </div>
+                                        <div class="enter-day-ctn #{timesheetController.isToday(timesheetController.timesheetModel.thursday)}">
+                                            <h1>Th</h1>
+                                            <p>0.00</p>
+                                        </div>
+                                        <div class="enter-day-ctn #{timesheetController.isToday(timesheetController.timesheetModel.friday)}">
+                                            <h1>F</h1>
+                                            <p>0.00</p>
+                                        </div>
+                                        <div class="enter-day-ctn #{timesheetController.isToday(timesheetController.timesheetModel.saturday)}">
+                                            <h1>S</h1>
+                                            <p>0.00</p>
+                                        </div>
+                                        <div class="enter-day-ctn #{timesheetController.isToday(timesheetController.timesheetModel.sunday)}">
+                                            <h1>Su</h1>
+                                            <p>0.00</p>
+                                        </div>
+                                    </ui:fragment>
+                                    <div class="enter-total-ctn">
+                                        #{timesheetTranslationService.total}: 0.30
+                                    </div>
+                                </div>
+                                <div class="enter-time-ctn-01 clearfix">
+                                    <a class="enter-day-ctn-01 fancybox" href="#timeentry">8.00</a>
+                                    <a class="enter-day-ctn-01" href="#">10.50</a>
+                                    <a class="enter-day-ctn-01" href="#">8.00</a>
+                                    <a class="enter-day-ctn-01" href="#">8.00</a>
+                                    <a class="enter-day-ctn-01" href="#">0.00</a>
+                                    <a class="enter-day-ctn-01" href="#">0.00</a>
+                                    <a class="enter-day-ctn-01 brn" href="#">0.00</a>
+                                </div>
+
+                                <div class="start-time-ctn clearfix">
+                                    <div class="start-btn">
+                                        <a href="#">#{timesheetTranslationService.start}</a>
+                                    </div>
+                                    <div class="startedit-icon-ctn">
+                                        <a class="fancybox" href="#time-entry-detail"></a>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+
+                            <div class="timeprofiled clearfix">
+                                <div class="lable-field-area">
+                                    <label>Project:</label>
+                                    <input class="inventory-input-field-01" name="" type="text" value="P00001 – New Toronto Star Trek Mall Construction " />
+                                </div>
+                                <div class="lable-field-area">
+                                    <label>Phase:</label>
+                                    <input class="inventory-input-field-01" name="" type="text" value="PP001 – Planing and Design" />
+                                </div>
+                                <div class="lable-field-area">
+                                    <label>Milestone:</label>
+                                    <input class="inventory-input-field-01" name="" type="text" value="MN001- Deliver 3 Draft Desings" />
+                                </div>
+                                <div class="lable-field-area">
+                                    <label>Task: </label>
+                                    <input class="inventory-input-field-01" name="" type="text" value="T00001 – Research and Planning" />
+                                </div>
+                            </div>
+                            <br clear="all" />
+                            <div class="start-total-ctn clearfix">
+                                <p><span>Total Hours:</span> 0.40</p>
+                            </div>
+                            <hr class="hrline" />
+                            <div class="btns-ctnr-04 clearfix">
+                                <div class="right">
+                                    <a class="cancel-new-btn" href="#">Cancel</a>
+                                    <a class="save-btn-gry-01" href="#">Save</a>
+                                    <a class="save-new-btn-01 mrg-rgt" href="#">Submit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </o:form>
+        </ui:define>
+    </ui:composition>
+</html>

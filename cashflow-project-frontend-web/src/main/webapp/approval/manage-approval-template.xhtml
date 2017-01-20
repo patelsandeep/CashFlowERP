@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="create_phase_approval"
+              widgetVar="create_phase_approval"
+              closeOnEscape="true"
+              showHeader="false"
+              styleClass="phase-dialog"
+              resizable="false"
+              modal="true">
+        <o:form useRequestURI="true" id="manageApprovalForm">
+            <div class="phase-finance-popup-ctn" id="manageapprovals" >
+                <h1>#{manageApprovalTranslationService.manageApprovals} 
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('create_phase_approval').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="phase-finance-popup-field-ctnr clearfix">
+                    <ui:insert name="projectLevelDetails" />
+                    <div class="prosum-field-area">
+                        <label>#{manageApprovalTranslationService.managingApprovals}:</label>
+                        <h:inputTextarea value="#{manageApprovalTranslationService.managingDesc}"
+                                         styleClass="prosum-textarea-field-01" 
+                                         readonly="true"/>
+                    </div>
+                    <br clear="all" />
+                    <div class="lable-field-area-02"> <a class="attach-file-btn-01" href="#">Update PPC</a> </div>
+                    <br clear="all" />
+                    <div class="pro-table-ctrn">
+                        <table cellpadding="0" cellspacing="0" border="0" width="1800px">
+                            <tr class="border-head-01">
+                                <td>#{manageApprovalTranslationService.approver}</td>
+                                <td>#{manageApprovalTranslationService.projectRole}</td>
+                                <td>#{manageApprovalTranslationService.approvalLevel}</td>
+                                <td class="twd100">#{manageApprovalTranslationService.timeExpenses}</td>
+                                <td class="twd60">#{manageApprovalTranslationService.equipment}</td>
+                                <td class="twd60">#{manageApprovalTranslationService.materials}</td>
+                                <td class="twd90">#{manageApprovalTranslationService.subContractors}</td>
+                                <td class="twd60">#{manageApprovalTranslationService.overheads}</td>
+                                <td class="twd90">#{manageApprovalTranslationService.changeOrders}</td>
+                                <td class="twd60">#{manageApprovalTranslationService.ppcLabel}</td>
+                                <td class="twd60">#{manageApprovalTranslationService.invoices}</td>
+                                <td class="twd60">#{manageApprovalTranslationService.phases}</td>
+                                <td class="twd60">#{manageApprovalTranslationService.milestones}</td>
+                                <td class="twd60">#{manageApprovalTranslationService.tasks}</td>
+                                <td class="twd60">#{manageApprovalTranslationService.all}</td>
+                                <td class="twd30"></td>
+                            </tr>
+                            <tr class="border-td-01">
+                                <td>
+                                    <a class="approver-list-01" href="#">Select</a>
+                                    <ul id="approver-list-ctn-01"><li><a href="#">John Johnson</a></li></ul>
+                                </td>
+                                <td>
+                                    <a class="project-list-01" href="#">Select</a>
+                                    <ul id="project-list-ctn-01"><li><a href="#">Project Manager</a></li></ul>
+                                </td>
+                                <td>
+                                    <a class="plevel-list-01" href="#">Select</a>
+                                    <ul id="plevel-list-ctn-01"><li><a href="#">Project Level</a></li></ul>
+                                </td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td><input name="" type="checkbox" value="" /></td>
+                                <td class="acction-ctn"><a href="#"><img src="/resources/images/del-icon.png" alt="" /></a></td>
+                            </tr>
+                            <tr class="border-td-01">
+                                <td colspan="16"><a class="add-reminder-link" href="#">Add a line</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <a class="auditnotes-link" onClick="showhide3()">Audit Trail and Notes:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote3">
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                    </div>
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right"> 
+                            <a class="cancel-new-btn"
+                               onclick="PF('create_phase_approval').hide();" 
+                               href="#">
+                                #{manageApprovalTranslationService.cancel}
+                            </a> 
+                            <a class="save-new-btn-01 mrg-rgt" 
+                               href="#">
+                                #{manageApprovalTranslationService.save}
+                            </a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+</ui:composition>

@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <o:form useRequestURI="true" id="equipmentForm">
+        <div id="tab7" class="tab_content clearfix">
+            <div class="protab-para-ctn">
+                <h1>#{equipmentTabTranslationService.equipmentExpenses}</h1>
+                <p>
+                    #{equipmentTabTranslationService.expenseDetails1} #{equipmentTabTranslationService.expenseDetails2}<a href="#">#{equipmentTabTranslationService.knowledgeBaseLabel}</a> and view <a href="#">#{equipmentTabTranslationService.equipmentLEMSLabel}</a>
+                </p>
+            </div>
+            <div class="tabtitle clearfix">
+                <h1>#{equipmentTabTranslationService.equipmentExpenses}</h1>
+                <p:commandLink styleClass="addtm-btn fancybox"
+                               actionListener="#{equipmentTypeController.checkApprovedProject()}"
+                               value="+ #{equipmentTabTranslationService.addNewEquipmentChargeSchedule}"/>
+
+                <div class="all-customer-field-ctn-01">
+
+                    <h:inputText styleClass="search-field" 
+                                 value="#{equipmentExpenseListController.freeSearch}" />
+                    <h:selectOneMenu styleClass="all-sel-field-02"
+                                     value="#{equipmentExpenseListController.projectLevelUUID}">
+                        <f:selectItem itemLabel="#{equipmentTabTranslationService.filterByLabel}"/>
+                        <f:selectItems value="#{equipmentExpenseListController.projectLevels}"
+                                       var="level"
+                                       itemLabel="#{level.id}"
+                                       itemValue="#{level.uuid}"/>
+                    </h:selectOneMenu>
+
+                    <h:selectOneMenu styleClass="all-sel-field-02"
+                                     value="#{equipmentExpenseListController.equipmentType}">
+                        <f:selectItems value="#{equipmentExpenseListController.equipmentTypes}" />
+                    </h:selectOneMenu>
+                    <p:commandLink class="trgth-btns" 
+                                   value="Search" 
+                                   update="@form"
+                                   action="#{equipmentExpenseListController.loadEquipmentExpense()}" />
+
+                </div>
+            </div>
+            <div class="pro-table-ctrn">
+                <table cellpadding="0" cellspacing="0" border="0" width="1800px">
+                    <tr class="border-head">
+                        <td>#{equipmentTabTranslationService.phaseId}</td>
+                        <td>#{equipmentTabTranslationService.milestoneId}</td>
+                        <td>#{equipmentTabTranslationService.taskId}</td>
+                        <td>#{equipmentTabTranslationService.equipmentName}</td>
+                        <td>#{equipmentTabTranslationService.equipmentID}</td>
+                        <td>#{equipmentTabTranslationService.rented}</td>
+                        <td>#{equipmentTabTranslationService.costRate}</td>
+                        <td>#{equipmentTabTranslationService.billRate}</td>
+                        <td>#{equipmentTabTranslationService.units}</td>
+                        <td>#{equipmentTabTranslationService.amount}</td>
+                        <td>#{equipmentTabTranslationService.action}</td>
+                    </tr>
+                    <ui:repeat value="#{equipmentExpenseListController.equipmentExpenseInformations}"
+                               var="expenseInfo">
+                        <tr class="border-td">
+                            <td>#{expenseInfo.phaseId}</td>
+                            <td>#{expenseInfo.milestoneId}</td>
+                            <td>#{expenseInfo.taskId}</td>
+                            <td>
+                                <p:commandLink styleClass="fancybox"
+                                               value="#{expenseInfo.equipmentName}"
+                                               update="view_rented_equipment_form view_owned_equipment_expense_form"
+                                               actionListener="#{equipmentExpenseViewController.viewExpense(expenseInfo.equipmentUuid,expenseInfo.equipmentType)}"/>
+                            </td>
+                            <td>
+                                <p:commandLink styleClass="fancybox"
+                                               value="#{expenseInfo.equipmentID}"
+                                               update="view_rented_equipment_form view_owned_equipment_expense_form"
+                                               actionListener="#{equipmentExpenseViewController.viewExpense(expenseInfo.equipmentUuid,expenseInfo.equipmentType)}"/>
+                            </td>
+                            <td>#{expenseInfo.equipmentType eq 'OWNED'?'NO':'YES'}</td>
+                            <td>#{expenseInfo.costRate}</td>
+                            <td>#{expenseInfo.billRate}</td>
+                            <td>#{expenseInfo.units}</td>
+                            <td>#{expenseInfo.totalAmount}</td>
+                            <td>
+                                <ui:fragment rendered="#{expenseInfo.equipmentType eq 'OWNED'}">
+                                    <p:commandLink styleClass="fancybox"
+                                                   update="add_owned_equipment_form"
+                                                   onsuccess="PF('add_owned_equipment').show();"
+                                                   actionListener="#{ownedEquipmentExpenseController.editExpense(expenseInfo.equipmentUuid)}">
+                                        <img src="/resources/images/ac-edit-icon.png" alt="" />
+                                    </p:commandLink>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{expenseInfo.equipmentType eq 'RENTED'}">
+                                    <p:commandLink styleClass="fancybox"
+                                                   update="add_rented_equipment_form"
+                                                   onsuccess="PF('add_rented_equipment').show();"
+                                                   actionListener="#{rentedEquipmentExpenseController.editExpense(expenseInfo.equipmentUuid)}">
+                                        <img src="/resources/images/ac-edit-icon.png" alt="" />
+                                    </p:commandLink>
+                                </ui:fragment>
+                                <p:commandLink styleClass="fancybox"
+                                               update="view_rented_equipment_form view_owned_equipment_expense_form"
+                                               actionListener="#{equipmentExpenseViewController.viewExpense(expenseInfo.equipmentUuid,expenseInfo.equipmentType)}">
+                                    <img src="/resources/images/view-icon.png" alt="" />
+                                </p:commandLink>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                </table>
+            </div>
+            <div class="paging-ctnr clearfix">
+                <h:selectOneMenu value="#{equipmentExpenseListController.limit}" 
+                                 styleClass="col-sel-field">
+                    <f:selectItems value="#{equipmentExpenseListController.limits}"/>
+                    <p:ajax listener="#{equipmentExpenseListController.initEquipmentExpense()}"
+                            update="@form" />
+                </h:selectOneMenu>
+                <div class="next-prev-ctn clearfix">
+                    <p:commandLink styleClass="prev-btn"
+                                   value="Previous"
+                                   actionListener="#{equipmentExpenseListController.previousPage()}"
+                                   disabled="#{equipmentExpenseListController.page lt 1}"
+                                   update="@form"/>
+                    <span class="pages-info">#{equipmentExpenseListController.page + 1} of #{equipmentExpenseListController.pageCount}</span>
+                    <p:commandLink styleClass="next-btn" 
+                                   value="Next" 
+                                   actionListener="#{equipmentExpenseListController.nextPage()}"
+                                   disabled="#{equipmentExpenseListController.page ge equipmentExpenseListController.maxPage}"
+                                   update="@form"/>
+                </div>
+                <h:selectOneMenu value="#{equipmentExpenseListController.page}" 
+                                 styleClass="page-sel-field">
+                    <f:selectItems value="#{equipmentExpenseListController.pages}"/>
+                    <p:ajax listener="#{equipmentExpenseListController.initEquipmentExpense()}"
+                            update="@form" />
+                </h:selectOneMenu>
+            </div>
+            <hr class="hrline-02" />
+            <div class="btns-ctnr-04 clearfix">
+                <div class="right"> 
+                    <p:link href="#{equipmentExpenseListController.redirectProjectSummary()}"
+                            value="#{equipmentTabTranslationService.cancel}"
+                            styleClass="cancel-new-btn">
+                    </p:link>
+                </div>
+            </div>
+        </div>
+    </o:form>
+    <ui:include src="/equipment/equipment-type-popup.xhtml"/>
+    <ui:include src="/equipment/owned-equipment-expense-detail.xhtml"/>
+    <ui:include src="/equipment/rented-equipment-expense-detail.xhtml"/>
+</ui:composition>

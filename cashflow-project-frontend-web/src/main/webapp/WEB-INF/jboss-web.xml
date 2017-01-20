@@ -1,0 +1,9 @@
+<jboss-web>
+    <context-root>/</context-root>
+    <virtual-host>project</virtual-host>
+    <session-config>
+        <cookie-config>
+            <path>/</path>
+        </cookie-config>
+    </session-config>
+</jboss-web>

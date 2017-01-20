@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <o:form useRequestURI="true" id="phaseForm">
+        <div class="protab-para-ctn">
+            <h1>#{phaseTranslationService.header}</h1>
+            <p>#{phaseTranslationService.phaseDetails1} #{phaseTranslationService.phaseDetails2} <a href="#">#{phaseTranslationService.knowledgeBaseLabel}</a> and view <a href="#">#{phaseTranslationService.projectStructureLabel}.</a></p>
+        </div>
+        <div class="tabtitle clearfix">
+            <h1>#{phaseTranslationService.header}</h1>
+            <a class="trgth-btns fancybox" href="#" onclick="PF('create_project_phase').show()();">+ #{phaseTranslationService.addNewPhase}</a> 
+        </div>
+        <ui:include src="/phase/phase-list.xhtml" />
+        <hr class="hrline-02" />
+        <div class="btns-ctnr-04 clearfix">
+            <div class="right"> 
+                <p:link href="#{phaseListController.redirectProjectSummary()}"
+                        value="#{phaseTranslationService.cancel}"
+                        styleClass="cancel-new-btn">
+                </p:link>
+            </div>
+        </div>
+    </o:form>
+    <ui:include src="/phase/add-phase-popup.xhtml"/>
+    <ui:include src="/task/add-task-popup.xhtml"/>
+    <ui:include src="/task/view-task-popup.xhtml"/>
+</ui:composition>

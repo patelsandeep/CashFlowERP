@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <o:form useRequestURI="true" id="expenseForm">
+        <div id="tab6" class="tab_content clearfix">
+            <div class="protab-para-ctn">
+                <h1>#{expenseTabTranslationService.timesheetsAndExpenses} </h1>
+                <p>
+                    #{expenseTabTranslationService.expenseDetails1} #{expenseTabTranslationService.expenseDetails2} 
+                    <a href="#">#{expenseTabTranslationService.knowledgeBaseLabel}</a> and view <a href="#">#{expenseTabTranslationService.expenseReportsLabel}</a>
+                </p>
+            </div>
+            <div class="tabtitle clearfix">
+                <h1>#{expenseTabTranslationService.timesheetsAndExpenses}</h1>
+
+                <p:commandLink styleClass="addtm-btn fancybox"
+                               actionListener="#{expenseLabourTypeController.checkApprovedProject()}"
+                               value="+ #{expenseTabTranslationService.addExpenseLabel}"/>
+                <div class="all-customer-field-ctn-01">
+                    <h:inputText class="search-field"
+                                 value="#{labourExpenseListController.filterModel.searchValue}">
+                    </h:inputText>
+                    <h:selectOneMenu styleClass="all-sel-field-02"
+                                     value="#{labourExpenseListController.filterModel.projectLevelUUID}">
+                        <f:selectItem itemLabel="#{expenseTabTranslationService.filterByLabel}"/>
+                        <f:selectItems value="#{labourExpenseListController.filterModel.projectLevels}"
+                                       var="level"
+                                       itemLabel="#{level.id}"
+                                       itemValue="#{level.uuid}"/>
+                    </h:selectOneMenu>
+                    <h:selectOneMenu styleClass="all-sel-field-02"
+                                     value="#{labourExpenseListController.filterModel.accessRoleUUID}">
+                        <f:selectItem itemLabel="#{expenseTabTranslationService.filterByLabel}"/>
+                        <f:selectItems value="#{labourExpenseListController.filterModel.accessRoles}"
+                                       var="role"
+                                       itemLabel="#{role.roleName}"
+                                       itemValue="#{role.uuid}" />
+                    </h:selectOneMenu>
+                    <h:selectOneMenu styleClass="all-sel-field-02"
+                                     value="#{labourExpenseListController.filterModel.labourExpenseType}">
+                        <f:selectItems value="#{labourExpenseListController.labourExpenseTypes}" />
+
+                    </h:selectOneMenu>
+                    <p:commandLink class="trgth-btns" 
+                                   value="Search" 
+                                   update="@form"
+                                   action="#{labourExpenseListController.loadExpense()}" />
+                </div>
+            </div>
+            <div class="pro-table-ctrn">
+                <table cellpadding="0" cellspacing="0" border="0" width="1800px">
+                    <tr class="border-head">
+                        <td>#{expenseTabTranslationService.projectId}</td>
+                        <td>#{expenseTabTranslationService.phaseId}</td>
+                        <td>#{expenseTabTranslationService.milestoneId}</td>
+                        <td>#{expenseTabTranslationService.taskId}</td>
+                        <td>#{expenseTabTranslationService.teamMember}</td>
+                        <td>#{expenseTabTranslationService.memberId}</td>
+                        <td>#{expenseTabTranslationService.platformRole}</td>
+                        <td>#{expenseTabTranslationService.department}</td>
+                        <td>#{expenseTabTranslationService.projectRole}</td>
+                        <td>#{expenseTabTranslationService.regularTimeHours}</td>
+                        <td>#{expenseTabTranslationService.overTimeHours}</td>
+                        <td>#{expenseTabTranslationService.ptoTimeHours}</td>
+                        <td>#{expenseTabTranslationService.totalHours}</td>
+                        <td>#{expenseTabTranslationService.expenseReport}</td>
+                        <td>#{expenseTabTranslationService.action} </td>
+                    </tr>
+                    <ui:repeat value="#{labourExpenseListController.expenseInformation.entrySet().toArray()}"
+                               var="expenseInfoMap">
+                        <c:set value="#{expenseInfoMap.value}" var="expenseInfo" />
+                        <tr class="border-td">
+                            <td>#{expenseInfo.projectId}</td>
+                            <td>#{expenseInfo.phaseId}</td>
+                            <td>#{expenseInfo.milestoneId}</td>
+                            <td>#{expenseInfo.taskId}</td>
+                            <td>
+                                <p:commandLink styleClass="fancybox"
+                                               value="#{expenseInfo.memberName}"
+                                               update="view_expense_type_form"
+                                               actionListener="#{labourExpenseViewController.selectType(expenseInfoMap.key,expenseInfo.teamMemberCategory)}"
+                                               oncomplete="PF('view_expense_type').show();"/>
+                            </td>
+                            <td>
+                                <p:commandLink styleClass="fancybox"
+                                               value="#{expenseInfo.memberId}"
+                                               update="view_expense_type_form"
+                                               actionListener="#{labourExpenseViewController.selectType(expenseInfoMap.key,expenseInfo.teamMemberCategory)}"
+                                               oncomplete="PF('view_expense_type').show();"/>
+
+                            </td>
+                            <td>#{expenseInfo.systemRole} </td>
+                            <td>#{expenseInfo.department} </td>
+                            <td>#{expenseInfo.projectRole} </td>
+                            <td>#{expenseInfo.regularHours}</td>
+                            <td>#{expenseInfo.overTimeHours}</td>
+                            <td>#{expenseInfo.ptoHours}</td>
+                            <td>#{expenseInfo.totalHours}</td>
+                            <td>#{expenseInfo.expenseReportAmount}</td>
+                            <td class="acction-ctn">
+                                <a class="fancybox" href="#">
+                                    <img src="/resources/images/add-icon-02.png" alt="" />
+                                </a>
+                                <a class="fancybox" href="#time-entry-detail">
+                                    <img src="/resources/images/ac-edit-icon.png" alt="" />
+                                </a>
+                                <p:commandLink styleClass="fancybox"
+                                               update="view_expense_type_form"
+                                               actionListener="#{labourExpenseViewController.selectType(expenseInfoMap.key,expenseInfo.teamMemberCategory)}"
+                                               oncomplete="PF('view_expense_type').show();">
+                                    <img src="/resources/images/view-icon.png" alt="" />
+                                </p:commandLink>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                </table>
+            </div>
+            <div class="paging-ctnr clearfix">
+                <h:selectOneMenu value="#{labourExpenseListController.limit}" 
+                                 styleClass="col-sel-field">
+                    <f:selectItems value="#{labourExpenseListController.limits}"/>
+                    <p:ajax listener="#{labourExpenseListController.loadExpense()}"
+                            update="@form" />
+                </h:selectOneMenu>
+                <div class="next-prev-ctn clearfix">
+                    <p:commandLink styleClass="prev-btn"
+                                   value="Previous"
+                                   actionListener="#{labourExpenseListController.previousPage()}"
+                                   disabled="#{labourExpenseListController.page lt 1}"
+                                   update="@form"/>
+                    <span class="pages-info">#{labourExpenseListController.page + 1} of #{labourExpenseListController.pageCount}</span>
+                    <p:commandLink styleClass="next-btn" 
+                                   value="Next" 
+                                   actionListener="#{labourExpenseListController.nextPage()}"
+                                   disabled="#{labourExpenseListController.page ge labourExpenseListController.maxPage}"
+                                   update="@form"/>
+                </div>
+                <h:selectOneMenu value="#{labourExpenseListController.page}" styleClass="page-sel-field">
+                    <f:selectItems value="#{labourExpenseListController.pages}"/>
+                    <p:ajax listener="#{labourExpenseListController.loadExpense()}"
+                            update="@form" />
+                </h:selectOneMenu>
+            </div>
+            <hr class="hrline-02" />
+            <div class="btns-ctnr-04 clearfix">
+                <div class="right"> 
+                    <p:link href="#{labourExpenseListController.redirectProjectSummary()}"
+                            value="#{expenseTabTranslationService.cancel}"
+                            styleClass="cancel-new-btn">
+                    </p:link>
+                </div>
+            </div>
+        </div>
+    </o:form>
+    <ui:include src="/timeandexpense/expense-type-popup.xhtml"/>
+    <ui:include src="/timeandexpense/validation-popup.xhtml"/>
+    <ui:include src="/timeandexpense/view-expense-type-popup.xhtml"/>
+</ui:composition>

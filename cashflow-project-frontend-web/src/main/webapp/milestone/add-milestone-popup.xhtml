@@ -1,0 +1,373 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <p:dialog id="create_project_milestone"
+              widgetVar="create_project_milestone"
+              closeOnEscape="true"
+              showHeader="false"
+              resizable="false"
+              styleClass="phase-dialog"
+              modal="true">
+
+        <o:form useRequestURI="true" id="addMilestoneForm" >
+
+            <div class="add-new-phase-popup-ctn" id="addNewMile" >
+                <h1>#{projectMilestoneTranslationService.milestoneHeader} 
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('create_project_milestone').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{projectMilestoneTranslationService.customerLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectMilestoneController.milestoneModel.customerName}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{projectMilestoneTranslationService.customerIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectMilestoneController.milestoneModel.customerId}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.projectNameLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectMilestoneController.milestoneModel.projectName}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.projectIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectMilestoneController.milestoneModel.projectId}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.phaseLabel}: </label>
+                        <h:selectOneMenu value="#{projectMilestoneController.milestoneModel.projectPhase}"
+                                         styleClass="inventory-sel-field-01">
+                            <f:selectItem itemLabel="#{projectMilestoneTranslationService.selectPhaseLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{projectMilestoneController.loadPhases()}"
+                                           var="phase"
+                                           itemValue="#{phase.uuid}"
+                                           itemLabel="#{phase.name}"/>
+                            <p:ajax update="phaseId milestoneNumber" listener="#{projectMilestoneController.updatePhaseId()}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.phaseIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="phaseId"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.phaseId}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.milestoneNumberLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="milestoneNumber"
+                                     value="#{projectMilestoneController.milestoneModel.milestoneNumber}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.milestoneIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectMilestoneController.milestoneModel.milestoneId}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.milestoneNameLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectMilestoneController.milestoneModel.milestoneName}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.milestoneSupervisorLabel}:</label>
+
+
+                        <p:autoComplete cache="true"
+                                        inputStyleClass="inventory-input-field-01"
+                                        inputStyle="padding-right: 0px; padding-left: 0px; box-shadow: none;"
+                                        completeMethod="#{projectMilestoneController.loadSupervisors}"
+                                        emptyMessage="#{projectMilestoneTranslationService.noMilestoneSupervisorFoundMessage}"
+                                        forceSelection="true"
+                                        queryDelay="400"
+                                        minQueryLength="3"
+                                        placeholder="#{projectMilestoneTranslationService.messageForMilestoneSupervisorSearch}"
+                                        value="#{projectMilestoneController.milestoneModel.milestoneSupervisor}"
+                                        title="#{projectMilestoneTranslationService.messageForMilestoneSupervisorSearch}"
+                                        var="sup"
+                                        itemValue="#{sup}"
+                                        itemLabel="#{sup.supervisorName}"
+                                        style="width: 320px">
+
+                        </p:autoComplete>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.startDateLabel}:</label>
+                        <p:calendar id="startDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{projectMilestoneController.milestoneModel.startDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="startDate"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.endDateLabel}:</label>
+                        <p:calendar id="enddate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{projectMilestoneController.milestoneModel.endDate}"
+                                    pattern="yyyy-MM-dd"
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="enddate"/>
+                    </div>
+                    <div class="prosum-field-area">
+                        <label>#{projectMilestoneTranslationService.milestoneSummaryLabel}:</label>
+                        <h:inputTextarea styleClass="prosum-textarea-field-01"
+                                         value="#{projectMilestoneController.milestoneModel.milestoneSummary}"/>
+                    </div>
+                    <div class="prosum-field-area">
+                        <label>#{projectMilestoneTranslationService.milestoneDeliverableLabel}:</label>
+                        <h:inputTextarea styleClass="prosum-textarea-field-01"
+                                         value="#{projectMilestoneController.milestoneModel.milestoneDeliverable}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.milestoneBudgetCostLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="costCurrency"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     value="#{projectMilestoneController.milestoneModel.milestoneBudgetCost}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax update="@this profit" listener="#{projectMilestoneController.calculateMilestoneGrossProfit()}"/>
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.milestoneBudgetRevenueLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="revenueCurrency"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     value="#{projectMilestoneController.milestoneModel.milestoneBudgetRevenue}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax update="@this profit" listener="#{projectMilestoneController.calculateMilestoneGrossProfit()}"/>
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.milestoneBudgetProfitLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="profitCurrency"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     id="profit"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.milestoneBudgetGrossProfit}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{projectMilestoneTranslationService.depositOrRetainersLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-09"
+                                     id="depositCurrency"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-10" 
+                                     value="#{projectMilestoneController.milestoneModel.depositOrRetainers}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax update="@this" listener="#{projectMilestoneController.checkDepositValue()}" />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area-02"> 
+                        <a class="attach-file-btn-01 mrgt" href="#">#{projectMilestoneTranslationService.invoiceIssueLabel}</a> 
+                    </div>
+                    <div class="lable-field-area-02"> 
+                        <a class="attach-file-btn-01 fancybox" onclick="PF('create_milestone_alert').show()();"  href="#">
+                            #{projectMilestoneTranslationService.manageAlertsLabel}
+                        </a>
+                    </div>
+                    <div class="lable-field-area-02"> 
+                        <a class="attach-file-btn-01 fancybox" onclick="PF('create_milestone_approval').show()();" href="#">
+                            #{projectMilestoneTranslationService.manageApprovalsLabel}
+                        </a> 
+                    </div>
+                    <div class="lable-field-area"> 
+                        <a class="attach-file-btn-01 fancybox" onclick="PF('create_milestone_finance').show()();"  href="#">
+                            #{projectMilestoneTranslationService.viewMilestoneFinancialsLabel}
+                        </a> 
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.taskCountLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.taskCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.teamMemberLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.teamMemberCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.subContractorLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.subContractorCount}"/>
+                    </div>
+                    <br clear="all" />
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.milestonePOCLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.poc}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.milestonePPCLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.ppc}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.changeOrderCountLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.changeOrderCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.changeOrderAmountLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="changeOrderCurrency"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.changeOrderAmount}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.penaltyCountLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.penaltyCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.penaltyAmountLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="penaltyCurrency"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.penaltiesAmount}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.projectManagerLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectMilestoneController.milestoneModel.projectManager}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.safetyRatingLabel}: </label>
+
+                        <h:selectOneMenu id="safetyrating" 
+                                         disabled="true"
+                                         value="#{projectMilestoneController.milestoneModel.safetyRating}"
+                                         styleClass="inventory-sel-field-01">
+
+                            <f:selectItems value="#{projectMilestoneController.safetyRatings}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.performanceStatusLabel}:</label>
+                        <h:selectOneMenu id="performanceStatus" 
+                                         value="#{projectMilestoneController.milestoneModel.performanceStatus}"
+                                         styleClass="inventory-sel-field-01">
+
+                            <f:selectItems value="#{projectMilestoneController.performanceStatuses}"/>
+
+                        </h:selectOneMenu>
+
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectMilestoneTranslationService.milestoneStatusLabel}:</label>
+                        <h:selectOneMenu id="milestoneStatus" 
+                                         value="#{projectMilestoneController.milestoneModel.milestoneStatus}"
+                                         styleClass="inventory-sel-field-01">
+
+                            <f:selectItems value="#{projectMilestoneController.milestoneStatuses}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+
+                        <h:outputLabel for="phase_details_file_input" 
+                                       styleClass="attach-file-btn-01"
+                                       value="#{projectMilestoneTranslationService.milestoneAttachmentsLabel}">
+                        </h:outputLabel>
+                        <p:fileUpload mode="advanced"
+                                      widgetVar="phase_details_file"
+                                      id="phase_details_file"
+                                      auto="true"
+                                      fileLimit="5"
+                                      styleClass="ui-helper-hidden"
+                                      multiple="true"
+                                      skinSimple="true"
+                                      dragDropSupport="true"
+                                      allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xlsx|csv|xls)$/"
+                                      fileUploadListener="#{projectMilestoneController.fileUpload}"
+                                      />
+                    </div>
+                    <br clear="all" />
+                    <a class="auditnotes-link">#{projectMilestoneTranslationService.auditTrailandNotesLabel}:</a><br />
+
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a class="cancel-new-btn"
+                               onclick="PF('create_project_milestone').hide();">#{projectMilestoneTranslationService.cancelLabel}</a>
+
+                            <p:commandLink value="#{projectMilestoneTranslationService.saveLabel}"
+                                           update="@form milestonesuccessForm"
+                                           action="#{projectMilestoneController.saveProjectMilestone()}"
+                                           onsuccess="PF('create_project_milestone').hide();PF('milestone_success_message').show();"
+                                           styleClass="save-new-btn-01 mrg-rgt"/>
+                            <a class="save-new-btn-01 mrg-rgt" href="#">#{projectMilestoneTranslationService.approveLabel}</a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </o:form>
+
+    </p:dialog>
+    <ui:include src="manage-milestone-alerts.xhtml"/>
+    <ui:include src="manage-milestone-approvals.xhtml"/>
+    <ui:include src="view-milestone-finance-details.xhtml"/>
+    <ui:include src="milestone-success-popup.xhtml"/>
+
+</ui:composition>

@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="add_project_role"
+              widgetVar="add_project_role"
+              closeOnEscape="true"
+              resizable="false"
+              showHeader="false"
+              styleClass="phase-dialog"
+              modal="true">
+        <o:form useRequestURI="true" 
+                id="add_project_role_form">
+            <div class="add-new-phase-popup-ctn" 
+                 id="addnewtmember" >
+                <h1>#{projectTeamMemberTranslationService.addNewProjectRole}
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('add_project_role').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{projectTeamMemberTranslationService.newProjectRoleName}:</label>
+                        <h:inputText styleClass="inventory-input-field-01" 
+                                     value="#{projectTeamMemberController.newProjectRoleModel.roleName}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTeamMemberTranslationService.projectRoleLevel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         value="#{projectTeamMemberController.newProjectRoleModel.projectLevelCategory}">
+
+                            <f:selectItems value="#{projectTeamMemberController.levelCategories}"
+                                           />
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+                <br clear="all" />
+                <div class="online-payment-btn-new-1 clearfix">
+                    <p>#{projectTeamMemberTranslationService.approvalPermissions}:</p>
+                </div>
+                <div class="approvper" id="applist">
+                    <ui:repeat value="#{projectTeamMemberController.newProjectRoleModel.accessScopes.entrySet().toArray()}"
+                               var="scopeDef">
+                        <div class="clearfix">
+                            <h:selectBooleanCheckbox
+                                value="#{projectTeamMemberController.newProjectRoleModel.accessScopes[scopeDef.key]}" />
+                            <p>#{scopeDef.key.name}</p>
+                        </div>
+                    </ui:repeat>
+                </div>
+                <br clear="all" />
+                <hr />
+                <div class="btns-ctnr-04 clearfix">
+                    <div class="right"> 
+                        <a class="cancel-new-btn"
+                           onclick="PF('add_project_role').hide();">
+                            #{projectTeamMemberTranslationService.cancel}
+                        </a> 
+                        <p:commandLink styleClass="save-new-btn-01 mrg-rgt" 
+                                       update="@form add_project_member_form people_success_form"
+                                       actionListener="#{projectTeamMemberController.saveNewRole()}"
+                                       onsuccess="PF('add_project_role').hide();PF('people_success_message').show();"
+                                       value="#{projectTeamMemberTranslationService.save}" /> 
+
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+</ui:composition>

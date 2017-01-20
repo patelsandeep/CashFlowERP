@@ -1,0 +1,284 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="view_project_member"
+              widgetVar="view_project_member"
+              closeOnEscape="true"
+              resizable="false"
+              showHeader="false"
+              styleClass="phase-dialog"
+              modal="true">
+        <o:form useRequestURI="true" 
+                id="view_project_member_form">
+            <div class="add-new-phase-popup-ctn" 
+                 id="addnewtmember" >
+                <h1>#{projectTeamMemberTranslationService.teamMemberDetail}
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('view_project_member').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <p:commandLink actionListener="#{projectTeamMemberController.editProjectTeamMemberFromView(projectTeamMemberViewController.projectTeamMemberModel)}"
+                                   update="add_project_member_form"
+                                   styleClass="trgth-btns"
+                                   value="#{projectTeamMemberTranslationService.edit}"
+                                   oncomplete="PF('view_project_member').hide();PF('add_project_member').show();">
+                    </p:commandLink>
+                    <br clear="all" />
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{projectTeamMemberTranslationService.customerLabel}:</label>
+                        <h:outputText styleClass="inventory-input-field-01" 
+                                      value="#{projectTeamMemberViewController.projectTeamMemberModel.customerName}" />
+                    </div>
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{projectTeamMemberTranslationService.projectLabel}:</label>
+                        <h:outputText styleClass="inventory-input-field-01" 
+                                      value="#{projectTeamMemberViewController.projectTeamMemberModel.projectName}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTeamMemberTranslationService.phaseLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectTeamMemberViewController.projectTeamMemberModel.phaseName}" />
+
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTeamMemberTranslationService.milestoneLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectTeamMemberViewController.projectTeamMemberModel.mileStoneName}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTeamMemberTranslationService.taskLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectTeamMemberViewController.projectTeamMemberModel.taskname}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTeamMemberTranslationService.taskIdLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectTeamMemberViewController.projectTeamMemberModel.taskID}" />
+                    </div>
+                    <ui:fragment rendered="#{projectTeamMemberViewController.projectTeamMemberModel.teamMemberCategory eq 'EMPLOYEE'}">
+                        <div class="lable-field-area">
+                            <label>#{projectTeamMemberTranslationService.department}:</label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         readonly="true"
+                                         value="#{projectTeamMemberViewController.projectTeamMemberModel.departmentUUID}" />
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{projectTeamMemberTranslationService.organizationLevel}:</label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         readonly="true"
+                                         value="#{projectTeamMemberViewController.projectTeamMemberModel.organizationLevel}" />
+
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{projectTeamMemberTranslationService.name}:</label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         readonly="true"
+                                         value="#{projectTeamMemberViewController.projectTeamMemberModel.teamMember.supervisorName}" />
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{projectTeamMemberTranslationService.teamMemberID}: </label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         readonly="true"
+                                         value="#{projectTeamMemberViewController.projectTeamMemberModel.memberID}" />
+                        </div>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{projectTeamMemberViewController.projectTeamMemberModel.teamMemberCategory eq 'SUB_CONTRACTOR' or projectTeamMemberViewController.projectTeamMemberModel.teamMemberCategory eq 'CONSULTANT'}">
+                        <div class="lable-field-area">
+                            <label>#{projectTeamMemberTranslationService.supplier}: </label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         readonly="true"
+                                         value="#{projectTeamMemberViewController.projectTeamMemberModel.supplierName}" />
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{projectTeamMemberTranslationService.supplierID}: </label>
+                            <h:inputText readonly="true"
+                                         id="supplierID"
+                                         styleClass="inventory-input-field-01"
+                                         value="#{projectTeamMemberViewController.projectTeamMemberModel.supplierId}" />
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{projectTeamMemberTranslationService.name}:</label>
+                            <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                             id="supplierName"
+                                             disabled="true"
+                                             value="#{projectTeamMemberViewController.projectTeamMemberModel.memberName}">
+                                <f:selectItem itemLabel="#{projectTeamMemberTranslationService.selectProjectRole}" />
+                                <f:selectItems value="#{projectTeamMemberViewController.projectTeamMemberModel.persons}"
+                                               var="person"
+                                               itemLabel="#{person.name}"
+                                               itemValue="#{person.uuid}" />
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{projectTeamMemberTranslationService.teamMemberID}: </label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         readonly="true"
+                                         value="#{projectTeamMemberViewController.projectTeamMemberModel.memberID}" />
+                        </div>
+                    </ui:fragment>
+                    <div class="lable-field-area">
+                        <label>#{projectTeamMemberTranslationService.platformRole}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     id="platformRole"
+                                     value="#{projectTeamMemberViewController.projectTeamMemberModel.platformRole}"
+                                     />
+                    </div>
+                    <h:panelGroup  id="projectRolesGroup">
+                        <ui:repeat value="#{projectTeamMemberViewController.projectTeamMemberModel.projectRoleModels}"
+                                   var="projectRole">
+                            <div class="lable-field-area">
+                                <label>#{projectTeamMemberTranslationService.projectRole}:</label>
+                                <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                                 disabled="true"
+                                                 value="#{projectRole.projectRoleUUID}">
+                                    <f:selectItem itemLabel="#{projectTeamMemberTranslationService.selectProjectRole}" />
+                                    <f:selectItems value="#{projectTeamMemberViewController.projectTeamMemberModel.accessRoles}"
+                                                   var="scope"
+                                                   itemLabel="#{scope.roleName}"
+                                                   itemValue="#{scope.uuid}" />
+                                </h:selectOneMenu>
+                            </div>
+                            <div class="lable-field-area">
+                                <label>#{projectTeamMemberTranslationService.costRateSource}:</label>
+                                <h:inputText styleClass="inventory-input-field-01"
+                                             readonly="true"
+                                             value="#{projectRole.costRateSource}"
+                                             />
+                            </div>
+                            <div class="lable-field-area">
+                                <label>#{projectTeamMemberTranslationService.costRate}:</label>
+                                <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                             readonly="true"
+                                             value="#{projectTeamMemberViewController.projectTeamMemberModel.currency}"/>
+                                <h:inputText styleClass="inventory-input-field-07 input-val-07"
+                                             readonly="true"
+                                             value="#{projectRole.costRate}" >
+                                    <f:convertNumber pattern="#,##0.00" 
+                                                     maxFractionDigits="2" />
+
+                                </h:inputText>
+                            </div>
+                            <div class="lable-field-area-02">
+                                <label>#{projectTeamMemberTranslationService.markupMethod}: </label>
+                                <h:inputText styleClass="inventory-input-field-01"
+                                             readonly="true"
+                                             value="#{projectRole.markUpMethod}"
+                                             />
+                            </div>
+
+                            <div class="lable-field-area-02">
+                                <h:panelGroup id="markUpGroup">
+                                    <ui:fragment rendered="#{projectRole.markUpMethod eq 'PERCENTAGE'}">
+                                        <h:inputText styleClass="inventory-input-field-01 mrgt"
+                                                     style="width: 115px"
+                                                     readonly="true"
+                                                     value="#{projectRole.markUpValue}">
+
+                                        </h:inputText>
+                                        <h:outputText styleClass="inventory-input-field-01"
+                                                      value="%"
+                                                      style="width: 32px; margin: -5px;"/>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{projectRole.markUpMethod eq 'ABSOLUTE'}">
+                                        <h:inputText styleClass="inventory-input-field-01 mrgt"
+                                                     readonly="true"
+                                                     value="#{projectRole.markUpValue}">
+                                            <f:convertNumber pattern="#,##0.00" 
+                                                             maxFractionDigits="2" />
+                                        </h:inputText>
+                                    </ui:fragment>
+                                </h:panelGroup>
+                            </div>
+                            <div class="lable-field-area">
+                                <label>#{projectTeamMemberTranslationService.billRate}:</label>
+                                <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                             readonly="true"
+                                             value="#{projectTeamMemberViewController.projectTeamMemberModel.currency}"/>
+                                <h:inputText styleClass="inventory-input-field-07 input-val-07"
+                                             id="billRate"
+                                             readonly="true"
+                                             value="#{projectRole.billRate}" >
+                                    <f:convertNumber pattern="#,##0.00" 
+                                                     maxFractionDigits="2" />
+
+                                </h:inputText>
+                            </div>
+                            <br clear="all" />
+                        </ui:repeat>
+                    </h:panelGroup>
+
+                    <br clear="all" />
+                    <div class="online-payment-btn-new-1 clearfix">
+                        <p>#{projectTeamMemberTranslationService.approvalPermissions}:</p>
+
+                        <h:panelGroup id="advanceSettingPanel"
+                                      layout="block"
+                                      styleClass="#{projectTeamMemberViewController.onButtonDivCss} left">
+
+                            <p:commandLink styleClass="#{projectTeamMemberViewController.onButtonCss}"
+                                           value="ON" 
+                                           process="@this"
+                                           partialSubmit="true"
+                                           actionListener="#{projectTeamMemberViewController.projectTeamMemberModel.setAdvanceSettings(true)}" 
+                                           update="advanceSettingPanel advancePanel" /> 
+
+                            <p:commandLink styleClass="#{projectTeamMemberViewController.offButtonCss}"
+                                           value="OFF"  
+                                           process="@this"
+                                           partialSubmit="true"
+                                           actionListener="#{projectTeamMemberViewController.projectTeamMemberModel.setAdvanceSettings(false)}" 
+                                           update="advanceSettingPanel advancePanel" /> 
+                        </h:panelGroup>
+                    </div>
+                    <h:panelGroup id="advancePanel">
+                        <ui:fragment rendered="#{projectTeamMemberViewController.projectTeamMemberModel.advanceSettings}">
+                            <div class="approvper" id="applist">
+                                <ui:repeat value="#{projectTeamMemberViewController.projectTeamMemberModel.checked.entrySet().toArray()}"
+                                           var="scopeDef">
+                                    <div class="clearfix">
+                                        <h:selectBooleanCheckbox
+                                            value="#{projectTeamMemberViewController.projectTeamMemberModel.checked[scopeDef.key]}" />
+                                        <p>#{scopeDef.key.name}</p>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                        </ui:fragment>
+                    </h:panelGroup>
+                    <br clear="all" />
+                    <a class="auditnotes-link mrgno" onclick="showhide16()">Audit Trail and Notes:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote16">
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                    </div>
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right"> 
+                            <a class="cancel-new-btn"
+                               onclick="PF('view_project_member').hide();">
+                                #{projectTeamMemberTranslationService.cancel}
+                            </a> 
+                            <a class="save-new-btn-01 mrg-rgt" 
+                               href="#">
+                                #{projectTeamMemberTranslationService.approve}
+                            </a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+</ui:composition>

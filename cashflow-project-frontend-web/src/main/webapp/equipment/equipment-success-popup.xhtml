@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="owned_equip_success_message"
+              appendTo="@(body)"
+              styleClass="message_dialog"
+              widgetVar="owned_equip_success_message"
+              showHeader="false"
+              modal="true">
+        <o:form useRequestURI="true" id="ownedEquipSuccessForm">
+
+            <div class="add-new-phase-popup-ctn" id="addnewphase" >
+                <h1> #{ownedEquipmentExpenseTranslationService.successMessageHeaderLabel}
+
+                    <p:commandLink actionListener="#{equipmentExpenseListController.initEquipmentExpense()}"
+                                   update="equipmentForm"
+                                   onsuccess="PF('owned_equip_success_message').hide();">
+                        <img src="/resources/images/fancy-close-btn.png" 
+                             class ="close-icon-popup close-header" />
+                    </p:commandLink>
+                </h1>
+
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    #{ownedEquipmentExpenseController.successMessageModel.successMessage}
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <p:commandLink actionListener="#{equipmentExpenseListController.initEquipmentExpense()}"
+                                           update="equipmentForm"
+                                           styleClass="save-new-btn-01 mrg-rgt ok-btn"
+                                           value="#{ownedEquipmentExpenseTranslationService.okLabel}"
+                                           onsuccess="PF('owned_equip_success_message').hide();">
+                            </p:commandLink>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </o:form>
+    </p:dialog>
+    
+    <p:dialog id="owned_equip_approve_success_message"
+              appendTo="@(body)"
+              styleClass="message_dialog"
+              widgetVar="owned_equip_approve_success_message"
+              showHeader="false"
+              modal="true">
+        <o:form useRequestURI="true" id="ownedEquipApproveSuccessForm">
+
+            <div class="add-new-phase-popup-ctn" id="addnewphase" >
+                <h1> #{ownedEquipmentExpenseTranslationService.successMessageHeaderLabel}
+
+                    <p:commandLink actionListener="#{equipmentExpenseListController.initEquipmentExpense()}"
+                                   update="equipmentForm"
+                                   onsuccess="PF('owned_equip_approve_success_message').hide();">
+                        <img src="/resources/images/fancy-close-btn.png" 
+                             class ="close-icon-popup close-header" />
+                    </p:commandLink>
+                </h1>
+
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    #{equipmentExpenseViewController.successMessageModel.successMessage}
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <p:commandLink actionListener="#{equipmentExpenseListController.initEquipmentExpense()}"
+                                           update="equipmentForm"
+                                           styleClass="save-new-btn-01 mrg-rgt ok-btn"
+                                           value="#{ownedEquipmentExpenseTranslationService.okLabel}"
+                                           onsuccess="PF('owned_equip_approve_success_message').hide();">
+                            </p:commandLink>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </o:form>
+    </p:dialog>
+
+    <p:dialog id="owned_equip_file_upload_message"
+              appendTo="@(body)"
+              styleClass="message_dialog"
+              widgetVar="owned_equip_file_upload_message"
+              showHeader="false"
+              modal="true">
+        <o:form useRequestURI="true" id="ownedSuccessForm">
+
+            <div class="add-new-phase-popup-ctn" id="addnewphase" >
+                <h1> #{ownedEquipmentExpenseTranslationService.successMessageHeaderLabel}
+
+                    <a>
+                        <img src="/resources/images/fancy-close-btn.png" 
+                             onclick="PF('owned_equip_file_upload_message').hide();"
+                             class ="close-icon-popup close-header" />
+                    </a>
+                </h1>
+
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    #{ownedEquipmentExpenseTranslationService.uploadSuccessMessage}
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a href="#"
+                               class="save-new-btn-01 mrg-rgt ok-btn" 
+                               onclick="PF('owned_equip_file_upload_message').hide();">#{ownedEquipmentExpenseTranslationService.okLabel}</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </o:form>
+    </p:dialog>
+
+    <p:dialog id="rented_equip_success_message"
+              appendTo="@(body)"
+              styleClass="message_dialog"
+              widgetVar="rented_equip_success_message"
+              showHeader="false"
+              modal="true">
+        <o:form useRequestURI="true" id="rentedSuccessForm">
+
+            <div class="add-new-phase-popup-ctn" id="addnewphase" >
+                <h1> #{rentedEquipmentExpenseTranslationService.successMessageHeaderLabel}
+
+                    <p:commandLink actionListener="#{equipmentExpenseListController.initEquipmentExpense()}"
+                                   update="equipmentForm"
+                                   onsuccess="PF('rented_equip_success_message').hide();">
+                        <img src="/resources/images/fancy-close-btn.png" 
+                             class ="close-icon-popup close-header" />
+                    </p:commandLink>
+                </h1>
+
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    #{rentedEquipmentExpenseController.successMessageModel.successMessage}
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <p:commandLink actionListener="#{equipmentExpenseListController.initEquipmentExpense()}"
+                                           update="equipmentForm"
+                                           styleClass="save-new-btn-01 mrg-rgt ok-btn"
+                                           value="#{rentedEquipmentExpenseTranslationService.okLabel}"
+                                           onsuccess="PF('rented_equip_success_message').hide();" />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </o:form>
+    </p:dialog>
+
+    <p:dialog id="owned_equip_validate_message"
+              appendTo="@(body)"
+              styleClass="message_dialog"
+              widgetVar="owned_equip_validate_message"
+              showHeader="false"
+              modal="true">
+        <o:form useRequestURI="true" id="ownedValidateForm">
+
+            <div class="add-new-phase-popup-ctn" id="addnewphase" >
+                <h1> #{ownedEquipmentExpenseTranslationService.validateMessageLabel}
+
+                    <a>
+                        <img src="/resources/images/fancy-close-btn.png" 
+                             onclick="PF('owned_equip_validate_message').hide();"
+                             class ="close-icon-popup close-header" />
+                    </a>
+                </h1>
+
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    #{ownedEquipmentExpenseTranslationService.projectMustApprovedLabel}
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a href="#"
+                               class="save-new-btn-01 mrg-rgt ok-btn" 
+                               onclick="PF('owned_equip_validate_message').hide();">#{ownedEquipmentExpenseTranslationService.okLabel}</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </o:form>
+    </p:dialog>
+</ui:composition>

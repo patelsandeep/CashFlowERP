@@ -1,0 +1,306 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <o:form useRequestURI="true" id="tabForm">
+        <div class="clearfix">
+            <div class="prosum-field-area lfa-mrgt">
+                <label>#{projectGeneralInfoTranslationService.createSummaryHeader}:</label>
+                <h:inputTextarea styleClass="prosum-textarea-field" value="#{projectController.generalInfoModel.projectSummary}"/>
+            </div>
+            <div class="lable-field-area">
+                <h:outputLabel for="project_details_file_input" 
+                               styleClass="attach-file-btn-01"
+                               value="#{projectGeneralInfoTranslationService.attachProjectDetailFilesLabel}">
+                </h:outputLabel>
+                <p:fileUpload mode="advanced"
+                              widgetVar="project_details_file"
+                              id="project_details_file"
+                              auto="true"
+                              fileLimit="5"
+                              styleClass="ui-helper-hidden"
+                              multiple="true"
+                              skinSimple="true"
+                              dragDropSupport="true"
+                              allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xlsx|csv|xls)$/"
+                              fileUploadListener="#{projectController.fileUpload}"
+                              />
+
+            </div>
+            <div class="lable-field-area">
+
+                <h:outputLabel for="project_contract_file_input" 
+                               styleClass="attach-file-btn-01"
+                               value="#{projectGeneralInfoTranslationService.attachProjectContractFilesLabel}">
+                </h:outputLabel>
+                <p:fileUpload mode="advanced"
+                              id="project_contract_file"
+                              widgetVar="project_contract_file"
+                              auto="true"
+                              fileLimit="5"
+                              styleClass="ui-helper-hidden"
+                              multiple="true"
+                              skinSimple="true"
+                              dragDropSupport="true"
+                              allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xlsx|csv|xls)$/"
+                              fileUploadListener="#{projectController.fileUpload}"
+                              />
+
+
+
+            </div>
+            <div class="lable-field-area">
+                <label>#{projectGeneralInfoTranslationService.projectLocationLabel}:</label>
+                <h:inputText styleClass="inventory-input-field-01" 
+                             value="#{projectController.generalInfoModel.location}"/>
+
+            </div>
+            <div class="lable-field-area-02">
+                <label>#{projectGeneralInfoTranslationService.locationPermitRequiredLabel}:</label>
+                <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                 value="#{projectController.generalInfoModel.locationPermission}">
+
+                    <f:selectItem itemValue="Yes" itemLabel="Yes" />
+                    <f:selectItem itemValue="No" itemLabel="No" />
+
+                </h:selectOneMenu>
+            </div>
+            <div class="lable-field-area-02">
+
+                <h:outputLabel for="project_attach_file_input" 
+                               styleClass="attach-file-btn-01 mrgt"
+                               value="#{projectGeneralInfoTranslationService.attachFilesLabel}">
+                </h:outputLabel>
+                <p:fileUpload mode="advanced"
+                              id="project_attach_file"
+                              widgetVar="project_attach_file"
+                              auto="true"
+                              fileLimit="5"
+                              styleClass="ui-helper-hidden"
+                              multiple="true"
+                              skinSimple="true"
+                              dragDropSupport="true"
+                              allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xlsx|csv|xls)$/"
+                              fileUploadListener="#{projectController.fileUpload}"
+                              />
+
+            </div>
+            <div class="lable-field-area-02">
+                <label>#{projectGeneralInfoTranslationService.projectInsuranceRequiredLabel}:</label>
+                <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                 value="#{projectController.generalInfoModel.projectInsurance}">
+
+                    <f:selectItem itemValue="Yes" itemLabel="Yes" />
+                    <f:selectItem itemValue="No" itemLabel="No" />
+
+                </h:selectOneMenu>
+            </div>
+            <div class="lable-field-area-02"> 
+                <h:outputLabel for="project_insurance_file_input" 
+                               styleClass="attach-file-btn-01 mrgt"
+                               value="#{projectGeneralInfoTranslationService.attachFilesLabel}">
+                </h:outputLabel>
+                <p:fileUpload mode="advanced"
+                              id="project_insurance_file"
+                              widgetVar="project_insurance_file"
+                              auto="true"
+                              fileLimit="5"
+                              styleClass="ui-helper-hidden"
+                              multiple="true"
+                              skinSimple="true"
+                              dragDropSupport="true"
+                              allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xlsx|csv|xls)$/"
+                              fileUploadListener="#{projectController.fileUpload}"
+                              />
+            </div>
+            <div class="lable-field-area-02">
+                <label>#{projectGeneralInfoTranslationService.customerDepositRequiredLabel}:</label>
+                <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                 value="#{projectController.generalInfoModel.customerDepositReq}">
+
+                    <f:selectItem itemValue="Yes" itemLabel="Yes" />
+                    <f:selectItem itemValue="No" itemLabel="No" />
+
+                    <p:ajax update="depositBox" listener="#{projectController.updateCustomerDepositCheckbox()}"/>
+
+                </h:selectOneMenu>
+            </div>
+            <div class="lable-field-area-02" style="max-width: 180px">
+                <label>#{projectGeneralInfoTranslationService.amountLabel}</label>
+                <h:inputText styleClass="inventory-input-field-07" 
+                             id="amntCurrency"
+                             readonly="true"
+                             value="#{projectController.projectModel.currency}"
+                             style="max-width: 46px;"/>
+                <h:inputText styleClass="inventory-input-field-07" 
+                             value="#{projectController.generalInfoModel.customerDeposit}"
+                             style="max-width: 126px;">
+                    <f:convertNumber pattern="#,##0.00" 
+                                     maxFractionDigits="2" />  
+                    <p:ajax update="@this" listener="#{projectController.checkDepositValue()}"/>
+                </h:inputText>
+            </div>
+        </div>
+        <ui:fragment rendered="#{!empty projectController.projectModel.projectUUID}">
+
+
+            <ui:repeat value="#{projectController.generalInfoModel.projectFileUrls}"
+                       var="doc">
+                <label class="file-view">
+                    <p:commandLink value="#{doc.name}"
+                                   styleClass="auditnotes-link"
+                                   ajax="false">
+                        <p:fileDownload value="#{staticContentController.content}" 
+                                        class="item-photo" />
+                        <f:param name="fileUUID" value="#{doc.uuid}" />
+                    </p:commandLink>
+                </label>
+            </ui:repeat>
+
+
+        </ui:fragment>
+        <div class="prosumlist-ctn">
+            <h1>#{projectGeneralInfoTranslationService.projectSummaryStructureLabel}</h1>
+            <h2>#{projectGeneralInfoTranslationService.structureDescLabel}:</h2>
+            <ul>
+                <li>
+                    <a href="#">#{projectGeneralInfoTranslationService.projectLevelLabel}
+                    </a> -  #{projectGeneralInfoTranslationService.projectLevelDescLabel}
+                </li>
+                <li>
+                    <a href="#">#{projectGeneralInfoTranslationService.phaseLevelLabel}</a>
+                    – #{projectGeneralInfoTranslationService.phaseLevelDescLabel}
+                </li>
+                <li>
+                    <a href="#">#{projectGeneralInfoTranslationService.milestoneLevelLabel}</a>
+                    – #{projectGeneralInfoTranslationService.milestoneLevelDescLabel}
+                </li>
+                <li><a href="#">#{projectGeneralInfoTranslationService.taskLevelLabel}</a> 
+                    – #{projectGeneralInfoTranslationService.taskLevelDescLabel}
+                </li>
+            </ul>
+            <p> #{projectGeneralInfoTranslationService.structureDescFooterLabel}
+                <a href="#">#{projectGeneralInfoTranslationService.knowledgeBaseLabel}</a> 
+                #{projectGeneralInfoTranslationService.andViewLabel}
+                <a href="#">#{projectGeneralInfoTranslationService.projectStructureLabel}</a>
+            </p>
+            <div class="clearfix">
+                <div class="procheck-ctn">
+                    <div class="pcheck-ctn clearfix">
+                        <h:selectBooleanCheckbox 
+                            value="#{projectController.generalInfoModel.includePhases}">
+                            <p:ajax update="tabPanel" />
+                        </h:selectBooleanCheckbox>
+                        <label>#{projectGeneralInfoTranslationService.includePhasesLabel}</label>
+                    </div>
+                    <div class="pcheck-ctn clearfix">
+                        <h:selectBooleanCheckbox 
+                            value="#{projectController.generalInfoModel.includeMilestones}">
+                            <p:ajax update="tabPanel" />
+                        </h:selectBooleanCheckbox>
+                        <label>#{projectGeneralInfoTranslationService.includeMilestonesLabel}</label>
+                    </div>
+                    <div class="pcheck-ctn clearfix">
+                        <h:selectBooleanCheckbox value="#{projectController.generalInfoModel.includeTasks}" 
+                                                 disabled="true"/>
+                        <label>#{projectGeneralInfoTranslationService.includeTasksLabel}</label>
+                    </div>
+                </div>
+                <div class="procheck-ctn">
+                    <div class="pcheck-ctn clearfix">
+                        <h:selectBooleanCheckbox value="#{projectController.generalInfoModel.includeSubContractors}"/>
+                        <label>#{projectGeneralInfoTranslationService.includeSubContractorsLabel}</label>
+                    </div>
+                    <div class="pcheck-ctn clearfix">
+                        <h:panelGroup id="depositBox">
+
+                            <ui:fragment rendered="#{projectController.generalInfoModel.customerDepositReq eq 'No'}">
+                                <h:selectBooleanCheckbox disabled="true" value="#{projectController.generalInfoModel.includeCustomerDeposit}"/>
+                                <label>#{projectGeneralInfoTranslationService.includeDepositOrRetainerLabel}</label>
+                                <br clear="all" />
+
+                                <h:selectOneMenu styleClass="phase-sel-field"
+                                                 disabled="true"
+                                                 value="#{projectController.generalInfoModel.levelCategory}">
+
+                                    <f:selectItems value="#{projectController.levelCategories}"/>
+
+                                </h:selectOneMenu>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{projectController.generalInfoModel.customerDepositReq eq 'Yes'}">
+                                <h:selectBooleanCheckbox  value="#{projectController.generalInfoModel.includeCustomerDeposit}"/>
+                                <label>#{projectGeneralInfoTranslationService.includeDepositOrRetainerLabel}</label>
+                                <br clear="all" />
+
+                                <h:selectOneMenu styleClass="phase-sel-field"
+                                                 value="#{projectController.generalInfoModel.levelCategory}">
+
+                                    <f:selectItems value="#{projectController.levelCategories}"/>
+
+                                </h:selectOneMenu>
+
+                                <a class="issue-deposit-btn" href="#">#{projectGeneralInfoTranslationService.issueDepositInvoiceLabel}</a>
+                            </ui:fragment>
+
+
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </div>
+            <a class="trgth-btns" href="#{menuOptionController.buildMenuOptionModel('PROJECTS', 'PROJECTS').menuLink}">
+                #{projectGeneralInfoTranslationService.projectDashboardLinkLabel}
+            </a>
+            <a class="auditnotes-link">#{projectGeneralInfoTranslationService.auditTrailandNotesLabel}:</a><br />
+            <div class="auditnote-ctn1" id="Audinote">
+
+            </div>
+            <hr class="hrline-02" />
+            <div class="btns-ctnr-04 clearfix">
+                <div class="right">
+                    <ui:fragment rendered="#{empty projectController.projectModel.projectUUID}">
+                        <p:link href="#{projectController.redirectProjectSummary()}"
+                                value="#{projectGeneralInfoTranslationService.cancelLabel}"
+                                styleClass="cancel-new-btn">
+                        </p:link>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!empty projectController.projectModel.projectUUID}">
+
+                        <p:link href="#{projectController.redirectProjectSummary()}"
+                                value="#{projectGeneralInfoTranslationService.closeLabel}"
+                                styleClass="cancel-new-btn">
+                        </p:link>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{projectController.projectModel.projectStatus != 'APPROVED'}">
+                        <!--This must remain ajax, thats why we use actionListener, so that ajaxified form submit can work-->
+                        <p:commandLink value="#{empty projectController.projectModel.projectUUID ?
+                                                projectGeneralInfoTranslationService.saveLabel :
+                                                projectGeneralInfoTranslationService.updateLabel}"
+                                       styleClass="save-new-btn-01 mrg-rgt"
+                                       partialSubmit="true"
+                                       process=":createProjectForm @form"
+                                       update=":createProjectForm @form tabContent"
+                                       actionListener="#{projectController.saveProject()}"
+                                       onsuccess="PF('success_message').show();">
+                            <f:param name="action" value="save"/>
+                        </p:commandLink>
+                        <p:commandLink value="#{projectGeneralInfoTranslationService.approveLabel}"
+                                       styleClass="save-new-btn-01 mrg-rgt"
+                                       partialSubmit="true"
+                                       process=":createProjectForm @form"
+                                       update=":createProjectForm @form tabContent"
+                                       actionListener="#{projectController.saveProject()}"
+                                       onsuccess="PF('success_approve_message').show();">
+                            <f:param name="action" value="approve"/>
+                        </p:commandLink>
+                    </ui:fragment>
+                </div>
+            </div>
+        </div>
+    </o:form>
+    <ui:include src="/projects/general-info-message-popup.xhtml"/>
+</ui:composition>

@@ -1,0 +1,77 @@
+@charset "utf-8";
+/* CSS Document */
+.container-01 {width:100%;}
+ul.tabs-01 {
+    width:100%;
+    max-width:1050px;
+    display:block;
+    margin:0 auto;
+}
+ul.tabs-01 li {
+    width:33.33%;
+    display:block;
+    float:left;	
+}
+ul.tabs-01 li a {
+    background-color:#fff;
+    border-radius:5px;
+    text-decoration:none;
+    padding:15px 20px;
+    text-align:center;
+    color:#3b3c3b;
+    margin:0 15px;
+    display:block;
+}
+ul.tabs-01 li a h1
+{
+    font-size:18px;
+    font-weight:700;
+}
+ul.tabs-01 li a p
+{
+    font-size:12px;
+    line-height:18px;
+    font-weight:500;
+    color:#8a8a8a;
+}
+ul.tabs-01 li a.allarticle {background:url(/resources/images/all-article-icon.png) no-repeat 20px center #FFF;}
+ul.tabs-01 li a.mparticle {background:url(/resources/images/mpopular-icon.png) no-repeat 20px center #FFF;}
+ul.tabs-01 li a.comarticle {background:url(/resources/images/community-icon.png) no-repeat 20px center #FFF;}
+ul.tabs-01 li a.act-com {background:url(/resources/images/act-com-icon.png) no-repeat 20px center #FFF;}
+ul.tabs-01 li a.busi-com {background:url(/resources/images/business-com-icon.png) no-repeat 20px center #FFF;}
+ul.tabs-01 li a.acc-book {background:url(/resources/images/acc-book-icon.png) no-repeat 20px center #FFF; padding:20px 20px !important; margin:0 10px !important;}
+ul.tabs-01 li a.consultants {background:url(/resources/images/consultant-icon.png) no-repeat 20px center #FFF; padding:20px 20px !important; margin:0 10px !important;}
+
+ul.tabs-01 li a:hover {background-color:#e6e6e6;}
+
+html ul.tabs-01 li.active a
+{
+    background-color:#e6e6e6;
+    border-radius:5px;
+    text-decoration:none;
+    padding:15px 20px;
+    text-align:center;
+    color:#3b3c3b;
+    margin:0 15px;
+    display:block;
+}
+.tab_container-01 {
+    clear: both;
+    width: 100%;
+    background-color:#fff;
+    padding:20px 0 50px 0;
+}
+.tab_content-01 {
+    width:100%;
+    max-width:1050px;
+    margin:0 auto;
+}
+@media only screen and (min-width : 320px) and (max-width : 568px){
+    ul.tabs-01 li {width:100%; float:none; margin:10px auto 10px auto;}
+    .tab_container-01 {padding:0 0 25px 0;}
+}
+
+@media only screen and (min-width : 600px) and (max-width : 768px){
+    ul.tabs-01 li {width:50%; float:left; margin:10px auto 10px auto;}
+    .tab_container-01 {padding:10px 0 35px 0;}
+}

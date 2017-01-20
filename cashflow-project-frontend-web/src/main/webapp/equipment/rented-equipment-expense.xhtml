@@ -1,0 +1,584 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="add_rented_equipment"
+              widgetVar="add_rented_equipment"
+              styleClass="phase-dialog"
+              resizable="false"
+              showHeader="false"
+              modal="true">
+        <o:form useRequestURI="true" enctype="multipart/form-data" id="add_rented_equipment_form">
+            <div class="phase-finance-popup-ctn" id="ren-eqnt-sch" >
+                <h1>#{rentedEquipmentExpenseTranslationService.rentedEquipmentHeader}
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('add_rented_equipment').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{rentedEquipmentExpenseTranslationService.dateLabel}: </label>
+                        <p:calendar id="equipDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{rentedEquipmentExpenseController.equipmentModel.date}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="equipDate"/>
+                    </div>
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{rentedEquipmentExpenseTranslationService.equipmentChargeScheduleId}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.rentedEquipmentId}"/>
+                    </div>   
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.customerLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.customer}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.projectLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.project}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.phaseLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         value="#{rentedEquipmentExpenseController.equipmentModel.phase}">
+                            <f:selectItem itemLabel="#{rentedEquipmentExpenseTranslationService.selectPhaseLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{rentedEquipmentExpenseController.projectPhases}"
+                                           var="phase"
+                                           itemLabel="#{phase.name}"
+                                           itemValue="#{phase.uuid}"/>
+                            <p:ajax update="mile"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.milestoneLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="mile"
+                                         value="#{rentedEquipmentExpenseController.equipmentModel.milestone}">
+                            <f:selectItem itemLabel="#{rentedEquipmentExpenseTranslationService.selectMilestoneLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{rentedEquipmentExpenseController.milestones}"
+                                           var="milestone"
+                                           itemLabel="#{milestone.name}"
+                                           itemValue="#{milestone.uuid}"/>
+                            <p:ajax update="task"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.taskLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="task"
+                                         value="#{rentedEquipmentExpenseController.equipmentModel.task}">
+                            <f:selectItem itemLabel="#{rentedEquipmentExpenseTranslationService.selectTaskLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{rentedEquipmentExpenseController.projectTasks}"
+                                           var="task"
+                                           itemLabel="#{task.name}"
+                                           itemValue="#{task.uuid}"/>
+
+                            <p:ajax update="taskId" listener="#{rentedEquipmentExpenseController.updateTaskID}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.taskIdLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="taskId"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.taskId}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.suppierLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="supplier"
+                                         value="#{rentedEquipmentExpenseController.equipmentModel.supplier}">
+                            <f:selectItem itemLabel="#{rentedEquipmentExpenseTranslationService.selectSuppierLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{rentedEquipmentExpenseController.suppliers}"
+                                           var="sup"
+                                           itemLabel="#{sup.name}"
+                                           itemValue="#{sup.uuid}"/>
+
+                            <p:ajax update="supId" listener="#{rentedEquipmentExpenseController.updateSupplierID}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.suppierIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="supId"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.supplierId}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.equipmentNameLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.equipmentName}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.serialNumberLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.serialNumber}"/>
+                    </div>
+
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.invoiceNumberLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.invoiceNumber}"/>
+                    </div>
+
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.invoiceDueDateLabel}: </label>
+                        <p:calendar id="dueDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{rentedEquipmentExpenseController.equipmentModel.invocieDueDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="dueDate"/>
+                    </div>
+
+                    <br clear="all"/>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.supplierInvoiceAmountLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01 wd55"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-01 wd261"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.supplierInvoiceAmount}">
+                            <f:convertNumber pattern="#,##0.00"
+                                             maxFractionDigits="2" />
+                            <p:ajax update="@this invoiceTotal taxAmount taxAmount2 costRateId billRate billAmount nonBillAmount" 
+                                    listener="#{rentedEquipmentExpenseController.calculateSupplierInvoice()}"/>
+                        </h:inputText>
+                    </div>
+
+
+                    <div class="lable-field-area-02">
+                        <label>#{rentedEquipmentExpenseTranslationService.taxLabel}: </label>
+                        <h:selectOneMenu value="#{rentedEquipmentExpenseController.equipmentModel.taxId}" 
+                                         styleClass="inventory-sel-field-01">
+                            <f:selectItem itemLabel="#{rentedEquipmentExpenseTranslationService.selectTaxLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{rentedEquipmentExpenseController.taxRates}" 
+                                           var="tax" itemLabel="#{tax.taxCategory.code}-#{tax.rate}%" 
+                                           itemValue="#{tax.taxId}"/>
+                            <p:ajax update="invoiceTotal taxAmount costRateId billRate billAmount nonBillAmount"
+                                    listener="#{rentedEquipmentExpenseController.calculateSupplierInvoice()}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{rentedEquipmentExpenseTranslationService.taxLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="taxAmount"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.taxAmount}"/>
+
+
+                    </div>
+                    <br clear="all"/>
+                    <div class="lable-field-area-02">
+                        <label>#{rentedEquipmentExpenseTranslationService.taxLabel}: </label>
+                        <h:selectOneMenu value="#{rentedEquipmentExpenseController.equipmentModel.taxId2}" 
+                                         styleClass="inventory-sel-field-01">
+                            <f:selectItem itemLabel="#{rentedEquipmentExpenseTranslationService.selectTaxLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{rentedEquipmentExpenseController.taxRates}" 
+                                           var="tax" itemLabel="#{tax.taxCategory.code}-#{tax.rate}%" 
+                                           itemValue="#{tax.taxId}"/>
+                            <p:ajax update="invoiceTotal taxAmount2 costRateId billRate billAmount nonBillAmount"
+                                    listener="#{rentedEquipmentExpenseController.calculateSupplierInvoice()}"/>
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="lable-field-area-02">
+                        <label>#{rentedEquipmentExpenseTranslationService.taxLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="taxAmount2"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.taxAmount2}"/>
+
+
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.supplierInvoiceTotalLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="invoiceTotal"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.supplierInvoiceTotal}"/>
+
+                    </div>
+                    <br clear="all" />
+                    <div class="lable-field-area-02">
+                        <label>#{rentedEquipmentExpenseTranslationService.billingUnitLabel}:</label>
+                        <h:selectOneMenu value="#{rentedEquipmentExpenseController.equipmentModel.billingUnit}" 
+                                         styleClass="inventory-sel-field-01">
+
+                            <f:selectItems value="#{rentedEquipmentExpenseController.billingUnits}"/>
+                            <p:ajax update="costUnit billUnit"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{rentedEquipmentExpenseTranslationService.qtyLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.qty}">
+                            <p:ajax update="@this costRateId billRate billAmount nonBillAmount" listener="#{rentedEquipmentExpenseController.updateCostRate()}"/>
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{rentedEquipmentExpenseTranslationService.costRateLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01 wd55"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-01 wd93"
+                                     id="costRateId"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.costRate}">
+                            <f:convertNumber pattern="#,##0.00"
+                                             maxFractionDigits="2" />
+                            <p:ajax update="@this billRate billAmount nonBillAmount" 
+                                    listener="#{rentedEquipmentExpenseController.updateBillRate()}"/>
+
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <h:inputText styleClass="inventory-input-field-01 mrgt"
+                                     id="costUnit"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.billingUnit}"/>
+                    </div>
+
+                    <br clear="all" />
+
+                    <div class="lable-field-area-02">
+                        <label>#{rentedEquipmentExpenseTranslationService.markUpLabel}:</label>
+                        <h:selectOneMenu value="#{rentedEquipmentExpenseController.equipmentModel.markUpMethod}"
+                                         styleClass="inventory-sel-field-01">
+                            <f:selectItems
+                                value="#{rentedEquipmentExpenseController.markUpMethods}" />
+                            <p:ajax update="markUpGroup billRate billAmount nonBillAmount"
+                                    listener="#{rentedEquipmentExpenseController.updateBillRate()}"/>
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="lable-field-area-02">
+                        <h:panelGroup id="markUpGroup">
+                            <label>#{rentedEquipmentExpenseTranslationService.markUpAmountLabel}: </label>
+                            <ui:fragment rendered="#{rentedEquipmentExpenseController.equipmentModel.markUpMethod eq 'PERCENTAGE'}">
+                                <h:inputText styleClass="inventory-input-field-01"
+                                             style="width: 115px"
+                                             value="#{rentedEquipmentExpenseController.equipmentModel.markUpValue}">
+                                    <p:ajax update="@this billRate billAmount nonBillAmount"
+                                            listener="#{rentedEquipmentExpenseController.updateBillRate()}"/>
+                                </h:inputText>
+                                <h:outputText styleClass="inventory-input-field-01"
+                                              value="%"
+                                              style="width: 32px; margin: -5px;"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{rentedEquipmentExpenseController.equipmentModel.markUpMethod eq 'ABSOLUTE'}">
+                                <h:inputText styleClass="inventory-input-field-01"
+                                             value="#{rentedEquipmentExpenseController.equipmentModel.markUpValue}">
+                                    <f:convertNumber pattern="#,##0.00" 
+                                                     maxFractionDigits="2" />
+                                    <p:ajax update="@this billRate billAmount nonBillAmount"
+                                            listener="#{rentedEquipmentExpenseController.updateBillRate()}"/>
+                                </h:inputText>
+                            </ui:fragment>
+                        </h:panelGroup>
+                    </div>
+
+
+                    <div class="lable-field-area-02">
+                        <label>#{rentedEquipmentExpenseTranslationService.billingRateLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01 wd55"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-01 wd93"
+                                     id="billRate"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.billRate}">
+                            <f:convertNumber pattern="#,##0.00"
+                                             maxFractionDigits="2" />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <h:inputText styleClass="inventory-input-field-01 mrgt"
+                                     id="billUnit"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.billingUnit}"/>
+
+
+                    </div>
+
+                    <br clear="all" />
+
+
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.billableQtyLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="billQty"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.billableQty}">
+
+                            <p:ajax update="@this billAmount nonBillQty nonBillAmount"
+                                    listener="#{rentedEquipmentExpenseController.calculateNonBillableQty()}"/>
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.billableAmountLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="billAmount"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.billableAmount}">
+
+
+                        </h:inputText>
+                    </div>
+
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.nonBillableQtyLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="nonBillQty"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.nonBillableQty}">
+
+                            <p:ajax update="@this nonBillAmount billQty billAmount"
+                                    listener="#{rentedEquipmentExpenseController.calculateBillableQty()}"/>
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.nonBillableAmountLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="nonBillAmount"
+                                     readonly="true"
+                                     value="#{rentedEquipmentExpenseController.equipmentModel.nonBillableAmount}">
+
+
+                        </h:inputText>
+                    </div>
+
+                    <div class="lable-field-area">
+                        <label>#{rentedEquipmentExpenseTranslationService.notesLabel}:</label>
+                        <h:inputTextarea styleClass="terms-textarea-field-01"
+                                         value="#{rentedEquipmentExpenseController.equipmentModel.notes}">
+                        </h:inputTextarea>
+                    </div>
+                    <div class="lable-field-area">
+                        <h:outputLabel for="rent_equip_file_input" 
+                                       styleClass="attach-file-btn-01 mrgt"
+                                       value="#{rentedEquipmentExpenseTranslationService.attachFilesLabel}">
+                        </h:outputLabel>
+                        <p:fileUpload mode="advanced"
+                                      widgetVar="rent_equip_file"
+                                      id="rent_equip_file"
+                                      auto="true"
+                                      fileLimit="5"
+                                      styleClass="ui-helper-hidden"
+                                      multiple="true"
+                                      skinSimple="true"
+                                      dragDropSupport="true"
+                                      oncomplete="PF('owned_equip_file_upload_message').show();"
+                                      allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xlsx|csv|xls)$/"
+                                      fileUploadListener="#{rentedEquipmentExpenseController.fileUpload}"
+                                      />
+                    </div>
+
+
+                    <br clear="all" />
+                    <a class="auditnotes-link" onclick="showhide28()">Audit Trail and Notes:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote28">
+
+                    </div>
+                    <hr />
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a class="cancel-new-btn" 
+                               onclick="PF('add_rented_equipment').hide();">#{rentedEquipmentExpenseTranslationService.cancelLabel}</a> 
+                            <p:commandLink styleClass="save-new-btn-01 mrg-rgt" 
+                                           value="#{rentedEquipmentExpenseTranslationService.saveLabel}"
+                                           update="@form rentedSuccessForm"
+                                           actionListener="#{rentedEquipmentExpenseController.saveRentedEquipment()}"
+                                           onsuccess="PF('add_rented_equipment').hide();PF('rented_equip_success_message').show();">
+                                <f:param name="action" value="save"/>
+                            </p:commandLink>
+
+                            <p:commandLink styleClass="save-new-btn-01 mrg-rgt" 
+                                           value="#{rentedEquipmentExpenseTranslationService.approveLabel}"
+                                           update="@form rentedSuccessForm"
+                                           actionListener="#{rentedEquipmentExpenseController.saveRentedEquipment()}"
+                                           onsuccess="PF('add_rented_equipment').hide();PF('rented_equip_success_message').show();">
+                                <f:param name="action" value="approve"/>
+                            </p:commandLink>
+                        </div>
+                    </div>
+                    <hr />
+                    <a class="advanced-settings-btn" onclick="showhide29a()">Advanced Settings</a>
+                    <div class="timede-adset" id="adset4">
+                        <h2>Record Equipment Expenses for Rented Equipment</h2>
+
+                        <div class="pro-table-ctrn">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tr class="border-head-01">
+                                    <td>Date</td>
+                                    <td>Batch No.</td>
+                                    <td>JE No.</td>
+                                    <td>Account Name</td>
+                                    <td>Account Number</td>
+                                    <td>DR</td>
+                                    <td>CR</td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-01d" href="#">Select</a>
+                                        <ul id="acn-list-ctn-01d" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales – Project Expense</a></li>
+                                            <li><a href="#">Sales Tax Recoverable - GST </a></li>
+                                            <li><a href="#">Sales Tax Recoverable - PST </a></li>
+                                            <li><a href="#">Accounts Payable- General </a></li>
+
+                                        </ul></td>
+                                    <td><a class="ano-list-01d" href="#">Select</a>
+                                        <ul id="ano-list-ctn-01d" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                        </ul></td>
+                                    <td>CAD 225.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-02d" href="#">Select</a>
+                                        <ul id="acn-list-ctn-02d" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales – Project Expense</a></li>
+                                            <li><a href="#">Sales Tax Recoverable - GST </a></li>
+                                            <li><a href="#">Sales Tax Recoverable - PST </a></li>
+                                            <li><a href="#">Accounts Payable- General </a></li>
+
+                                        </ul></td>
+                                    <td><a class="ano-list-02d" href="#">Select</a>
+                                        <ul id="ano-list-ctn-02d" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                        </ul></td>
+                                    <td>CAD 50.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-03d" href="#">Select</a>
+                                        <ul id="acn-list-ctn-03d" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales – Project Expense</a></li>
+                                            <li><a href="#">Sales Tax Recoverable - GST </a></li>
+                                            <li><a href="#">Sales Tax Recoverable - PST </a></li>
+                                            <li><a href="#">Accounts Payable- General </a></li>
+
+                                        </ul></td>
+                                    <td><a class="ano-list-03d" href="#">Select</a>
+                                        <ul id="ano-list-ctn-03d" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                        </ul></td>
+                                    <td>CAD 15.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-04d" href="#">Select</a>
+                                        <ul id="acn-list-ctn-04d" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales – Project Expense</a></li>
+                                            <li><a href="#">Sales Tax Recoverable - GST </a></li>
+                                            <li><a href="#">Sales Tax Recoverable - PST </a></li>
+                                            <li><a href="#">Accounts Payable- General </a></li>
+
+                                        </ul></td>
+                                    <td><a class="ano-list-04d" href="#">Select</a>
+                                        <ul id="ano-list-ctn-04d" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                        </ul></td>
+                                    <td>CAD 21.00</td>
+                                    <td></td>
+                                </tr>
+
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-05d" href="#">Select</a>
+                                        <ul id="acn-list-ctn-05d" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales – Project Expense</a></li>
+                                            <li><a href="#">Sales Tax Recoverable - GST </a></li>
+                                            <li><a href="#">Sales Tax Recoverable - PST </a></li>
+                                            <li><a href="#">Accounts Payable- General </a></li>
+
+                                        </ul></td>
+                                    <td><a class="ano-list-05d" href="#">Select</a>
+                                        <ul id="ano-list-ctn-05d" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                        </ul></td>
+                                    <td></td>
+                                    <td>CAD 336.00</td>
+                                </tr>
+
+                                <tr class="border-td title-td">
+                                    <td colspan="5">Totals</td>
+                                    <td>CAD 336.00</td>
+                                    <td>CAD 336.00</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <a class="auditnotes-link fancybox" href="#jetransinfo">JE Transaction Tracking Info</a>        
+                        <hr />
+                        <div class="btns-ctnr-04 clearfix">
+                            <div class="right"> <a class="cancel-new-btn" href="#">Cancel</a><a class="save-new-btn-01 mrg-rgt" href="#">Save</a></div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </o:form>
+    </p:dialog>
+
+</ui:composition>

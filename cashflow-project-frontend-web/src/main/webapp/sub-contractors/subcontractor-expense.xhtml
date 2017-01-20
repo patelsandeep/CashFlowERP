@@ -1,0 +1,673 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="add_subcontractor_expense"
+              widgetVar="add_subcontractor_expense"
+              styleClass="phase-dialog"
+              showHeader="false"
+              resizable="false"
+              modal="true">
+        <o:form useRequestURI="true" enctype="multipart/form-data" id="add_subcontractor_expense_form">
+            <div class="phase-finance-popup-ctn" id="subcont-exp" >
+                <h1>#{subContractorExpenseTranslationService.addSubContractorExpenses}
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('add_subcontractor_expense').hide();"
+                         class ="close-icon-popup close-header" /></h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <ui:fragment rendered="#{subContractorExpenseController.subContractorExpenseModel.mode eq 'view' 
+                                             and subContractorExpenseController.subContractorExpenseModel.expenseStatus ne 'APPROVED'}">
+                        <p:commandLink actionListener="#{subContractorExpenseController.viewExpense(subContractorExpenseController.subContractorExpenseModel.subContractorExpenseUUID)}"
+                                       styleClass="trgth-btns"
+                                       update="@form"
+                                       value="#{subContractorExpenseTranslationService.edit}"/>
+                    </ui:fragment>
+                    <br clear="all" />
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{subContractorExpenseTranslationService.date}: </label>
+                        <p:calendar id="equipDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{subContractorExpenseController.subContractorExpenseModel.date}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="equipDate"/>
+                    </div>
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{subContractorExpenseTranslationService.subContractorExpenseID}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.subContractorExpenseModel.subContractorExpenseID}"/>
+                    </div>   
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.customer}:</label>
+                        <h:outputText styleClass="inventory-input-field-01"
+                                      value="#{subContractorExpenseController.subContractorExpenseModel.customer}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.project}:</label>
+                        <h:outputText styleClass="inventory-input-field-01"
+                                      value="#{subContractorExpenseController.subContractorExpenseModel.project}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.phase}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.phase}">
+                            <f:selectItem itemLabel="#{subContractorExpenseTranslationService.all}"/>
+                            <f:selectItems value="#{subContractorExpenseController.projectPhases}"
+                                           var="phase"
+                                           itemLabel="#{phase.name}"
+                                           itemValue="#{phase.uuid}"/>
+                            <p:ajax update="milestone" 
+                                    listener="#{subContractorExpenseController.setMilestones()}" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.milestone}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="milestone"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.milestone}">
+                            <f:selectItem itemLabel="#{subContractorExpenseTranslationService.all}"/>
+                            <f:selectItems value="#{subContractorExpenseController.projectMilestones}"
+                                           var="milestone"
+                                           itemLabel="#{milestone.name}"
+                                           itemValue="#{milestone.uuid}"/>
+                            <p:ajax update="task"
+                                    listener="#{subContractorExpenseController.setTasks()}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.task}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="task"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.task}">
+                            <f:selectItem itemLabel="#{subContractorExpenseTranslationService.all}"/>
+                            <f:selectItems value="#{subContractorExpenseController.projectTasks}"
+                                           var="task"
+                                           itemLabel="#{task.name}"
+                                           itemValue="#{task.uuid}"/>
+
+                            <p:ajax update="taskId" listener="#{subContractorExpenseController.updateTaskID}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.taskID}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="taskId"
+                                     readonly="true"
+                                     value="#{subContractorExpenseController.subContractorExpenseModel.taskID}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.supplier}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.supplierUUID}">
+                            <f:selectItem />
+                            <f:selectItem itemValue="Add New Supplier"
+                                          itemLabel="#{subContractorExpenseTranslationService.addSubContractor}"/>
+                            <f:selectItems value="#{subContractorExpenseController.suppliers}"
+                                           var="supplier"
+                                           itemLabel="#{supplier.name}"
+                                           itemValue="#{supplier.uuid}"/>
+
+                            <p:ajax update="supplierID new_subcontractor_form" 
+                                    listener="#{subContractorExpenseController.updateSupplierID()}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.supplierID}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="supplierID"
+                                     readonly="true"
+                                     value="#{subContractorExpenseController.subContractorExpenseModel.supplierID}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.subContractorService}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.subContractorExpenseModel.subContractorService}">
+                            <p:ajax event="change" update="description"
+                                    listener="#{subContractorExpenseController.updateDesc()}"/>
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.description}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="description"
+                                     value="#{subContractorExpenseController.subContractorExpenseModel.description}"/>
+                    </div>
+
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.invoiceNumber}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{subContractorExpenseController.subContractorExpenseModel.invoiceNumber}"/>
+                    </div>
+
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.invoiceDueDate}: </label>
+                        <p:calendar id="invoiceDueDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{subContractorExpenseController.subContractorExpenseModel.invoiceDueDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="invoiceDueDate"/>
+                    </div>
+
+                    <br clear="all" />
+                    <h:panelGroup id="amountPanelGroup">
+                        <div class="lable-field-area">
+                            <label>#{subContractorExpenseTranslationService.supplierInvoiceAmount}:</label>
+                            <h:inputText styleClass="inventory-input-field-01 wd55"
+                                         readonly="true"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.currency}"/>
+                            <h:inputText styleClass="inventory-input-field-01 wd261"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.invoiceAmount}">
+                                <f:convertNumber pattern="#,##0.00"
+                                                 maxFractionDigits="2" />
+                                <p:ajax update="amountPanelGroup catezPanelGroup" 
+                                        listener="#{subContractorExpenseController.updateAmountValues()}"/>
+                            </h:inputText>
+                        </div>
+
+                        <div class="lable-field-area-02">
+                            <label>#{subContractorExpenseTranslationService.tax}: </label>
+                            <h:selectOneMenu value="#{subContractorExpenseController.subContractorExpenseModel.taxId}" 
+                                             styleClass="inventory-sel-field-01">
+                                <f:selectItem/>
+                                <f:selectItems value="#{subContractorExpenseController.taxRates}" 
+                                               var="tax" itemLabel="#{tax.taxCategory.code}-#{tax.rate}%" 
+                                               itemValue="#{tax.taxId}"/>
+                                <p:ajax update="amountPanelGroup catezPanelGroup"
+                                        listener="#{subContractorExpenseController.updateAmountValues()}"/>
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="lable-field-area-02">
+                            <label>#{subContractorExpenseTranslationService.tax}: </label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         readonly="true"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.taxValue}">
+                                <f:convertNumber pattern="#,##0.00"
+                                                 maxFractionDigits="2" />
+                            </h:inputText>
+                        </div>
+                        <br clear="all" />
+
+                        <div class="lable-field-area-02">
+                            <label>#{subContractorExpenseTranslationService.tax}: </label>
+                            <h:selectOneMenu value="#{subContractorExpenseController.subContractorExpenseModel.taxId2}" 
+                                             styleClass="inventory-sel-field-01">
+                                <f:selectItem/>
+                                <f:selectItems value="#{subContractorExpenseController.taxRates}" 
+                                               var="tax" itemLabel="#{tax.taxCategory.code}-#{tax.rate}%" 
+                                               itemValue="#{tax.taxId}"/>
+                                <p:ajax update="amountPanelGroup catezPanelGroup" 
+                                        listener="#{subContractorExpenseController.updateAmountValues()}"/>
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="lable-field-area-02">
+                            <label>#{subContractorExpenseTranslationService.tax}: </label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         readonly="true"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.taxValue2}">
+                                <f:convertNumber pattern="#,##0.00"
+                                                 maxFractionDigits="2" />
+                            </h:inputText>
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{subContractorExpenseTranslationService.supplierInvoiceTotal}:</label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         readonly="true"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.invoiceTotal}">
+                            </h:inputText>
+                        </div>
+                    </h:panelGroup>
+
+                    <h:panelGroup id="catezPanelGroup">
+
+                        <div class="catez-ctn">
+                            <div class="catez-fld clearfix">
+                                <h2>#{subContractorExpenseTranslationService.categorization}:</h2>
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.labor}:</label>
+                                    <h:inputText styleClass="inventory-input-field-01 wd50"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.currency}"/>
+                                    <h:inputText styleClass="inventory-input-field-01 wd93"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.labourValue}">
+                                        <f:convertNumber pattern="#,##0.00"
+                                                         maxFractionDigits="2" />
+                                        <p:ajax update="catezPanelGroup" 
+                                                listener="#{subContractorExpenseController.validateCatezValues()}"/>
+                                    </h:inputText>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.materials}:</label>
+                                    <h:inputText styleClass="inventory-input-field-01 wd50"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.currency}"/>
+                                    <h:inputText styleClass="inventory-input-field-01 wd93"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.materialValue}">
+                                        <f:convertNumber pattern="#,##0.00"
+                                                         maxFractionDigits="2" />
+                                        <p:ajax update="catezPanelGroup subcontractoSuccessForm" 
+                                                listener="#{subContractorExpenseController.deductFromLabour(subContractorExpenseController.subContractorExpenseModel.materialValue)}"/>
+                                    </h:inputText>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.equipment}:</label>
+                                    <h:inputText styleClass="inventory-input-field-01 wd50"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.currency}"/>
+                                    <h:inputText styleClass="inventory-input-field-01 wd93"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.equipmentValue}">
+                                        <f:convertNumber pattern="#,##0.00"
+                                                         maxFractionDigits="2" />
+                                        <p:ajax update="catezPanelGroup subcontractoSuccessForm" 
+                                                listener="#{subContractorExpenseController.deductFromLabour(subContractorExpenseController.subContractorExpenseModel.equipmentValue)}"/>
+                                    </h:inputText>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.markUp}: </label>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 style="width: 115px"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.labourMarkUpValue}">
+                                        <p:ajax update="catezPanelGroup"
+                                                listener="#{subContractorExpenseController.updateBillableValues()}"/>
+                                    </h:inputText>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 value="%"
+                                                 readonly="true"
+                                                 style="width: 32px;"/>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.markUp}: </label>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 style="width: 115px"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.materialMarkUpValue}">
+                                        <p:ajax update="catezPanelGroup"
+                                                listener="#{subContractorExpenseController.updateBillableValues()}"/>
+                                    </h:inputText>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 value="%"
+                                                 readonly="true"
+                                                 style="width: 32px;"/>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.markUp}: </label>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 style="width: 115px"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.equipmentMarkUpValue}">
+                                        <p:ajax update="catezPanelGroup"
+                                                listener="#{subContractorExpenseController.updateBillableValues()}"/>
+                                    </h:inputText>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 value="%"
+                                                 readonly="true"
+                                                 style="width: 32px;"/>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.markUpAmount}: </label>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.labourMarkUpAmount}">
+
+                                    </h:inputText>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.markUpAmount}: </label>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.materialMarkUpAmount}">
+
+                                    </h:inputText>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.markUpAmount}: </label>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.equipmentMarkUpAmount}">
+
+                                    </h:inputText>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.nonBillableAmount}:</label>
+                                    <h:inputText styleClass="inventory-input-field-01 wd50"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.currency}"/>
+                                    <h:inputText styleClass="inventory-input-field-01 wd93"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.laborNonBillableValue}">
+                                        <f:convertNumber pattern="#,##0.00"
+                                                         maxFractionDigits="2" />
+                                        <p:ajax update="catezPanelGroup" 
+                                                listener="#{subContractorExpenseController.updateBillableValues()}"/>
+                                    </h:inputText>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.nonBillableAmount}:</label>
+                                    <h:inputText styleClass="inventory-input-field-01 wd50"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.currency}"/>
+                                    <h:inputText styleClass="inventory-input-field-01 wd93"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.materialNonBillableValue}">
+                                        <f:convertNumber pattern="#,##0.00"
+                                                         maxFractionDigits="2" />
+                                        <p:ajax update="catezPanelGroup" 
+                                                listener="#{subContractorExpenseController.updateBillableValues()}"/>
+                                    </h:inputText>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.nonBillableAmount}:</label>
+                                    <h:inputText styleClass="inventory-input-field-01 wd50"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.currency}"/>
+                                    <h:inputText styleClass="inventory-input-field-01 wd93"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.equipmentNonBillableValue}">
+                                        <f:convertNumber pattern="#,##0.00"
+                                                         maxFractionDigits="2" />
+                                        <p:ajax update="catezPanelGroup" 
+                                                listener="#{subContractorExpenseController.updateBillableValues()}"/>
+                                    </h:inputText>
+                                </div>
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.billableAmount}:</label>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.laborBillableAmount}">
+                                    </h:inputText>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.billableAmount}:</label>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.materialBillableAmount}">
+                                    </h:inputText>
+                                </div>
+
+                                <div class="lable-field-area-02">
+                                    <label>#{subContractorExpenseTranslationService.billableAmount}:</label>
+                                    <h:inputText styleClass="inventory-input-field-01"
+                                                 readonly="true"
+                                                 value="#{subContractorExpenseController.subContractorExpenseModel.equipmentBillableAmount}">
+                                    </h:inputText>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{subContractorExpenseTranslationService.nonBillableAmount}:</label>
+                            <h:inputText styleClass="inventory-input-field-01 wd261"
+                                         readonly="true"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.nonBillableAmount}">
+                            </h:inputText>
+                        </div>
+
+                        <div class="lable-field-area-02">
+                            <label>#{subContractorExpenseTranslationService.markUpAmount}: </label>
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         readonly="true"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.totalMarkUpAmount}">
+                            </h:inputText>
+                        </div>
+                        <br clear="all" />
+                        <div class="lable-field-area">
+                            <label>#{subContractorExpenseTranslationService.billableAmount}:</label>
+                            <h:inputText styleClass="inventory-input-field-01 wd261"
+                                         readonly="true"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.totalBillableAmount}">
+                            </h:inputText>
+                        </div>
+                    </h:panelGroup>
+
+                    <div class="lable-field-area">
+                        <label>#{subContractorExpenseTranslationService.notes}:</label>
+                        <h:inputTextarea styleClass="subcont-textarea-field-01"
+                                         value="#{subContractorExpenseController.subContractorExpenseModel.notes}" />
+                    </div>
+
+                    <div class="lable-field-area">
+                        <h:outputLabel for="expense_file_input" 
+                                       styleClass="attach-file-btn-01 mrgt"
+                                       value="#{subContractorExpenseTranslationService.attachFiles}">
+                        </h:outputLabel>
+                        <p:fileUpload mode="advanced"
+                                      widgetVar="expense_file"
+                                      id="expense_file"
+                                      auto="true"
+                                      fileLimit="5"
+                                      styleClass="ui-helper-hidden"
+                                      multiple="true"
+                                      skinSimple="true"
+                                      dragDropSupport="true"
+                                      update="subcontractoSuccessForm"
+                                      onstart="PF('statusDialog').show()" 
+                                      oncomplete="PF('statusDialog').hide();PF('subcontractor_success_message').show();"
+                                      allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xlsx|csv|xls)$/"
+                                      fileUploadListener="#{subContractorExpenseController.fileUpload}"
+                                      />
+                    </div>
+
+                    <br clear="all" />
+                    <ui:repeat value="#{subContractorExpenseController.subContractorExpenseModel.expenseDocs}"
+                               var="doc">
+                        <p:commandLink value="#{doc.name}"
+                                       styleClass="auditnotes-link"
+                                       ajax="false">
+                            <p:fileDownload value="#{staticContentController.content}" 
+                                            class="item-photo" />
+                            <f:param name="fileUUID" value="#{doc.uuid}" />
+                        </p:commandLink>
+                        <br />
+                    </ui:repeat>
+                    <br clear="all" />
+                    <a class="auditnotes-link" onclick="showhide32()">Audit Trail and Notes:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote32">
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                    </div>
+                    <hr />
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right"> 
+                            <a class="cancel-new-btn"
+                               onclick="PF('add_subcontractor_expense').hide();"
+                               href="#">
+                                #{subContractorExpenseTranslationService.cancel}
+                            </a> 
+                            <ui:fragment rendered="#{subContractorExpenseController.subContractorExpenseModel.mode ne 'view'}">
+                                <p:commandLink styleClass="save-new-btn-01"
+                                               update="@form subcontractoSuccessForm subcontractor_expense_form"
+                                               onsuccess="PF('add_subcontractor_expense').hide();PF('subcontractor_success_message').show();"
+                                               actionListener="#{subContractorExpenseController.save()}"
+                                               value="#{subContractorExpenseTranslationService.save}" >
+                                </p:commandLink>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{subContractorExpenseController.subContractorExpenseModel.expenseStatus ne 'APPROVED'}">
+                                <p:commandLink styleClass="save-new-btn-01 mrg-rgt"
+                                               update="@form subcontractoSuccessForm subcontractor_expense_form"
+                                               onsuccess="PF('add_subcontractor_expense').hide();PF('subcontractor_success_message').show();"
+                                               actionListener="#{subContractorExpenseController.approve()}"
+                                               value="#{subContractorExpenseTranslationService.approve}" >
+                                </p:commandLink>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                    <hr />
+                    <a class="advanced-settings-btn" onclick="showhide33()">Advanced Settings</a>
+                    <div class="timede-adset" id="adset7">
+                        <h2>Record Sub-Contractor Expenses with Recoverable Sales Tax</h2>
+                        <div class="pro-table-ctrn">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tr class="border-head-01">
+                                    <td>Date</td>
+                                    <td>Batch No.</td>
+                                    <td>JE No.</td>
+                                    <td>Account Name</td>
+                                    <td>Account Number</td>
+                                    <td>DR</td>
+                                    <td>CR</td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-01g" href="#">Select</a>
+                                        <ul id="acn-list-ctn-01g" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales � Project Materials</a></li>
+                                            <li><a href="#">Sales Tax Recoverable - GST </a></li>
+                                            <li><a href="#">Sales Tax Recoverable - PST </a></li>
+                                            <li><a href="#">Accounts Payable- General </a></li>
+
+                                        </ul></td>
+                                    <td><a class="ano-list-01g" href="#">Select</a>
+                                        <ul id="ano-list-ctn-01g" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                        </ul></td>
+                                    <td>CAD 225.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-02g" href="#">Select</a>
+                                        <ul id="acn-list-ctn-02g" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales � Project Materials</a></li>
+                                            <li><a href="#">Sales Tax Recoverable - GST </a></li>
+                                            <li><a href="#">Sales Tax Recoverable - PST </a></li>
+                                            <li><a href="#">Accounts Payable- General </a></li>
+
+                                        </ul></td>
+                                    <td>
+                                        <a class="ano-list-02g" href="#">Select</a>
+                                        <ul id="ano-list-ctn-02g" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                        </ul>
+                                    </td>
+                                    <td>CAD 50.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-03g" href="#">Select</a>
+                                        <ul id="acn-list-ctn-03g" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales � Project Materials</a></li>
+                                            <li><a href="#">Sales Tax Recoverable - GST </a></li>
+                                            <li><a href="#">Sales Tax Recoverable - PST </a></li>
+                                            <li><a href="#">Accounts Payable- General </a></li>
+
+                                        </ul></td>
+                                    <td><a class="ano-list-03g" href="#">Select</a>
+                                        <ul id="ano-list-ctn-03g" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                        </ul></td>
+                                    <td>CAD 15.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-04g" href="#">Select</a>
+                                        <ul id="acn-list-ctn-04g" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales � Project Materials</a></li>
+                                            <li><a href="#">Sales Tax Recoverable - GST </a></li>
+                                            <li><a href="#">Sales Tax Recoverable - PST </a></li>
+                                            <li><a href="#">Accounts Payable- General </a></li>
+
+                                        </ul></td>
+                                    <td><a class="ano-list-04g" href="#">Select</a>
+                                        <ul id="ano-list-ctn-04g" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                        </ul></td>
+                                    <td>CAD 21.00</td>
+                                    <td></td>
+                                </tr>
+
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td><a class="acn-list-05g" href="#">Select</a>
+                                        <ul id="acn-list-ctn-05g" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales � Project Materials</a></li>
+                                            <li><a href="#">Sales Tax Recoverable - GST </a></li>
+                                            <li><a href="#">Sales Tax Recoverable - PST </a></li>
+                                            <li><a href="#">Accounts Payable- General </a></li>
+
+                                        </ul></td>
+                                    <td><a class="ano-list-05g" href="#">Select</a>
+                                        <ul id="ano-list-ctn-05g" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">22150112-0001</a></li>
+                                            <li><a href="#">1160111-0000</a></li>
+                                        </ul></td>
+                                    <td></td>
+                                    <td>CAD 336.00</td>
+                                </tr>
+
+                                <tr class="border-td title-td">
+                                    <td colspan="5">Totals</td>
+                                    <td>CAD 336.00</td>
+                                    <td>CAD 336.00</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <a class="auditnotes-link fancybox" href="#jetransinfo">JE Transaction Tracking Info</a>        
+                        <hr />
+                        <div class="btns-ctnr-04 clearfix">
+                            <div class="right"> <a class="cancel-new-btn" href="#">Cancel</a><a class="save-new-btn-01 mrg-rgt" href="#">Save</a></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+    <ui:include src="/sub-contractors/new-subcontractor.xhtml" />
+</ui:composition>

@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:panelGroup id="taskContent"
+                  layout="block">
+        <div class="pro-table-ctrn">
+            <table cellpadding="0" cellspacing="0" border="0" width="1200px">
+                <tr class="border-head">
+                    <td class="twd90 border-left">#{taskTranslationService.count}</td>
+                    <td class="twd90">#{taskTranslationService.taskID}</td>
+                    <td class="twd240">#{taskTranslationService.taskName}</td>
+                    <td class="twd80">#{taskTranslationService.startDate}</td>
+                    <td class="twd80">#{taskTranslationService.endDate}</td>
+                    <td class="twd60">#{taskTranslationService.progress}</td>
+                    <td class="twd40">#{taskTranslationService.status}</td>
+                    <td class="twd40">#{taskTranslationService.alerts}</td>
+                    <td class="twd80 border-right">#{taskTranslationService.action}</td>
+                </tr>
+                <ui:repeat value="#{phaseListController.projectTasks}" var="phase">
+                    <tr class="border-td show-m1">
+                        <td>
+                            <p:commandLink actionListener="#{viewProjectTaskController.viewProjectTask(phase.uuid)}" 
+                                           onsuccess="PF('view_project_task').show();"
+                                           update="viewTaskForm"
+                                           value="#{phase.number}"/> 
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{viewProjectTaskController.viewProjectTask(phase.uuid)}" 
+                                           onsuccess="PF('view_project_task').show();"
+                                           update="viewTaskForm"
+                                           value=" #{phase.id}"/>
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{viewProjectTaskController.viewProjectTask(phase.uuid)}" 
+                                           onsuccess="PF('view_project_task').show();"
+                                           update="viewTaskForm"
+                                           value="#{phase.name}"/>
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{viewProjectTaskController.viewProjectTask(phase.uuid)}" 
+                                           onsuccess="PF('view_project_task').show();"
+                                           update="viewTaskForm">
+
+                                <h:outputText value="#{phase.startDate.time}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:outputText>
+                            </p:commandLink>
+
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{viewProjectTaskController.viewProjectTask(phase.uuid)}" 
+                                           onsuccess="PF('view_project_task').show();"
+                                           update="viewTaskForm">
+                                <h:outputText value="#{phase.endDate.time}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:outputText>
+                            </p:commandLink>
+
+                        </td>
+                        <c:set value="#{phaseListController.getProjectLevelProgress(phase.uuid)}"
+                               var="phaseProgress" />
+                        <td>
+                            <p:commandLink actionListener="#{viewProjectTaskController.viewProjectTask(phase.uuid)}" 
+                                           update="viewTaskForm"
+                                           onsuccess="PF('view_project_task').show();"
+                                           value="#{phaseProgress.percentOfCompletion} %"/>
+                        </td>
+                        <td>
+                            <p:commandLink actionListener="#{viewProjectTaskController.viewProjectTask(phase.uuid)}" 
+                                           update="viewTaskForm"
+                                           onsuccess="PF('view_project_task').show();"
+                                           styleClass="pending-btn-02"
+                                           value="#{phaseProgress.projectStatus}" />
+                        </td>
+                        <ui:fragment rendered="#{phase.safetyRating eq 'SAFE'}">
+                            <td>
+                                <p:commandLink actionListener="#{viewProjectTaskController.viewProjectTask(phase.uuid)}" 
+                                               update="viewTaskForm"
+                                               onsuccess="PF('view_project_task').show();"
+                                               styleClass="safe-btn"
+                                               value="#{phase.safetyRating}" />
+                            </td>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{phase.safetyRating eq 'RISKY'}">
+                            <td>
+                                <p:commandLink actionListener="#{viewProjectTaskController.viewProjectTask(phase.uuid)}" 
+                                               update="viewTaskForm"
+                                               onsuccess="PF('view_project_task').show();"
+                                               styleClass="alert-btn"
+                                               value="#{phase.safetyRating}" />
+                            </td>
+                        </ui:fragment>
+                        <td class="acction-ctn">
+                            <p:commandLink actionListener="#{projectTaskController.editProjectTask(phase.uuid)}"
+                                           update="addTaskForm"
+                                           onsuccess="PF('create_project_task').show();"
+                                           title="#{taskTranslationService.editTaskLabel}">
+                                <img src="/resources/images/ac-edit-icon.png" alt="" />
+                            </p:commandLink>
+
+                            <p:commandLink actionListener="#{viewProjectTaskController.viewProjectTask(phase.uuid)}"
+                                           update="viewTaskForm"
+                                           onsuccess="PF('view_project_task').show();"
+                                           title="#{taskTranslationService.viewTaskLabel}">
+
+                                <img src="/resources/images/view-icon.png" alt="" />
+                            </p:commandLink>
+
+                        </td>
+                    </tr>
+                </ui:repeat>
+            </table>
+        </div>
+    </h:panelGroup>
+
+    <div class="paging-ctnr clearfix">
+        <h:selectOneMenu value="#{phaseListController.limit}" 
+                         styleClass="col-sel-field">
+            <f:selectItems value="#{phaseListController.limits}"/>
+            <p:ajax listener="#{phaseListController.initPhases()}"
+                    update="@form" />
+        </h:selectOneMenu>
+        <div class="next-prev-ctn clearfix">
+            <p:commandLink styleClass="prev-btn"
+                           value="Previous"
+                           actionListener="#{phaseListController.previousPage()}"
+                           disabled="#{phaseListController.page lt 1}"
+                           update="@form"/>
+            <span class="pages-info">#{phaseListController.page + 1} of #{phaseListController.pageCount}</span>
+            <p:commandLink styleClass="next-btn" 
+                           value="Next" 
+                           actionListener="#{phaseListController.nextPage()}"
+                           disabled="#{phaseListController.page ge phaseListController.maxPage}"
+                           update="@form"/>
+        </div>
+        <h:selectOneMenu value="#{phaseListController.page}" styleClass="page-sel-field">
+            <f:selectItems value="#{phaseListController.pages}"/>
+            <p:ajax listener="#{phaseListController.initPhases()}"
+                    update="@form" />
+        </h:selectOneMenu>
+    </div>
+</ui:composition>

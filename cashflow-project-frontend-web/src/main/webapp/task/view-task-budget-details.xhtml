@@ -1,0 +1,381 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="view_task_budget_details"
+              widgetVar="view_task_budget_details"
+              closeOnEscape="true"
+              resizable="false"
+              showHeader="false"
+              styleClass="phase-dialog"
+              modal="true">
+        <o:form useRequestURI="true" id="viewTaskBudgetForm">
+            <div class="add-new-phase-popup-ctn" id="taskbud-detail" >
+                <h1>View Task Budget Details 
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('view_task_budget_details').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{projectTaskTranslationService.customerLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{viewProjectTaskController.projectTaskModel.customerName}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.projectNameLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{viewProjectTaskController.projectTaskModel.projectName}"
+                                     readonly="true"/>
+                    </div>
+                    <ui:fragment rendered="#{viewProjectTaskController.project.projectLevelCategory eq 'PHASE'}">
+
+                        <div class="lable-field-area">
+                            <label>#{projectTaskTranslationService.phaseLabel}: </label>
+
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         value="#{viewProjectTaskController.projectTaskModel.projectPhaseName}"
+                                         readonly="true"/>
+                        </div>
+                        <div class="lable-field-area">
+                            <label>#{projectTaskTranslationService.milestoneLabel}: </label>
+
+                            <h:inputText styleClass="inventory-input-field-01"
+                                         value="#{viewProjectTaskController.projectTaskModel.projectMilestoneName}"
+                                         readonly="true"/>
+
+                        </div>
+
+                    </ui:fragment>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskNameLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{viewProjectTaskController.projectTaskModel.taskName}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.taskIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{viewProjectTaskController.projectTaskModel.taskId}"/>
+                    </div>
+
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.startDateLabel}:</label>
+                        <p:calendar id="startDate" 
+                                    disabled="true"
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{viewProjectTaskController.projectTaskModel.startDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="startDate"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectTaskTranslationService.endDateLabel}:</label>
+                        <p:calendar id="enddate" 
+                                    disabled="true"
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{viewProjectTaskController.projectTaskModel.endDate}"
+                                    pattern="yyyy-MM-dd"
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="enddate"/>
+                    </div>
+                    <h:panelGroup id="budgetDetailPanel">
+                        <div class="lable-field-area">
+                            <h2>#{projectTaskTranslationService.directCostLabel}:</h2>
+                            <label>#{projectTaskTranslationService.budgetLabourCostLabel}: </label>
+                            <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                         readonly="true"
+                                         value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                            <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                         readonly="true"
+                                         value="#{viewProjectTaskController.projectTaskModel.taskBudgetInformation.budgetLabourCost}">
+                                <f:convertNumber pattern="#,##0.00" 
+                                                 maxFractionDigits="2" />  
+                            </h:inputText>
+
+                        </div>
+                        <ui:fragment rendered="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.includeBudgetRevenueDetails}">
+                            <div class="lable-field-area">
+                                <h2>#{projectTaskTranslationService.directRevenueLabel}:</h2>
+                                <label>#{projectTaskTranslationService.budgetLabourRevenueLabel}:</label>
+                                <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                                <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.budgetLabourRevenue}">
+                                    <f:convertNumber pattern="#,##0.00" 
+                                                     maxFractionDigits="2" />  
+                                </h:inputText>
+                            </div>
+                        </ui:fragment>
+                        <br clear="all"/>
+                        <div class="lable-field-area">
+                            <label>#{projectTaskTranslationService.budgetEquipmentCostLabel}:</label>
+                            <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                         readonly="true"
+                                         value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                            <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                         readonly="true"
+                                         value="#{viewProjectTaskController.projectTaskModel.taskBudgetInformation.budgetEquipmentCost}">
+                                <f:convertNumber pattern="#,##0.00" 
+                                                 maxFractionDigits="2" />  
+                            </h:inputText>
+                        </div>
+                        <ui:fragment rendered="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.includeBudgetRevenueDetails}">
+                            <div class="lable-field-area">
+                                <label>#{projectTaskTranslationService.budgetEquipmentRevenueLabel}:</label>
+                                <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                                <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.budgetEquipmentRevenue}">
+                                    <f:convertNumber pattern="#,##0.00" 
+                                                     maxFractionDigits="2" /> 
+                                </h:inputText>
+                            </div>
+                        </ui:fragment>
+                        <br clear="all"/>
+                        <div class="lable-field-area">
+                            <label>#{projectTaskTranslationService.budgetMaterialCostLabel}:</label>
+                            <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                         readonly="true"
+                                         value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                            <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                         readonly="true"
+                                         value="#{viewProjectTaskController.projectTaskModel.taskBudgetInformation.budgetMaterialCost}">
+                                <f:convertNumber pattern="#,##0.00" 
+                                                 maxFractionDigits="2" />  
+                            </h:inputText>
+                        </div>
+                        <ui:fragment rendered="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.includeBudgetRevenueDetails}">
+                            <div class="lable-field-area">
+                                <label>#{projectTaskTranslationService.budgetMaterialRevenueLabel}:</label>
+                                <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                                <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.budgetMaterialRevenue}">
+                                    <f:convertNumber pattern="#,##0.00" 
+                                                     maxFractionDigits="2" />  
+                                </h:inputText>
+
+                            </div>
+                        </ui:fragment>
+                        <br clear="all"/>
+                        <div class="lable-field-area">
+                            <label>#{projectTaskTranslationService.budgetSubContractorCostLabel}:</label>
+                            <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                         readonly="true"
+                                         value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                            <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                         readonly="true"
+                                         value="#{viewProjectTaskController.projectTaskModel.taskBudgetInformation.budgetSubContractorCost}">
+                                <f:convertNumber pattern="#,##0.00" 
+                                                 maxFractionDigits="2" />  
+                            </h:inputText>
+                        </div>
+                        <ui:fragment rendered="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.includeBudgetRevenueDetails}">
+                            <div class="lable-field-area">
+                                <label>#{projectTaskTranslationService.budgetSubContractorRevenueLabel}:</label>
+                                <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                                <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.budgetSubContractorRevenue}">
+                                    <f:convertNumber pattern="#,##0.00" 
+                                                     maxFractionDigits="2" />  
+
+                                </h:inputText>
+                            </div>
+                        </ui:fragment>
+                        <br clear="all"/>
+                        <div class="lable-field-area">
+                            <h2>#{projectTaskTranslationService.indirectCostLabel}:</h2>
+                            <label>#{projectTaskTranslationService.overheadCostAllocationLabel}:</label>
+                            <div data-tip="#{projectTaskTranslationService.overheadCostAllocationTip}">
+                                <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                                <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.taskBudgetInformation.costAllocation}">
+                                    <f:convertNumber pattern="#,##0.00" 
+                                                     maxFractionDigits="2" />  
+                                </h:inputText>
+                            </div>
+                        </div>
+                        <ui:fragment rendered="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.includeBudgetRevenueDetails}">
+                            <div class="lable-field-area">
+                                <h2>#{projectTaskTranslationService.indirectRevenueLabel}:</h2>
+                                <label>#{projectTaskTranslationService.overheadRevenueAllocationLabel}:</label>
+                                <div data-tip="#{projectTaskTranslationService.overheadCostAllocationTip}">
+                                    <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                                 readonly="true"
+                                                 value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                                    <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                                 readonly="true"
+                                                 value="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.revenueAllocation}">
+                                        <f:convertNumber pattern="#,##0.00" 
+                                                         maxFractionDigits="2" /> 
+                                    </h:inputText>
+                                </div>
+                            </div>
+                        </ui:fragment>
+                        <br clear="all"/>
+                        <div class="lable-field-area">
+                            <label>#{projectTaskTranslationService.otherIndirectCostLabel}: </label>      
+                            <div data-tip="#{projectTaskTranslationService.overheadCostAllocationTip}">
+                                <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                                <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.taskBudgetInformation.otherIndirectCost}">
+                                    <f:convertNumber pattern="#,##0.00" 
+                                                     maxFractionDigits="2" />  
+
+                                </h:inputText>
+                            </div>      
+                        </div>
+                        <ui:fragment rendered="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.includeBudgetRevenueDetails}">
+                            <div class="lable-field-area">
+                                <label>#{projectTaskTranslationService.otherIndirectRevenueLabel}:</label>
+                                <div data-tip="#{projectTaskTranslationService.overheadCostAllocationTip}">
+                                    <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                                 readonly="true"
+                                                 value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                                    <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                                 readonly="true"
+                                                 value="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.otherIndirectRevenue}">
+                                        <f:convertNumber pattern="#,##0.00" 
+                                                         maxFractionDigits="2" />
+                                    </h:inputText>
+                                </div>            
+                            </div>
+                        </ui:fragment>
+                        <br clear="all"/>
+                        <div class="lable-field-area">
+                            <h2>#{projectTaskTranslationService.taskTotalCostLabel}:</h2>
+                            <label>#{projectTaskTranslationService.totalBudgetedCostLabel}:</label>
+                            <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                         readonly="true"
+                                         value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                            <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                         readonly="true"
+                                         id="totalCost"
+                                         value="#{viewProjectTaskController.projectTaskModel.taskBudgetInformation.taskBudgetCost}">
+                                <f:convertNumber pattern="#,##0.00" 
+                                                 maxFractionDigits="2" />  
+                            </h:inputText>
+                        </div>
+                        <ui:fragment rendered="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.includeBudgetRevenueDetails}">
+                            <div class="lable-field-area">
+                                <h2>#{projectTaskTranslationService.totalTaskRevenueLabel}:</h2>
+                                <label>#{projectTaskTranslationService.totalBudgetedRevenueLabel}:</label>
+                                <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                                <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                             readonly="true"
+                                             id="totalRevenue"
+                                             value="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.taskBudgetRevenue}">
+                                    <f:convertNumber pattern="#,##0.00" 
+                                                     maxFractionDigits="2" />  
+                                </h:inputText>
+                            </div>
+                        </ui:fragment>
+                        <br clear="all"/>
+                        <div class="lable-field-area">
+                            <h2>#{projectTaskTranslationService.grossProfitLabel}:</h2>
+                            <label>#{projectTaskTranslationService.budgetedGrossProfitLabel}: </label>
+                            <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                         readonly="true"
+                                         value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                            <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                         readonly="true"
+                                         id="totalCostGrossProfit"
+                                         value="#{viewProjectTaskController.projectTaskModel.taskBudgetInformation.taskBudgetGrossProfit}">
+                                <f:convertNumber pattern="#,##0.00" 
+                                                 maxFractionDigits="2" />  
+                            </h:inputText>
+                        </div>
+                        <ui:fragment rendered="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.includeBudgetRevenueDetails}">
+                            <div class="lable-field-area">
+                                <h2>#{projectTaskTranslationService.grossProfitLabel}:</h2>
+                                <label>#{projectTaskTranslationService.budgetedGrossProfitLabel}: </label>
+                                <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                             readonly="true"
+                                             value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                                <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                             readonly="true"
+                                             id="totalRevenueGrossProfit"
+                                             value="#{viewProjectTaskController.projectTaskModel.taskBudgetInformation.taskBudgetGrossProfit}">
+                                    <f:convertNumber pattern="#,##0.00" 
+                                                     maxFractionDigits="2" />  
+                                </h:inputText>
+                            </div>
+                        </ui:fragment>
+                        <br clear="all"/>
+                    </h:panelGroup>
+                    <div class="lable-field-area">
+                        <h2>#{projectTaskTranslationService.taskBudgetedRevenueLabel}:</h2>
+                        <label>#{projectTaskTranslationService.budgetedRevenueLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     readonly="true"
+                                     value="#{viewProjectTaskController.projectTaskModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-01 input-val-07"
+                                     id="budgedRevenue"
+                                     readonly="true"
+                                     value="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.taskBudgetRevenue}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                        </h:inputText>
+                    </div><br clear="all" />
+
+                    <div class="lable-field-area clearfix">
+                        <h:selectBooleanCheckbox 
+                            disabled="true"
+                            styleClass="artcheck-01"
+                            value="#{viewProjectTaskController.projectTaskModel.taskRevenueInformation.includeBudgetRevenueDetails}">
+                            <p:ajax update="taskBudgetForm:budgetDetailPanel" />
+                        </h:selectBooleanCheckbox>
+                        <label style="artcheck-input-field-02">#{projectTaskTranslationService.includeBudgetRevenueDetailsLabel}</label>
+                    </div>
+
+                    <br clear="all" />
+                    <a class="auditnotes-link" onclick="showhide12()">#{projectTaskTranslationService.auditTrailandNotesLabel}:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote12">
+
+                    </div>
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a class="cancel-new-btn"
+                               onclick="PF('view_task_budget_details').hide();">#{projectTaskTranslationService.cancelLabel}</a>
+
+
+                            <a class="save-new-btn-01 mrg-rgt" href="#">#{projectTaskTranslationService.approveLabel}</a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+
+</ui:composition>

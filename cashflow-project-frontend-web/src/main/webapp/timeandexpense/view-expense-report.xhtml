@@ -1,0 +1,392 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="view_expense_report"
+              widgetVar="view_expense_report"
+              styleClass="phase-dialog"
+              showHeader="false"
+              modal="true">
+        <o:form useRequestURI="true" id="view_expense_report_form">
+
+            <div class="phase-finance-popup-ctn" id="exp-rep-det" >
+                <h1>#{expenseTranslationService.viewExpenseHeader} 
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('view_expense_report').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <p:commandLink actionListener="#{expenseController.edit(labourExpenseViewController.expenseReportModel.expenseReportId)}"
+                                   styleClass="trgth-btns"
+                                   onsuccess="PF('view_expense_report').hide();PF('add_expense_report').show();"
+                                   update="add_expense_report_form"
+                                   value="#{expenseTranslationService.edit}"/>
+
+                    <br clear="all" />
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{expenseTranslationService.expenseReportIdLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         value="#{labourExpenseViewController.expenseReportModel.expenseReportId}">
+                            <f:selectItems value="#{labourExpenseViewController.labourExpenseModel.expenseReports}" 
+                                           var="expense"
+                                           itemLabel="#{expense.expenseReportId}"
+                                           itemValue="#{expense.expenseReportId}"/>
+                            <p:ajax update="@form" 
+                                    listener="#{labourExpenseViewController.updateExpenseDetail()}" />
+                        </h:selectOneMenu>
+
+                    </div>
+                    <br clear="all" />
+
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.customerLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.expenseReportModel.customer}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.projectLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.expenseReportModel.project}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.phaseLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.expenseReportModel.phaseName}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.milestoneLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.expenseReportModel.milestoneName}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.taskLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.expenseReportModel.taskName}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.taskIdLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.expenseReportModel.taskId}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.nameLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.expenseReportModel.memberName}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.employeeIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.expenseReportModel.memberId}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{expenseTranslationService.projectRoleLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{labourExpenseViewController.expenseReportModel.projectRole}"/>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{expenseTranslationService.weekStartLabel}:</label>
+                        <p:calendar id="startDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{labourExpenseViewController.expenseReportModel.weekStartDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="startDate"/>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{expenseTranslationService.weekEndingLabel}:</label>
+                        <p:calendar id="endDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{labourExpenseViewController.expenseReportModel.weekEndingDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="endDate"/>
+                    </div>
+
+                    <br clear="all" />
+
+                    <div class="pro-table-ctrn">
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <tr class="border-head-01">
+                                <td>#{expenseTranslationService.dateLabel}</td>
+                                <td>#{expenseTranslationService.expenseTypeLabel}</td>
+                                <td>#{expenseTranslationService.amountLabel}</td>
+                                <td>#{expenseTranslationService.taxLabel}</td>
+                                <td>#{expenseTranslationService.taxLabel}</td>
+                                <td>#{expenseTranslationService.billableLabel}</td>
+                                <td>#{expenseTranslationService.totalLabel}</td>
+                                <td>#{expenseTranslationService.attachReceiptLabel}</td>
+                            </tr>
+                            <ui:repeat value="#{labourExpenseViewController.expenseReportModel.reportDataModels}"
+                                       var="expense">
+                                <tr class="border-td">
+                                    <td>
+                                        <h:outputText styleClass="inventory-input-field-01 twd80"
+                                                      value="#{expense.expenseDate.time}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:outputText>
+                                    </td>	
+                                    <td>
+                                        #{expense.expenseType}
+                                    </td>	
+                                    <td>
+                                        #{expense.totalAmount.currency} #{expense.expenseAmount}
+                                    </td> 
+                                    <td>
+                                        <h:selectOneMenu value="#{expense.taxId}"
+                                                         disabled="true"
+                                                         styleClass="inventory-sel-field-01">
+                                            <f:selectItems value="#{labourExpenseViewController.taxRates}" 
+                                                           var="tax" itemLabel="#{tax.taxCategory.code}-#{tax.rate}%" 
+                                                           itemValue="#{tax.taxId}"/>
+                                        </h:selectOneMenu>
+                                    </td>	
+
+                                    <td>
+                                        <h:selectOneMenu value="#{expense.taxId2}"
+                                                         disabled="true"
+                                                         styleClass="inventory-sel-field-01">
+                                            <f:selectItems value="#{labourExpenseViewController.taxRates}" 
+                                                           var="tax" itemLabel="#{tax.taxCategory.code}-#{tax.rate}%" 
+                                                           itemValue="#{tax.taxId}"/>
+                                        </h:selectOneMenu>
+                                    </td>	
+
+                                    <td>
+                                        #{expense.billable}
+                                    </td>	  
+
+                                    <td>#{expense.totalAmount}</td>
+                                    <td class="acction-ctn">
+                                        <p:commandLink 
+                                            actionListener="#{labourExpenseViewController.viewFilesForExpense(expense)}"
+                                            onsuccess="PF('expense_file').show();"
+                                            update="expenseFilesForm">
+                                            <img src="/resources/images/dwnld-icon.png" alt="" />
+                                        </p:commandLink>
+                                        <a href="#">
+
+                                        </a>
+                                        <a href="#">
+                                            <img src="/resources/images/upld-icon.png" alt="" />
+                                        </a>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+
+                            <tr class="border-td title-td">
+                                <td>#{expenseTranslationService.totalsLabel}</td>
+                                <td></td>			
+                                <td>#{labourExpenseViewController.expenseReportModel.expenseTotal}</td>       
+                                <td>#{labourExpenseViewController.expenseReportModel.taxTotal}</td>     	
+                                <td>#{labourExpenseViewController.expenseReportModel.tax2Total}</td>      
+                                <td></td>                
+                                <td>#{labourExpenseViewController.expenseReportModel.totalExpenseAmount}</td>
+                                <td></td> 
+                            </tr>
+                        </table>
+                    </div>
+
+                    <a class="auditnotes-link" onclick="showhide24()">Audit Trail and Notes:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote24">
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                    </div>
+                    <hr />
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right"> 
+                            <a class="cancel-new-btn"
+                               href="#"
+                               onclick="PF('view_expense_report').hide();">
+                                #{expenseTranslationService.cancelLabel}
+                            </a> 
+                           <h:panelGroup id="buttonPanel">
+                               <ui:fragment rendered="#{labourExpenseViewController.expenseReportModel.expenseReportStatus eq 'SAVED'}">
+
+                                    <p:commandLink styleClass="save-new-btn-01 mrg-rgt"
+                                                   update="@form expenseApproveSuccessForm"
+                                                   value="#{expenseTranslationService.submitLabel}"
+                                                   onsuccess="PF('view_expense_report').hide();PF('expense_approve_success_message').show();"
+                                                   actionListener="#{labourExpenseViewController.submitExpense()}"/>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{labourExpenseViewController.expenseReportModel.expenseReportStatus eq 'SUBMITTED' }">
+                                    <p:commandLink styleClass="reject-btn-01 mrg-rgt"
+                                                   update="@form expenseApproveSuccessForm"
+                                                   value="#{expenseTranslationService.rejectLabel}"
+                                                   onsuccess="PF('view_expense_report').hide();PF('expense_approve_success_message').show();"
+                                                   actionListener="#{labourExpenseViewController.rejectExpense()}"/>
+                                    <p:commandLink styleClass="save-new-btn-01 mrg-rgt"
+                                                   update="@form expenseApproveSuccessForm"
+                                                   value="#{expenseTranslationService.approveLabel}"
+                                                   onsuccess="PF('view_expense_report').hide();PF('expense_approve_success_message').show();"
+                                                   actionListener="#{labourExpenseViewController.approveExpense()}"/>
+
+                                </ui:fragment>
+
+                            </h:panelGroup>
+                            
+                        </div>
+                    </div>
+                    <hr />
+                    <a class="advanced-settings-btn" onclick="showhide25()">Advanced Settings</a>
+                    <div class="timede-adset" id="adset2">
+                        <h2>Record Expenses</h2>
+                        <div class="pro-table-ctrn">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tr class="border-head-01">
+                                    <td>Date</td>
+                                    <td>Batch No.</td>
+                                    <td>JE No.</td>
+                                    <td>Account Name</td>
+                                    <td>Account Number</td>
+                                    <td>DR</td>
+                                    <td>CR</td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td>
+                                        <a class="acn-list-01" href="#">Select</a>
+                                        <ul id="acn-list-ctn-01" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales – Project Expense</a></li> 
+                                            <li><a href="#">Employee Expenses Payable – Travel</a></li>
+                                            <li><a href="#">Employee Expenses Payable – Meals </a></li>                                               
+                                        </ul>
+                                    </td>
+
+                                    <td>
+                                        <a class="ano-list-01" href="#">Select</a>
+                                        <ul id="ano-list-ctn-01" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">6110311-0002</a></li> 
+                                            <li><a href="#">2130212-0000</a></li>
+                                            <li><a href="#">2130214-0000</a></li>                                               
+                                        </ul>
+                                    </td>
+
+                                    <td>CAD 224.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td>
+                                        <a class="acn-list-02" href="#">Select</a>
+                                        <ul id="acn-list-ctn-02" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales – Project Expense</a></li> 
+                                            <li><a href="#">Employee Expenses Payable – Travel</a></li>
+                                            <li><a href="#">Employee Expenses Payable – Meals </a></li>                                               
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <a class="ano-list-02" href="#">Select</a>
+                                        <ul id="ano-list-ctn-02" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">6110311-0002</a></li> 
+                                            <li><a href="#">2130212-0000</a></li>
+                                            <li><a href="#">2130214-0000</a></li>                                               
+                                        </ul>
+                                    </td>
+                                    <td>CAD 112.00</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td>
+                                        <a class="acn-list-03" href="#">Select</a>
+                                        <ul id="acn-list-ctn-03" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales – Project Expense</a></li> 
+                                            <li><a href="#">Employee Expenses Payable – Travel</a></li>
+                                            <li><a href="#">Employee Expenses Payable – Meals </a></li>                                               
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <a class="ano-list-03" href="#">Select</a>
+                                        <ul id="ano-list-ctn-03" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">6110311-0002</a></li> 
+                                            <li><a href="#">2130212-0000</a></li>
+                                            <li><a href="#">2130214-0000</a></li>                                               
+                                        </ul>
+                                    </td>
+                                    <td></td>
+                                    <td>CAD 112.00</td>
+                                </tr>
+                                <tr class="border-td">
+                                    <td>2016-10-20</td>
+                                    <td>BN00001</td>
+                                    <td>SJE00001</td>
+                                    <td>
+                                        <a class="acn-list-04" href="#">Select</a>
+                                        <ul id="acn-list-ctn-04" >
+                                            <li><a href="#">Project in Progress</a></li>
+                                            <li><a href="#">Cost of Sales – Project Expense</a></li> 
+                                            <li><a href="#">Employee Expenses Payable – Travel</a></li>
+                                            <li><a href="#">Employee Expenses Payable – Meals </a></li>                                               
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <a class="ano-list-04" href="#">Select</a>
+                                        <ul id="ano-list-ctn-04" >
+                                            <li><a href="#">1160111-0000</a></li>
+                                            <li><a href="#">6110311-0002</a></li> 
+                                            <li><a href="#">2130212-0000</a></li>
+                                            <li><a href="#">2130214-0000</a></li>                                               
+                                        </ul>
+                                    </td>
+                                    <td></td>
+                                    <td>CAD 224.00</td>
+                                </tr>
+                                <tr class="border-td title-td">
+                                    <td colspan="5">Totals</td>
+                                    <td>CAD 336.00</td>
+                                    <td>CAD 336.00</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <a class="auditnotes-link fancybox" href="#jetransinfo">JE Transaction Tracking Info</a>        
+                        <hr />
+                        <div class="btns-ctnr-04 clearfix">
+                            <div class="right"> <a class="cancel-new-btn" href="#">Cancel</a><a class="save-new-btn-01 mrg-rgt" href="#">Save</a></div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+    <ui:include src="/timeandexpense/view-expense-files-popup.xhtml"/>
+</ui:composition>
+
+
+

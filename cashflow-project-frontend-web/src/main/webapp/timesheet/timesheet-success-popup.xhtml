@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <p:dialog id="timesheet_success_message"
+              appendTo="@(body)"
+              styleClass="message_dialog"
+              widgetVar="timesheet_success_message"
+              showHeader="false"
+              modal="true">
+        <o:form useRequestURI="true" id="timeSheetSuccessForm">
+
+            <div class="add-new-phase-popup-ctn" id="addnewphase" >
+                <h1> #{timeEntryTranslationService.successMessageHeaderLabel}
+
+                    <p:commandLink actionListener="#{labourExpenseListController.loadExpense()}"
+                                   update="expenseForm">
+                        <img src="/resources/images/fancy-close-btn.png" 
+                             onclick="PF('timesheet_success_message').hide();"
+                             class ="close-icon-popup close-header" />
+                    </p:commandLink>
+                </h1>
+
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                      #{timeSheetEntryController.successMessageModel.successMessage}
+
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <p:commandLink actionListener="#{labourExpenseListController.loadExpense()}" 
+                                           styleClass="save-new-btn-01 mrg-rgt ok-btn" 
+                                           update="expenseForm"
+                                           value="#{timeEntryTranslationService.okLabel}"
+                                           onclick="PF('timesheet_success_message').hide();">
+                            </p:commandLink>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+</ui:composition>

@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pp="http://java.sun.com/jsf/passthrough"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="/main-template.xhtml"> 
+        <ui:define name="content"> 
+            <div class="condent-right">
+                <o:form id="paginationForm" useRequestURI="true">
+                    <div class="content-right-ctn">
+                        <div class="title-01 clearfix">
+                            <h1>#{projectListTranslationService.header}</h1>
+                            <a class="trgth-btns" href="#">Create a New Timesheet</a>
+                            <p:link href="#{staticLinkUrlController.newProjectPath}"
+                                    value="+ #{projectListTranslationService.createProject}"
+                                    styleClass="trgth-btns">
+                            </p:link>
+                        </div>
+                        <div class="content-ctnr clearfix">
+                            <div class="all-customer-field-ctn-01">
+                                <h:inputText styleClass="search-field" 
+                                             id="freeSearch"
+                                             pp:placeholder="#{projectListTranslationService.search}"
+                                             value="#{projectListController.freeSearch}" >
+                                </h:inputText>
+                                <select class="all-sel-field-01">
+                                    <option>Filter by:</option>
+                                </select>
+                                <select class="all-sel-field-01">
+                                    <option>Filter by:</option>
+                                </select>
+                                <p:calendar id="startDate"
+                                            converter="generalCalendarConverter"
+                                            value="#{projectListController.startDate}"
+                                            class="p-calander-search"
+                                            pattern="yyyy-MM-dd"
+                                            pp:pattern="yyyy-MM-dd">
+                                </p:calendar>
+                                <p:watermark value="#{projectListTranslationService.from}:" for="startDate"/>
+                                <p:calendar id="endDate" 
+                                            converter="generalCalendarConverter"
+                                            value="#{projectListController.endDate}"
+                                            class="p-calander-search" 
+                                            pattern="yyyy-MM-dd"
+                                            pp:pattern="yyyy-MM-dd">
+                                </p:calendar>
+                                <p:watermark value="#{projectListTranslationService.to}:" for="endDate"/>
+                                <p:commandLink class="trgth-btns" 
+                                               value="#{projectListTranslationService.search}" 
+                                               update="@form"
+                                               action="#{projectListController.loadProjects()}" />
+                            </div>
+                            <div class="invoice-table-ctn-01" style="overflow-x: scroll;width: 100%">
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                    <tr>
+                                        <th class="border-left white-space-nowrap">#{projectListTranslationService.projectID}</th>
+                                        <th>#{projectListTranslationService.project}</th>
+                                        <th>#{projectListTranslationService.customer}</th>
+                                        <th>#{projectListTranslationService.projectManager}</th>     
+                                        <th>#{projectListTranslationService.startDate}</th>      
+                                        <th>#{projectListTranslationService.endDate}</th>          
+                                        <th style="text-align: center">#{projectListTranslationService.projectBudgetedCost}</th>
+                                        <th style="text-align: center">#{projectListTranslationService.projectBudgetedRevenue}</th>    
+                                        <th
+                                            title="#{projectListTranslationService.costLTDDesc}">
+                                            #{projectListTranslationService.costLTD}
+                                        </th>        
+                                        <th class="white-space-nowrap">#{projectListTranslationService.percentComplete}</th>     
+                                        <th style="text-align: center"
+                                            title="#{projectListTranslationService.revenueLTDDesc}">
+                                            #{projectListTranslationService.revenueLTD}
+                                        </th>     
+                                        <th style="text-align: center" title="#{projectListTranslationService.invoicedLTDDesc}">
+                                            #{projectListTranslationService.invoicedLTD}
+                                        </th>
+                                        <th>#{projectListTranslationService.status}</th> 
+                                        <th class="border-right">#{projectListTranslationService.action}</th> 
+                                    </tr>
+                                    <ui:repeat value="#{projectListController.projectInformations}" var="pi">
+                                        <tr class="alt">
+                                            <td class="white-space-nowrap">
+
+                                                <h:commandLink action="#{projectListController.viewProject(pi.projectUUID)}"
+                                                               value="#{pi.projectId}"/>
+                                            </td>     
+                                            <td class="inline-block-td wd150">
+                                                <h:commandLink action="#{projectListController.viewProject(pi.projectUUID)}"
+                                                               value="#{pi.projectName}"/>
+                                            </td> 
+                                            <td class="white-space-nowrap">#{null!= pi.customer ? pi.customer.name : pi.customerDepartment.name}</td>
+                                            <td class="white-space-nowrap">#{pi.projectManager.name}</td>     
+                                            <td class="white-space-nowrap">
+                                                <h:outputText value="#{pi.startDate.time}">
+                                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                </h:outputText>
+                                            </td>    
+                                            <td class="white-space-nowrap">
+                                                <h:outputText value="#{pi.endDate.time}">
+                                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                </h:outputText>
+                                            </td> 
+                                            <td class="amount-right-ctn white-space-nowrap">#{pi.budgetAmount}</td>
+                                            <td class="amount-right-ctn white-space-nowrap">#{pi.budget.budgetedRevenue}</td>
+                                            <td class="amount-right-ctn white-space-nowrap">#{pi.costLTD}</td>
+                                            <td class="white-space-nowrap">#{pi.progress.percentOfCompletion} %</td>    
+                                            <td class="amount-right-ctn white-space-nowrap">#{projectListController.getRevenueLTD(pi)}</td>                   
+                                            <td class="amount-right-ctn white-space-nowrap">#{projectListController.getInvoicedLTD(pi)}</td> 
+                                            <td> 
+                                                <ui:fragment rendered="#{pi.progress.projectStatus eq 'PENDING'}">
+                                                <a href="#" class="pending-btn-02">#{pi.progress.projectStatus}</a>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{pi.progress.projectStatus eq 'APPROVED'}">
+                                                <a href="#" class="safe-btn">#{pi.progress.projectStatus}</a>
+                                                </ui:fragment>
+                                            </td>  
+                                            <td>
+
+                                                <h:commandLink action="#{projectListController.viewProject(pi.projectUUID)}"
+                                                               disabled="#{pi.progress.projectStatus ne 'PENDING'}"
+                                                               title="#{projectListTranslationService.editThisProject}">
+                                                    <img src="/resources/images/ac-edit-icon.png" alt="" />
+                                                </h:commandLink>
+
+                                                <h:commandLink action="#{projectListController.viewProject(pi.projectUUID)}"
+                                                               title="#{projectListTranslationService.viewThisProject}">
+                                                    <img src="/resources/images/view-icon.png" alt="" />
+                                                </h:commandLink>
+                                            </td>  
+                                        </tr>
+                                    </ui:repeat>
+                                </table>
+                            </div>
+                            <div class="paging-ctnr clearfix">
+                                <h:selectOneMenu value="#{projectListController.limit}" styleClass="col-sel-field">
+                                    <f:selectItems value="#{projectListController.limits}"/>
+                                    <p:ajax listener="#{projectListController.loadProjects()}"
+                                            update="@form" />
+                                </h:selectOneMenu>
+                                <div class="next-prev-ctn clearfix">
+                                    <p:commandLink styleClass="prev-btn"
+                                                   value="Previous"
+                                                   actionListener="#{projectListController.previousPage()}"
+                                                   disabled="#{projectListController.page lt 1}"
+                                                   update="@form"/>
+                                    <span class="pages-info">#{projectListController.page + 1} of #{projectListController.pageCount}</span>
+                                    <p:commandLink styleClass="next-btn" 
+                                                   value="Next" 
+                                                   actionListener="#{projectListController.nextPage()}"
+                                                   disabled="#{projectListController.page ge projectListController.maxPage}"
+                                                   update="@form"/>
+                                </div>
+                                <h:selectOneMenu value="#{projectListController.page}" styleClass="page-sel-field">
+                                    <f:selectItems value="#{projectListController.pages}"/>
+                                    <p:ajax listener="#{projectListController.loadProjects()}"
+                                            update="@form" />
+                                </h:selectOneMenu>
+                            </div>
+                        </div>
+                    </div>
+                </o:form>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>

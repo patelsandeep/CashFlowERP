@@ -1,0 +1,325 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <p:dialog id="time_entry"
+              widgetVar="time_entry"
+              resizable="false"
+              closeOnEscape="true"
+              showHeader="false"
+              styleClass="phase-dialog"
+              modal="true">
+        <o:form useRequestURI="true" id="time_entry_form" >
+            <div class="add-new-phase-popup-ctn" id="new-time-entry" >
+                <h1>#{timeEntryTranslationService.header}
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('time_entry').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{timeEntryTranslationService.timesheetID}: </label>
+                        <h:inputText styleClass="inventory-input-field-01" 
+                                     value="#{timeSheetEntryController.timeSheetEntryModel.timeSheetID}" />
+                    </div>
+                    <br clear="all" />
+
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.customerLabel}:</label>
+                        <h:outputText styleClass="inventory-input-field-01" 
+                                      value="#{timeSheetEntryController.timeSheetEntryModel.customer}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.projectLabel}:</label>
+                        <h:outputText styleClass="inventory-input-field-01" 
+                                      value="#{timeSheetEntryController.timeSheetEntryModel.project}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.phaseLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         value="#{timeSheetEntryController.timeSheetEntryModel.phaseUUID}">
+                            <f:selectItem itemLabel="#{timeEntryTranslationService.selectPhaseLabel}" />
+                            <f:selectItems value="#{timeSheetEntryController.projectPhases}"
+                                           var="phase"
+                                           itemLabel="#{phase.name}"
+                                           itemValue="#{phase.uuid}" />
+                            <p:ajax update="project_milestone" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.milestoneLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="project_milestone"
+                                         value="#{timeSheetEntryController.timeSheetEntryModel.milestoneUUID}">
+                            <f:selectItem itemLabel="#{timeEntryTranslationService.selectMilestoneLabel}" />
+                            <f:selectItems value="#{timeSheetEntryController.milestones}"
+                                           var="milestone"
+                                           itemLabel="#{milestone.name}"
+                                           itemValue="#{milestone.uuid}" />
+                            <p:ajax update="project_task" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.taskLabel}:</label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="project_task"
+                                         value="#{timeSheetEntryController.timeSheetEntryModel.taskUUID}">
+                            <f:selectItem itemLabel="#{projectTeamMemberTranslationService.selectTaskLabel}" />
+                            <f:selectItems value="#{timeSheetEntryController.projectTasks}"
+                                           var="task"
+                                           itemLabel="#{task.name}"
+                                           itemValue="#{task.uuid}" />
+                            <p:ajax update="project_task_ID team" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.taskIdLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     id="project_task_ID"
+                                     readonly="true"
+                                     value="#{timeSheetEntryController.taskID}" />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{timeEntryTranslationService.name}: </label>
+                        <h:selectOneMenu styleClass="inventory-sel-field-01"
+                                         id="team"
+                                         value="#{timeSheetEntryController.timeSheetEntryModel.member}">
+                           <f:selectItem itemLabel="#{timeEntryTranslationService.selectMemberLabel}"
+                                          itemValue="#{null}"/>
+                            <f:selectItems value="#{timeSheetEntryController.projectMembers}"
+                                           var="members"
+                                           itemLabel="#{members.name}"
+                                           itemValue="#{members.uuid}"/>
+                            <p:ajax listener="#{timeSheetEntryController.updateMemberValue()}"
+                                    update="memberGroup" />
+                        </h:selectOneMenu>
+                    </div>
+                    <h:panelGroup id="memberGroup">
+                        <div class="lable-field-area">
+                            <label>#{timeEntryTranslationService.teamMemberIdLabel}: </label>
+                            <h:inputText value="#{timeSheetEntryController.timeSheetEntryModel.memberID}"
+                                         readonly="true"
+                                         styleClass="inventory-input-field-01" />
+                        </div>
+                        <ui:fragment rendered="#{timeSheetEntryController.timeSheetEntryModel.teamMemberCategory ne 'EMPLOYEE'}">
+                            <div class="lable-field-area">
+                                <label>#{timeEntryTranslationService.supplierLabel}: </label>
+                                <h:inputText value="#{timeSheetEntryController.timeSheetEntryModel.supplierName}"
+                                             readonly="true"
+                                             styleClass="inventory-input-field-01" />
+                            </div>
+                            <div class="lable-field-area">
+                                <label>#{timeEntryTranslationService.supplierTypeLabel}: </label>
+                                <h:inputText value="#{timeSheetEntryController.timeSheetEntryModel.supplierType}"
+                                             readonly="true"
+                                             styleClass="inventory-input-field-01" />
+                            </div>
+                        </ui:fragment>
+                        <div class="lable-field-area">
+                            <label>#{timeEntryTranslationService.projectRole}:</label>
+                            <h:inputText value="#{timeSheetEntryController.timeSheetEntryModel.projectRole}"
+                                         readonly="true"
+                                         styleClass="inventory-input-field-01" />
+                        </div>
+
+                    </h:panelGroup>
+                    <div class="lable-field-area-02">
+                        <label>#{timeEntryTranslationService.weekStart}:</label>
+                        <p:calendar id="startDate" 
+                                    converter="generalCalendarConverter"
+                                    value="#{timeSheetEntryController.timeSheetEntryModel.weekStartDate}"
+                                    class="p-calander" 
+                                    pattern="yyyy-MM-dd"
+                                    pp:pattern="yyyy-MM-dd">
+                            <p:ajax event="dateSelect"
+                                    update="@form" />
+                        </p:calendar>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{timeEntryTranslationService.weekEnding}:</label>
+                        <p:calendar id="endDate" 
+                                    converter="generalCalendarConverter"
+                                    value="#{timeSheetEntryController.timeSheetEntryModel.weekEndDate}"
+                                    class="p-calander" 
+                                    pattern="yyyy-MM-dd"
+                                    pp:pattern="yyyy-MM-dd">
+                            <p:ajax event="dateSelect"
+                                    update="@form" />
+                        </p:calendar>
+                    </div>
+
+                    <br clear="all" />
+
+                    <div class="pro-table-ctrn">
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <tr class="border-head-01">
+                                <td>#{timeEntryTranslationService.date}</td>
+                                <td>#{timeEntryTranslationService.day}</td>
+                                <td>#{timeEntryTranslationService.regularTime}</td>
+                                <td>#{timeEntryTranslationService.overTime}</td>
+                                <td title="#{timeEntryTranslationService.paidTimeOffMessage}">
+                                    #{timeEntryTranslationService.pto}
+                                </td>
+                                <td>#{timeEntryTranslationService.billable}</td>
+                                <td>#{timeEntryTranslationService.total}</td>
+                            </tr>
+                            <h:panelGroup id="timeEntries">
+                                <ui:repeat value="#{timeSheetEntryController.timeSheetEntryModel.weeklyEntries}"
+                                           var="dailyEntry">
+                                    <tr class="border-td">
+                                        <td>
+                                            <p:calendar converter="generalCalendarConverter"
+                                                        value="#{dailyEntry.timeSheetDate}"
+                                                        class="p-calander" 
+                                                        mindate="#{timeSheetEntryController.timeSheetEntryModel.weekStartDate.time}"
+                                                        maxdate="#{timeSheetEntryController.timeSheetEntryModel.weekEndDate.time}"
+                                                        pattern="yyyy-MM-dd"
+                                                        pp:pattern="yyyy-MM-dd">
+                                                <p:ajax  update="@form"
+                                                         event="dateSelect"/>
+                                            </p:calendar>
+                                        </td>
+                                        <td>
+                                            <h:outputText 
+                                                styleClass="inventory-input-field-01 twd40"
+                                                value="#{dailyEntry.timeSheetDate.time}">
+                                                <f:convertDateTime pattern="EEE"/>
+                                            </h:outputText>
+                                        </td>
+                                        <td>
+                                            <h:inputText styleClass="inventory-input-field-01 twd80"
+                                                         value="#{dailyEntry.regularTime}" >
+                                                <f:convertNumber pattern="#0.00" maxFractionDigits="2" />
+                                                <p:ajax update="@form"
+                                                        listener="#{timeSheetEntryController.calculateTotals()}"/>
+                                            </h:inputText>
+                                        </td>
+                                        <td>
+                                            <h:inputText
+                                                styleClass="inventory-input-field-01 twd60"
+                                                value="#{dailyEntry.overTime}" >
+                                                <f:convertNumber pattern="#0.00" maxFractionDigits="2" />
+                                                <p:ajax update="@form"
+                                                        listener="#{timeSheetEntryController.calculateTotals()}"/>
+                                            </h:inputText>
+                                        </td>
+                                        <td>
+                                            <a class="timeptxt fancybox" href="#selpaid">
+                                                <h:inputText 
+                                                    styleClass="inventory-input-field-01 twd60"
+                                                    value="#{dailyEntry.ptoTime}" >
+                                                    <f:convertNumber pattern="#0.00" maxFractionDigits="2" />
+                                                    <p:ajax update="@form"
+                                                            oncomplete="PF('pto_category').show();"
+                                                            listener="#{timeSheetEntryController.calculateTotals()}"/>
+                                                </h:inputText>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <h:selectOneMenu 
+                                                styleClass="inventory-input-field-01 twd60"
+                                                value="#{dailyEntry.billableType}" >
+                                                <f:selectItems value="#{timeSheetEntryController.billableTypes}" />
+                                                <p:ajax />
+                                            </h:selectOneMenu>
+                                        </td>
+                                        <td>
+                                            <h:outputText styleClass="inventory-input-field-01 twd80"
+                                                          value="#{timeSheetEntryController.getDailyTotal(dailyEntry)}" >
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <ui:include src="pto-category-popup.xhtml"/>
+                                </ui:repeat>
+                            </h:panelGroup>
+                            <tr class="border-td">
+                                <td colspan="7">
+                                    <p:commandLink styleClass="add-reminder-link"
+                                                   update="@form" 
+                                                   immediate="true" 
+                                                   partialSubmit="true" 
+                                                   process="@this"
+                                                   actionListener="#{timeSheetEntryController.addEntry()}"
+                                                   value="+#{timeEntryTranslationService.addaLine}" />
+                                </td>
+                            </tr>
+                            <h:panelGroup id="totalGroup">
+                                <tr class="border-td title-td">
+                                    <td>#{timeEntryTranslationService.totalHours}</td>
+                                    <td></td>
+                                    <td>
+                                        #{timeSheetEntryController.timeSheetEntryModel.totalRegularTime} Hrs
+                                    </td>
+                                    <td>
+                                        #{timeSheetEntryController.timeSheetEntryModel.totalOverTime} Hrs
+                                    </td>
+                                    <td>
+                                        #{timeSheetEntryController.timeSheetEntryModel.totalPtoTime} Hrs
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        #{timeSheetEntryController.timeSheetEntryModel.finalTotal} Hrs
+                                    </td>
+                                </tr>
+                            </h:panelGroup>
+                        </table>
+                    </div>
+
+                    <a class="auditnotes-link" onclick="showhide20()">Audit Trail and Notes:</a><br />
+                    <div class="auditnote-ctn1" id="Audinote20">
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Dummy text of the printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Printing and typesetting </p>
+                        <p><span>2016-06-30 08:30 AM:</span> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+                    </div>
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right"> 
+                            <a class="cancel-new-btn"
+                               href="#"
+                               onclick="PF('time_entry').hide();">
+                                #{timeEntryTranslationService.cancel}
+                            </a> 
+                            <ui:fragment rendered="#{timeSheetEntryController.timeSheetEntryModel.timeSheetUUID eq null}">
+                                <p:commandLink styleClass="save-new-btn-01 mrg-rgt" 
+                                               actionListener="#{timeSheetEntryController.saveEntries()}"
+                                               update="@form timeSheetSuccessForm"
+                                               onsuccess="PF('time_entry').hide();PF('timesheet_success_message').show();"
+                                               value="#{timeEntryTranslationService.save}" >
+                                    <f:param name="action" value="save"/>
+                                </p:commandLink>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{timeSheetEntryController.timeSheetEntryModel.timeSheetUUID ne null}">
+                                <p:commandLink styleClass="save-new-btn-01 mrg-rgt" 
+                                               actionListener="#{timeSheetEntryController.saveEntries()}"
+                                               update="@form timeSheetSuccessForm"
+                                               onsuccess="PF('time_entry').hide();PF('timesheet_success_message').show();"
+                                               value="#{timeEntryTranslationService.update}" >
+                                    <f:param name="action" value="save"/>
+                                </p:commandLink>
+                            </ui:fragment>
+
+                            <p:commandLink styleClass="save-new-btn-01 mrg-rgt" 
+                                           actionListener="#{timeSheetEntryController.saveEntries()}"
+                                           update="@form timeSheetSuccessForm"
+                                           onsuccess="PF('time_entry').hide();PF('timesheet_success_message').show();"
+                                           value="#{timeEntryTranslationService.submit}" >
+                                <f:param name="action" value="submit"/>
+                            </p:commandLink>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </o:form>
+    </p:dialog>
+    <ui:include src="/timesheet/timesheet-success-popup.xhtml"/>
+
+</ui:composition>

@@ -1,0 +1,357 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:pp="http://java.sun.com/jsf/passthrough"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <p:dialog id="create_project_phase"
+              widgetVar="create_project_phase"
+              closeOnEscape="true"
+              resizable="false"
+              showHeader="false"
+              styleClass="phase-dialog"
+              modal="true">
+
+        <o:form useRequestURI="true" id="addPhaseForm">
+
+            <div class="add-new-phase-popup-ctn" id="addnewphase" >
+                <h1>#{projectPhaseTranslationService.phaseHeader} 
+                    <img src="/resources/images/fancy-close-btn.png" 
+                         onclick="PF('create_project_phase').hide();"
+                         class ="close-icon-popup close-header" />
+                </h1>
+                <div class="add-new-phase-popup-field-ctnr clearfix">
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{projectPhaseTranslationService.customerLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectPhaseController.phaseModel.customerName}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area lfa-mrgt">
+                        <label>#{projectPhaseTranslationService.customerIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectPhaseController.phaseModel.customerId}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.projectNameLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectPhaseController.phaseModel.projectName}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.projectIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectPhaseController.phaseModel.projectId}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.newPhaseNumberLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectPhaseController.phaseModel.phaseNumber}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.phaseIdLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectPhaseController.phaseModel.phaseId}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.phaseNameLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     value="#{projectPhaseController.phaseModel.phaseName}"
+                                     />
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.phaseSupervisorLabel}:</label>
+
+
+                        <p:autoComplete cache="true"
+                                        inputStyleClass="inventory-input-field-01"
+                                        inputStyle="padding-right: 0px; padding-left: 0px; box-shadow: none;"
+                                        completeMethod="#{projectPhaseController.loadSupervisors}"
+                                        emptyMessage="#{projectPhaseTranslationService.noPhaseSupervisorFoundMessage}"
+                                        forceSelection="true"
+                                        queryDelay="400"
+                                        minQueryLength="3"
+                                        placeholder="#{projectPhaseTranslationService.messageForPhaseSupervisorSearch}"
+                                        value="#{projectPhaseController.phaseModel.phaseSupervisor}"
+                                        title="#{projectPhaseTranslationService.messageForPhaseSupervisorSearch}"
+                                        var="sup"
+                                        itemValue="#{sup}"
+                                        itemLabel="#{sup.supervisorName}"
+                                        style="width: 320px">
+
+                        </p:autoComplete>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.startDateLabel}:</label>
+                        <p:calendar id="startDate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{projectPhaseController.phaseModel.startDate}"
+                                    pattern="yyyy-MM-dd"    
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="startDate"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.endDateLabel}:</label>
+                        <p:calendar id="enddate" 
+                                    converter="generalCalendarConverter"
+                                    class="p-calander" 
+                                    value="#{projectPhaseController.phaseModel.endDate}"
+                                    pattern="yyyy-MM-dd"
+                                    pp:pattern="yyyy-MM-dd">
+                        </p:calendar>
+                        <p:watermark value="YYYY-MM-DD" for="enddate"/>
+                    </div>
+                    <div class="prosum-field-area">
+                        <label>#{projectPhaseTranslationService.phaseSummaryLabel}:</label>
+                        <h:inputTextarea styleClass="prosum-textarea-field-01"
+                                         value="#{projectPhaseController.phaseModel.phaseSummary}"/>
+                    </div>
+                    <div class="prosum-field-area">
+                        <label>#{projectPhaseTranslationService.phaseDeliverableLabel}:</label>
+                        <h:inputTextarea styleClass="prosum-textarea-field-01"
+                                         value="#{projectPhaseController.phaseModel.phaseDeliverable}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.phaseBudgetCostLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="costCurrency"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     value="#{projectPhaseController.phaseModel.phaseBudgetCost}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax update="@this profit" listener="#{projectPhaseController.calculatePhaseGrossProfit()}"/>
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.phaseBudgetRevenueLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="revenueCurrency"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     value="#{projectPhaseController.phaseModel.phaseBudgetRevenue}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax update="@this profit" listener="#{projectPhaseController.calculatePhaseGrossProfit()}"/>
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.phaseBudgetProfitLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="profitCurrency"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     id="profit"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.phaseBudgetGrossProfit}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area-02">
+                        <label>#{projectPhaseTranslationService.depositOrRetainersLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-09"
+                                     id="depositCurrency"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-10" 
+                                     value="#{projectPhaseController.phaseModel.depositOrRetainers}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax update="@this" listener="#{projectPhaseController.checkDepositValue()}"/>
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area-02"> 
+                        <a class="attach-file-btn-01 mrgt" href="#">#{projectPhaseTranslationService.invoiceIssueLabel}</a> 
+                    </div>
+                    <div class="lable-field-area-02"> 
+                        <a class="attach-file-btn-01 fancybox" onclick="PF('create_phase_alert').show()();" href="#">
+                            #{projectPhaseTranslationService.manageAlertsLabel}
+                        </a>
+                    </div>
+                    <div class="lable-field-area-02"> 
+                        <a class="attach-file-btn-01 fancybox" onclick="PF('create_phase_approval').show()();" href="#">
+                            #{projectPhaseTranslationService.manageApprovalsLabel}
+                        </a> 
+                    </div>
+                    <div class="lable-field-area"> 
+                        <a class="attach-file-btn-01 fancybox" onclick="PF('create_phase_finance').show()();" href="#">
+                            #{projectPhaseTranslationService.viewPhaseFinancialsLabel}
+                        </a> 
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.milestoneCountLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.milestoneCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.taskCountLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.taskCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.teamMemberLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.teamMemberCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.subContractorLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.subContractorCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.phasePOCLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.poc}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.phasePPCLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.ppc}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.changeOrderCountLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.changeOrderCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.changeOrderAmountLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="changeOrderCurrency"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.changeOrderAmount}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.penaltyCountLabel}:</label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.penaltyCount}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.penaltyAmountLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-08"
+                                     id="penaltyCurrency"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.currency}"/>
+                        <h:inputText styleClass="inventory-input-field-07 input-val-07" 
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.penaltiesAmount}">
+                            <f:convertNumber pattern="#,##0.00" 
+                                             maxFractionDigits="2" />  
+                            <p:ajax />
+                        </h:inputText>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.projectManagerLabel}: </label>
+                        <h:inputText styleClass="inventory-input-field-01"
+                                     readonly="true"
+                                     value="#{projectPhaseController.phaseModel.projectManager}"/>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.safetyRatingLabel}: </label>
+
+                        <h:selectOneMenu id="safetyrating" 
+                                         disabled="true"
+                                         value="#{projectPhaseController.phaseModel.safetyRating}"
+                                         styleClass="inventory-sel-field-01">
+
+                            <f:selectItems value="#{projectPhaseController.safetyRatings}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.performanceStatusLabel}:</label>
+                        <h:selectOneMenu id="performanceStatus" 
+                                         value="#{projectPhaseController.phaseModel.performanceStatus}"
+                                         styleClass="inventory-sel-field-01">
+
+                            <f:selectItems value="#{projectPhaseController.performanceStatuses}"/>
+
+                        </h:selectOneMenu>
+
+                    </div>
+                    <div class="lable-field-area">
+                        <label>#{projectPhaseTranslationService.phaseStatusLabel}:</label>
+                        <h:selectOneMenu id="phaseStatus" 
+                                         value="#{projectPhaseController.phaseModel.phaseStatus}"
+                                         styleClass="inventory-sel-field-01">
+
+                            <f:selectItems value="#{projectPhaseController.phaseStatuses}"/>
+
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="lable-field-area">
+
+                        <h:outputLabel for="phase_details_file_input" 
+                                       styleClass="attach-file-btn-01"
+                                       value="#{projectPhaseTranslationService.attachFilesLabel}">
+                        </h:outputLabel>
+                        <p:fileUpload mode="advanced"
+                                      widgetVar="phase_details_file"
+                                      id="phase_details_file"
+                                      auto="true"
+                                      fileLimit="5"
+                                      styleClass="ui-helper-hidden"
+                                      multiple="true"
+                                      skinSimple="true"
+                                      dragDropSupport="true"
+                                      allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|xlsx|csv|xls)$/"
+                                      fileUploadListener="#{projectPhaseController.fileUpload}"
+                                      />
+                    </div>
+                    <br clear="all" />
+                    <a class="auditnotes-link">#{projectPhaseTranslationService.auditTrailandNotesLabel}:</a><br />
+
+                    <hr />
+                    <div class="btns-ctnr-04 clearfix">
+                        <div class="right">
+                            <a class="cancel-new-btn" 
+                               onclick="PF('create_project_phase').hide();">#{projectPhaseTranslationService.cancelLabel}</a>
+
+                            <p:commandLink value="#{projectPhaseTranslationService.saveLabel}"
+                                           styleClass="save-new-btn-01 mrg-rgt"
+                                           update="@form phasesuccessForm"
+                                           actionListener="#{projectPhaseController.saveProjectPhase()}"
+                                           onsuccess="PF('create_project_phase').hide();PF('phase_success_message').show();">
+                            </p:commandLink>
+                            <a class="save-new-btn-01 mrg-rgt" href="#">#{projectPhaseTranslationService.approveLabel}</a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </o:form>
+
+    </p:dialog>
+    <ui:include src="manage-phase-alerts.xhtml"/>
+    <ui:include src="/approval/phase-level-approval.xhtml"/>
+    <ui:include src="view-phase-finance-details.xhtml"/>
+    <ui:include src="phase-success-popup.xhtml"/>
+</ui:composition>
